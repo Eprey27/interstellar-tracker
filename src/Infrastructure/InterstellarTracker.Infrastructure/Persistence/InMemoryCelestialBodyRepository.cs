@@ -41,6 +41,11 @@ public class InMemoryCelestialBodyRepository : ICelestialBodyRepository
         return Task.FromResult(obj);
     }
 
+    public Task<IEnumerable<InterstellarObject>> GetAllInterstellarObjectsAsync(CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult<IEnumerable<InterstellarObject>>(_interstellarObjects.Values);
+    }
+
     private void InitializeData()
     {
         InitializeSun();

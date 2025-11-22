@@ -30,4 +30,11 @@ public interface ICelestialBodyRepository
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The interstellar object if found, null otherwise.</returns>
     Task<InterstellarObject?> GetInterstellarObjectByIdAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets all interstellar objects in the catalog.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Collection of all interstellar objects.</returns>
+    Task<IEnumerable<InterstellarObject>> GetAllInterstellarObjectsAsync(CancellationToken cancellationToken = default);
 }
