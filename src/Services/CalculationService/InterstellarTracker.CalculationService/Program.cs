@@ -15,28 +15,7 @@ builder.Services.AddInfrastructure();
 
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Title = "Interstellar Tracker - Calculation Service",
-        Version = "v1",
-        Description = "REST API for celestial body orbital calculations and interstellar object tracking",
-        Contact = new Microsoft.OpenApi.Models.OpenApiContact
-        {
-            Name = "Interstellar Tracker Team",
-            Email = "eprey27@gmail.com"
-        }
-    });
-
-    // Include XML comments for Swagger documentation
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        options.IncludeXmlComments(xmlPath);
-    }
-});
+builder.Services.AddSwaggerGen();
 
 // Add health checks
 builder.Services.AddHealthChecks();

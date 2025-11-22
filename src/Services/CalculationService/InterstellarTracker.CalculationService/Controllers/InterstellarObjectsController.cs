@@ -63,8 +63,9 @@ public class InterstellarObjectsController : ControllerBase
             });
         }
 
-        var position = interstellarObject.CalculatePosition(calculationDate);
-        var velocity = interstellarObject.CalculateVelocity(calculationDate);
+        var julianDate = DateTimeToJulianDate(calculationDate);
+        var position = interstellarObject.CalculatePosition(julianDate);
+        var velocity = interstellarObject.CalculateVelocity(julianDate);
 
         var response = new InterstellarObjectResponse
         {
@@ -129,6 +130,32 @@ public class InterstellarObjectsController : ControllerBase
             Magnitude = vector.Magnitude
         };
     }
+
+    /// <summary>
+    /// Converts DateTime to Julian Date
+    /// </summary>
+    /// <param name="dateTime">DateTime to convert</param>
+    /// <returns>Julian Date</returns>
+    private static double DateTimeToJulianDate(DateTime dateTime)
+    {
+        // Convert to UTC if not already
+        var utc = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+
+        // Julian Date calculation
+        // JD = 367*Y - INT(7*(Y + INT((M+9)/12))/4) + INT(275*M/9) + D + 1721013.5 + UT/24
+        int year = utc.Year;
+        int month = utc.Month;
+        int day = utc.Day;
+
+        double a = Math.Floor((14.0 - month) / 12.0);
+        double y = year + 4800 - a;
+        double m = month + 12 * a - 3;
+
+        double jdn = day + Math.Floor((153 * m + 2) / 5.0) + 365 * y + Math.Floor(y / 4.0) - Math.Floor(y / 100.0) + Math.Floor(y / 400.0) - 32045;
+        double fraction = (utc.Hour - 12.0) / 24.0 + utc.Minute / 1440.0 + utc.Second / 86400.0 + utc.Millisecond / 86400000.0;
+
+        return jdn + fraction;
+    }
 }
 
 /// <summary>
@@ -154,7 +181,7 @@ public record InterstellarObjectSummary
     /// <summary>
     /// Discovery date
     /// </summary>
-    public required DateTime DiscoveryDate { get; init; }
+    public required DateTimeOffset DiscoveryDate { get; init; }
 
     /// <summary>
     /// Orbital eccentricity

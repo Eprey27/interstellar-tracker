@@ -49,6 +49,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration.Tests", "Integr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterstellarTracker.Integration.Tests", "tests\Integration.Tests\InterstellarTracker.Integration.Tests\InterstellarTracker.Integration.Tests.csproj", "{007DF09A-62E0-466A-90DB-61DA0B4F8DC3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CalculationService", "CalculationService", "{F3903627-939B-F72D-5FDC-E4235DF56919}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterstellarTracker.CalculationService", "src\Services\CalculationService\InterstellarTracker.CalculationService\InterstellarTracker.CalculationService.csproj", "{54378082-C9B6-4232-B626-3C8AD6044996}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +183,18 @@ Global
 		{007DF09A-62E0-466A-90DB-61DA0B4F8DC3}.Release|x64.Build.0 = Release|Any CPU
 		{007DF09A-62E0-466A-90DB-61DA0B4F8DC3}.Release|x86.ActiveCfg = Release|Any CPU
 		{007DF09A-62E0-466A-90DB-61DA0B4F8DC3}.Release|x86.Build.0 = Release|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Debug|x64.Build.0 = Debug|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Debug|x86.Build.0 = Debug|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Release|x64.ActiveCfg = Release|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Release|x64.Build.0 = Release|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Release|x86.ActiveCfg = Release|Any CPU
+		{54378082-C9B6-4232-B626-3C8AD6044996}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -205,5 +221,7 @@ Global
 		{FF19C429-6E2B-46F7-A437-7D250C3D4595} = {E54C5156-A79F-F12B-3B9F-7475A4B81BB0}
 		{0CBD8A84-ADDB-80AC-D34C-93737CE66ECA} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{007DF09A-62E0-466A-90DB-61DA0B4F8DC3} = {0CBD8A84-ADDB-80AC-D34C-93737CE66ECA}
+		{F3903627-939B-F72D-5FDC-E4235DF56919} = {984BB9B3-3FA3-BE33-9484-CAC21695A33C}
+		{54378082-C9B6-4232-B626-3C8AD6044996} = {F3903627-939B-F72D-5FDC-E4235DF56919}
 	EndGlobalSection
 EndGlobal

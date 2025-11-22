@@ -23,7 +23,7 @@ public record InterstellarObjectResponse
     /// <summary>
     /// Discovery date
     /// </summary>
-    public required DateTime DiscoveryDate { get; init; }
+    public required DateTimeOffset DiscoveryDate { get; init; }
 
     /// <summary>
     /// Name of discoverer
