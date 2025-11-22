@@ -671,6 +671,7 @@ Status: Ready for next task
 **File:** `.github/workflows/ci-cd.yml` (86 lines)
 
 **Jobs Implemented:**
+
 - **build-and-test**: .NET 9.0, restore, build (Release), test with trx logger
   - Uploads test results as artifacts
   - Runs on: ubuntu-latest
@@ -694,6 +695,7 @@ Status: Ready for next task
 #### 2. Optimized Dockerfiles
 
 **CalculationService.Dockerfile** (43 lines):
+
 - Multi-stage build: SDK → aspnet runtime
 - Stage 1 (Build):
   - Copies solution and project files
@@ -707,6 +709,7 @@ Status: Ready for next task
   - ASPNETCORE_URLS=http://+:8080
 
 **WebUI.Dockerfile** (47 lines):
+
 - Similar multi-stage structure
 - Installs curl for health checks
 - Non-root execution
@@ -715,21 +718,25 @@ Status: Ready for next task
 #### 3. Health Check Endpoints
 
 **NuGet Packages Added:**
+
 - Microsoft.Extensions.Diagnostics.HealthChecks 10.0.0 (both services)
 - AspNetCore.HealthChecks.Uris 9.0.0 (WebUI)
 
 **CalculationService:**
+
 - Endpoint: `/health`
 - Checks: Service running, repository connectivity
 - Docker healthcheck interval: 30s, timeout: 3s, retries: 3
 
 **WebUI:**
+
 - Endpoint: `/health`
 - Checks: Service running + CalculationService reachability
 - Validates: HTTP connection to CalculationService /health endpoint
 - Docker healthcheck interval: 30s, start-period: 10s
 
 **Kubernetes Readiness/Liveness Probes Ready:**
+
 ```yaml
 livenessProbe:
   httpGet:
@@ -742,6 +749,7 @@ livenessProbe:
 #### 4. Prometheus & Grafana Setup
 
 **docker-compose.yml Updated:**
+
 - **Prometheus**: Port 9090
   - Configuration: `docker/prometheus/prometheus.yml`
   - Scrapes every 15s
@@ -755,6 +763,7 @@ livenessProbe:
   - Healthcheck: wget localhost:3000/api/health
 
 **Prometheus Configuration:**
+
 - Global scrape interval: 15s
 - Jobs configured:
   - prometheus (self-monitoring)
@@ -764,6 +773,7 @@ livenessProbe:
 - Metrics path: `/metrics`
 
 **Grafana Provisioning:**
+
 - Datasource: `docker/grafana/provisioning/datasources/prometheus.yml`
 - Dashboard provider: `docker/grafana/provisioning/dashboards/dashboard.yml`
 - Pre-built dashboard: `interstellar-overview.json`
@@ -771,14 +781,17 @@ livenessProbe:
 #### 5. Metrics Endpoints
 
 **NuGet Package:**
+
 - prometheus-net.AspNetCore 8.2.1 (both services)
 
 **Implementation:**
+
 - `using Prometheus;`
 - `app.UseHttpMetrics();` - Middleware for automatic HTTP metrics
 - `app.MapMetrics();` - Exposes /metrics endpoint
 
 **Exposed Metrics:**
+
 - `http_requests_received_total` - Total requests by method/controller/action
 - `http_request_duration_seconds` - Histogram of response times
 - `process_working_set_bytes` - Memory usage
@@ -787,6 +800,7 @@ livenessProbe:
 - Custom application metrics (future)
 
 **Grafana Dashboard Created:**
+
 - Request rate gauges (CalculationService + WebUI)
 - Average response time gauges
 - Memory usage time series
@@ -798,6 +812,7 @@ livenessProbe:
 **New File:** `docs/monitoring.md` (309 lines)
 
 **Sections:**
+
 - Overview of monitoring strategy
 - Prometheus setup and queries
 - Grafana dashboard configuration
@@ -812,6 +827,7 @@ livenessProbe:
 ### Technical Details
 
 #### Build Results
+
 ```
 Compilation: SUCCESS (4.4s)
 - InterstellarTracker.CalculationService: 0.9s
@@ -822,6 +838,7 @@ Compilation: SUCCESS (4.4s)
 ```
 
 #### Test Results
+
 ```
 Total: 58 tests
 Passed: 58
@@ -831,18 +848,21 @@ Duration: 3.4s
 ```
 
 **Test Breakdown:**
+
 - Domain.Tests: 31 tests
 - Application.Tests: 14 tests
 - Integration.Tests: 9 tests
 - MeshGeneratorTests: 4 tests
 
 #### Docker Images
+
 - Base images: mcr.microsoft.com/dotnet/sdk:9.0, aspnet:9.0
 - Security: Non-root execution (UID 1000)
 - Ports: All services standardized to 8080 in containers
 - Health checks: Integrated at both Docker and application levels
 
 #### Monitoring Stack Ports
+
 | Service | Port | Credentials |
 |---------|------|-------------|
 | Prometheus | 9090 | None |
