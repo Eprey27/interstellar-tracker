@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Domain\InterstellarTracker.Domain\InterstellarTracker.Domain.csproj" />
     <ProjectReference Include="..\..\..\src\Infrastructure\InterstellarTracker.Infrastructure\InterstellarTracker.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\src\Web\InterstellarTracker.Web\InterstellarTracker.Web.csproj" />
   </ItemGroup>
 
 </Project>

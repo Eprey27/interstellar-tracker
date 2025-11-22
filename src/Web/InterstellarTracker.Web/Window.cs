@@ -142,10 +142,13 @@ public class Window
             // Convert to AU for visualization (scale down from meters)
             float aAU = (float)(orbit.SemiMajorAxisMeters / 149_597_870_700.0);
             float e = (float)orbit.Eccentricity;
+            float i = (float)orbit.InclinationRadians;
+            float omega = (float)orbit.LongitudeOfAscendingNodeRadians;
+            float w = (float)orbit.ArgumentOfPeriapsisRadians;
 
             if (e < 1.0f) // Only elliptical orbits for now
             {
-                var vertices = MeshGenerator.GenerateOrbitPath(aAU, e, 360);
+                var vertices = MeshGenerator.GenerateOrbitPath(aAU, e, i, omega, w, 360);
                 var (vao, vbo, count) = MeshGenerator.CreateLineBuffers(_gl, vertices);
                 _orbitBuffers[body.Id] = (vao, vbo, count);
             }
@@ -157,11 +160,14 @@ public class Window
             var orbit = obj.OrbitalElements;
             float aAU = (float)(orbit.SemiMajorAxisMeters / 149_597_870_700.0);
             float e = (float)orbit.Eccentricity;
+            float i = (float)orbit.InclinationRadians;
+            float omega = (float)orbit.LongitudeOfAscendingNodeRadians;
+            float w = (float)orbit.ArgumentOfPeriapsisRadians;
 
             if (e > 1.0f) // Hyperbolic
             {
                 // For now, just draw a portion of the hyperbola near perihelion
-                var vertices = MeshGenerator.GenerateOrbitPath(Math.Abs(aAU), e, 180);
+                var vertices = MeshGenerator.GenerateOrbitPath(Math.Abs(aAU), e, i, omega, w, 180);
                 var (vao, vbo, count) = MeshGenerator.CreateLineBuffers(_gl, vertices);
                 _orbitBuffers[obj.Id] = (vao, vbo, count);
             }

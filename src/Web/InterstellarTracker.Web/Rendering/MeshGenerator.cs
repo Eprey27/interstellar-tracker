@@ -130,15 +130,32 @@ public static class MeshGenerator
     }
 
     /// <summary>
-    /// Generates line vertices for an elliptical orbit.
+    /// Generates line vertices for an orbital path with proper 3D orientation.
     /// </summary>
     /// <param name="a">Semi-major axis.</param>
     /// <param name="e">Eccentricity.</param>
+    /// <param name="inclinationRad">Inclination in radians.</param>
+    /// <param name="longitudeOfAscendingNodeRad">Longitude of ascending node (Ω) in radians.</param>
+    /// <param name="argumentOfPeriapsisRad">Argument of periapsis (ω) in radians.</param>
     /// <param name="segments">Number of line segments.</param>
-    /// <returns>Array of 3D positions for line strip.</returns>
-    public static float[] GenerateOrbitPath(float a, float e, int segments = 360)
+    /// <returns>Array of 3D positions for line strip in ecliptic coordinates.</returns>
+    public static float[] GenerateOrbitPath(
+        float a,
+        float e,
+        float inclinationRad,
+        float longitudeOfAscendingNodeRad,
+        float argumentOfPeriapsisRad,
+        int segments = 360)
     {
         List<float> vertices = new();
+
+        // Precompute rotation matrix components
+        float cosI = MathF.Cos(inclinationRad);
+        float sinI = MathF.Sin(inclinationRad);
+        float cosOmega = MathF.Cos(longitudeOfAscendingNodeRad);
+        float sinOmega = MathF.Sin(longitudeOfAscendingNodeRad);
+        float cosw = MathF.Cos(argumentOfPeriapsisRad);
+        float sinw = MathF.Sin(argumentOfPeriapsisRad);
 
         for (int i = 0; i <= segments; i++)
         {
@@ -148,10 +165,25 @@ public static class MeshGenerator
             // Orbit equation: r = a(1 - e²) / (1 + e*cos(nu))
             float r = a * (1 - e * e) / (1 + e * MathF.Cos(nu));
 
-            // Convert to Cartesian (orbit in XZ plane for now)
-            float x = r * MathF.Cos(nu);
-            float y = 0;
-            float z = r * MathF.Sin(nu);
+            // Position in orbital plane (periapsis at x-axis)
+            float xOrbit = r * MathF.Cos(nu);
+            float yOrbit = r * MathF.Sin(nu);
+
+            // Apply rotation: R_z(Ω) * R_x(i) * R_z(ω)
+            // First rotate by argument of periapsis (ω) around z-axis
+            float x1 = xOrbit * cosw - yOrbit * sinw;
+            float y1 = xOrbit * sinw + yOrbit * cosw;
+            float z1 = 0;
+
+            // Then rotate by inclination (i) around x-axis
+            float x2 = x1;
+            float y2 = y1 * cosI - z1 * sinI;
+            float z2 = y1 * sinI + z1 * cosI;
+
+            // Finally rotate by longitude of ascending node (Ω) around z-axis
+            float x = x2 * cosOmega - y2 * sinOmega;
+            float y = x2 * sinOmega + y2 * cosOmega;
+            float z = z2;
 
             vertices.Add(x);
             vertices.Add(y);
