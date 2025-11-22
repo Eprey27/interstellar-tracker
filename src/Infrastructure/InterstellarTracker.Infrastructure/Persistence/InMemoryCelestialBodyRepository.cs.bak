@@ -1,0 +1,497 @@
+using InterstellarTracker.Application.Common.Interfaces;
+using InterstellarTracker.Domain.Entities;
+using InterstellarTracker.Domain.ValueObjects;
+
+namespace InterstellarTracker.Infrastructure.Persistence;
+
+/// <summary>
+/// Constants for astronomical calculations.
+/// </summary>
+internal static class AstronomicalConstants
+{
+    /// <summary>
+    /// Astronomical Unit in meters (average Earth-Sun distance).
+    /// </summary>
+    public const double AU_TO_METERS = 149_597_870_700.0;
+
+    /// <summary>
+    /// Gravitational parameter of the Sun (GM☉) in m³/s².
+    /// </summary>
+    public const double SUN_GM = 1.32712440018e20;
+
+    /// <summary>
+    /// Convert degrees to radians.
+    /// </summary>
+    public static double DegreesToRadians(double degrees) => degrees * Math.PI / 180.0;
+
+    /// <summary>
+    /// Create orbital elements from AU and degrees (common format in astronomy).
+    /// </summary>
+    public static OrbitalElements CreateFromAU(
+        double semiMajorAxisAU,
+        double eccentricity,
+        double inclinationDegrees,
+        double lonAscNodeDegrees,
+        double argPeriapsisDegrees,
+        double meanAnomalyDegrees,
+        double epochJD)
+    {
+        return new OrbitalElements(
+            semiMajorAxisMeters: semiMajorAxisAU * AU_TO_METERS,
+            eccentricity: eccentricity,
+            inclinationRadians: DegreesToRadians(inclinationDegrees),
+            longitudeOfAscendingNodeRadians: DegreesToRadians(lonAscNodeDegrees),
+            argumentOfPeriapsisRadians: DegreesToRadians(argPeriapsisDegrees),
+            meanAnomalyAtEpochRadians: DegreesToRadians(meanAnomalyDegrees),
+            epochJulianDate: epochJD,
+            gravitationalParameter: SUN_GM
+        );
+    }
+}
+
+/// <summary>
+/// In-memory implementation of the celestial body repository.
+/// Contains data for the solar system and known interstellar objects.
+/// </summary>
+public class InMemoryCelestialBodyRepository : ICelestialBodyRepository
+{
+    private readonly Dictionary<string, CelestialBody> _bodies;
+    private readonly Dictionary<string, InterstellarObject> _interstellarObjects;
+
+    public InMemoryCelestialBodyRepository()
+    {
+        _bodies = new Dictionary<string, CelestialBody>();
+        _interstellarObjects = new Dictionary<string, InterstellarObject>();
+        InitializeData();
+    }
+
+    /// <summary>
+    /// Gets a celestial body by its identifier.
+    /// </summary>
+    /// <param name="bodyId">The unique identifier of the body.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The celestial body if found, null otherwise.</returns>
+    public Task<CelestialBody?> GetByIdAsync(string bodyId, CancellationToken cancellationToken = default)
+    {
+        _bodies.TryGetValue(bodyId, out var body);
+        return Task.FromResult(body);
+    }
+
+    /// <summary>
+    /// Gets all celestial bodies in the repository.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Collection of all celestial bodies.</returns>
+    public Task<IEnumerable<CelestialBody>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult<IEnumerable<CelestialBody>>(_bodies.Values);
+    }
+
+    /// <summary>
+    /// Gets an interstellar object by its identifier.
+    /// </summary>
+    /// <param name="objectId">The unique identifier of the interstellar object.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The interstellar object if found, null otherwise.</returns>
+    public Task<InterstellarObject?> GetInterstellarObjectByIdAsync(string objectId, CancellationToken cancellationToken = default)
+    {
+        _interstellarObjects.TryGetValue(objectId, out var obj);
+        return Task.FromResult(obj);
+    }
+
+    /// <summary>
+    /// Initializes the repository with solar system data and interstellar objects.
+    /// Data sources: NASA JPL Horizons, Minor Planet Center, Wikipedia
+    /// </summary>
+    private void InitializeData()
+    {
+        InitializeSun();
+        InitializePlanets();
+        InitializeDwarfPlanets();
+        InitializeComets();
+        InitializeInterstellarObjects();
+    }
+
+    private void InitializeSun()
+    {
+        // Sun - parent body for all solar system objects
+        _bodies["sun"] = new CelestialBody(
+            id: "sun",
+            name: "Sun",
+            orbitalElements: null, // Sun doesn't orbit anything
+            visualProperties: VisualProperties.Star(radius: 696_000.0, luminosity: 1.0)
+        );
+    }
+
+    private void InitializePlanets()
+    {
+        // Mercury - orbital data from NASA JPL Horizons (epoch J2000)
+        _bodies["mercury"] = new CelestialBody(
+            id: "mercury",
+            name: "Mercury",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 0.38709893,
+                eccentricity: 0.20563069,
+                inclination: 7.00487,
+                longitudeOfAscendingNode: 48.33167,
+                argumentOfPeriapsis: 29.124279,
+                meanAnomalyAtEpoch: 174.795,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 2439.7, albedo: 0.142)
+        );
+
+        // Venus
+        _bodies["venus"] = new CelestialBody(
+            id: "venus",
+            name: "Venus",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 0.72333199,
+                eccentricity: 0.00677323,
+                inclination: 3.39471,
+                longitudeOfAscendingNode: 76.68069,
+                argumentOfPeriapsis: 54.85229,
+                meanAnomalyAtEpoch: 50.115,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 6051.8, albedo: 0.76)
+        );
+
+        // Earth
+        _bodies["earth"] = new CelestialBody(
+            id: "earth",
+            name: "Earth",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 1.00000011,
+                eccentricity: 0.01671022,
+                inclination: 0.00005,
+                longitudeOfAscendingNode: -11.26064,
+                argumentOfPeriapsis: 102.94719,
+                meanAnomalyAtEpoch: 100.464,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 6371.0, albedo: 0.306)
+        );
+
+        // Mars
+        _bodies["mars"] = new CelestialBody(
+            id: "mars",
+            name: "Mars",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 1.52366231,
+                eccentricity: 0.09341233,
+                inclination: 1.85061,
+                longitudeOfAscendingNode: 49.57854,
+                argumentOfPeriapsis: 286.46230,
+                meanAnomalyAtEpoch: 19.412,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 3389.5, albedo: 0.170)
+        );
+
+        // Jupiter
+        _bodies["jupiter"] = new CelestialBody(
+            id: "jupiter",
+            name: "Jupiter",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 5.20336301,
+                eccentricity: 0.04839266,
+                inclination: 1.30530,
+                longitudeOfAscendingNode: 100.55615,
+                argumentOfPeriapsis: 275.06675,
+                meanAnomalyAtEpoch: 34.404,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 69911.0, albedo: 0.52)
+        );
+
+        // Saturn
+        _bodies["saturn"] = new CelestialBody(
+            id: "saturn",
+            name: "Saturn",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 9.53707032,
+                eccentricity: 0.05415060,
+                inclination: 2.48446,
+                longitudeOfAscendingNode: 113.71504,
+                argumentOfPeriapsis: 336.04084,
+                meanAnomalyAtEpoch: 49.954,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 58232.0, albedo: 0.47)
+        );
+
+        // Uranus
+        _bodies["uranus"] = new CelestialBody(
+            id: "uranus",
+            name: "Uranus",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 19.19126393,
+                eccentricity: 0.04716771,
+                inclination: 0.76986,
+                longitudeOfAscendingNode: 74.22988,
+                argumentOfPeriapsis: 96.73436,
+                meanAnomalyAtEpoch: 142.955,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 25362.0, albedo: 0.51)
+        );
+
+        // Neptune
+        _bodies["neptune"] = new CelestialBody(
+            id: "neptune",
+            name: "Neptune",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 30.06896348,
+                eccentricity: 0.00858587,
+                inclination: 1.76917,
+                longitudeOfAscendingNode: 131.72169,
+                argumentOfPeriapsis: 273.24966,
+                meanAnomalyAtEpoch: 267.767,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 24622.0, albedo: 0.41)
+        );
+    }
+
+    private void InitializeDwarfPlanets()
+    {
+        // Pluto - dwarf planet
+        _bodies["pluto"] = new CelestialBody(
+            id: "pluto",
+            name: "Pluto",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 39.48168677,
+                eccentricity: 0.24880766,
+                inclination: 17.14175,
+                longitudeOfAscendingNode: 110.30347,
+                argumentOfPeriapsis: 224.06676,
+                meanAnomalyAtEpoch: 238.928,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 1188.3, albedo: 0.575)
+        );
+
+        // Ceres - dwarf planet in asteroid belt
+        _bodies["ceres"] = new CelestialBody(
+            id: "ceres",
+            name: "Ceres",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 2.767,
+                eccentricity: 0.0758,
+                inclination: 10.593,
+                longitudeOfAscendingNode: 80.329,
+                argumentOfPeriapsis: 73.115,
+                meanAnomalyAtEpoch: 95.989,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 469.73, albedo: 0.09)
+        );
+
+        // Eris - distant dwarf planet
+        _bodies["eris"] = new CelestialBody(
+            id: "eris",
+            name: "Eris",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 67.668,
+                eccentricity: 0.44177,
+                inclination: 44.040,
+                longitudeOfAscendingNode: 35.951,
+                argumentOfPeriapsis: 151.639,
+                meanAnomalyAtEpoch: 205.989,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 1163.0, albedo: 0.96)
+        );
+
+        // Makemake - distant dwarf planet
+        _bodies["makemake"] = new CelestialBody(
+            id: "makemake",
+            name: "Makemake",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 45.791,
+                eccentricity: 0.159,
+                inclination: 28.96,
+                longitudeOfAscendingNode: 79.382,
+                argumentOfPeriapsis: 294.834,
+                meanAnomalyAtEpoch: 165.514,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 715.0, albedo: 0.81)
+        );
+
+        // Haumea - egg-shaped dwarf planet
+        _bodies["haumea"] = new CelestialBody(
+            id: "haumea",
+            name: "Haumea",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 43.335,
+                eccentricity: 0.195,
+                inclination: 28.19,
+                longitudeOfAscendingNode: 122.167,
+                argumentOfPeriapsis: 239.041,
+                meanAnomalyAtEpoch: 218.205,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Planet(radius: 816.0, albedo: 0.804)
+        );
+    }
+
+    private void InitializeComets()
+    {
+        // 1P/Halley - famous periodic comet, returns every ~76 years
+        // Orbital data from last perihelion: 1986-02-09 (JD 2446470.5)
+        _bodies["halley"] = new CelestialBody(
+            id: "halley",
+            name: "1P/Halley",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 17.834,
+                eccentricity: 0.96714,
+                inclination: 162.263,
+                longitudeOfAscendingNode: 58.420,
+                argumentOfPeriapsis: 111.333,
+                meanAnomalyAtEpoch: 38.076,
+                epoch: 2446470.5
+            ),
+            visualProperties: VisualProperties.Comet(radius: 5.5, albedo: 0.04)
+        );
+
+        // C/1995 O1 (Hale-Bopp) - Great Comet of 1997
+        // Orbital data from perihelion: 1997-04-01 (JD 2450540.0)
+        _bodies["hale-bopp"] = new CelestialBody(
+            id: "hale-bopp",
+            name: "C/1995 O1 (Hale-Bopp)",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 250.46,
+                eccentricity: 0.995068,
+                inclination: 89.430,
+                longitudeOfAscendingNode: 282.471,
+                argumentOfPeriapsis: 130.590,
+                meanAnomalyAtEpoch: 0.0,
+                epoch: 2450540.0
+            ),
+            visualProperties: VisualProperties.Comet(radius: 30.0, albedo: 0.04)
+        );
+
+        // 2P/Encke - short period comet with 3.3 year period
+        _bodies["encke"] = new CelestialBody(
+            id: "encke",
+            name: "2P/Encke",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 2.218,
+                eccentricity: 0.8502,
+                inclination: 11.782,
+                longitudeOfAscendingNode: 334.568,
+                argumentOfPeriapsis: 186.543,
+                meanAnomalyAtEpoch: 152.655,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Comet(radius: 2.4, albedo: 0.047)
+        );
+
+        // 67P/Churyumov-Gerasimenko - visited by Rosetta spacecraft
+        _bodies["churyumov-gerasimenko"] = new CelestialBody(
+            id: "churyumov-gerasimenko",
+            name: "67P/Churyumov-Gerasimenko",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 3.463,
+                eccentricity: 0.641,
+                inclination: 7.041,
+                longitudeOfAscendingNode: 50.147,
+                argumentOfPeriapsis: 12.780,
+                meanAnomalyAtEpoch: 94.416,
+                epoch: 2451545.0
+            ),
+            visualProperties: VisualProperties.Comet(radius: 2.0, albedo: 0.06)
+        );
+
+        // C/1996 B2 (Hyakutake) - Great Comet of 1996, possibly interstellar origin
+        _bodies["hyakutake"] = new CelestialBody(
+            id: "hyakutake",
+            name: "C/1996 B2 (Hyakutake)",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: 1700.0,
+                eccentricity: 0.999897,
+                inclination: 124.920,
+                longitudeOfAscendingNode: 188.046,
+                argumentOfPeriapsis: 130.173,
+                meanAnomalyAtEpoch: 0.0,
+                epoch: 2450182.5 // Perihelion 1996-05-01
+            ),
+            visualProperties: VisualProperties.Comet(radius: 2.5, albedo: 0.04)
+        );
+    }
+
+    private void InitializeInterstellarObjects()
+    {
+        // 1I/'Oumuamua - first confirmed interstellar object
+        // Discovery: October 19, 2017 by Pan-STARRS telescope
+        // Highly elongated object, possibly rocky asteroid
+        // Estimated size: 100-230 meters long, 35-100 meters wide
+        _interstellarObjects["oumuamua"] = new InterstellarObject(
+            id: "oumuamua",
+            designation: "1I/2017 U1",
+            name: "1I/'Oumuamua",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: -1.279,  // Negative for hyperbolic orbit
+                eccentricity: 1.201,     // Record at time of discovery
+                inclination: 122.741,
+                longitudeOfAscendingNode: 24.597,
+                argumentOfPeriapsis: 241.811,
+                meanAnomalyAtEpoch: 0.0,
+                epoch: 2458080.5        // Perihelion 2017-09-09
+            ),
+            discoveryDate: new DateTimeOffset(2017, 10, 19, 0, 0, 0, TimeSpan.Zero),
+            discoverer: "Pan-STARRS (Robert Weryk)",
+            visual: VisualProperties.Asteroid(radius: 115.0, albedo: 0.10),
+            estimatedDiameterMeters: 230.0
+        );
+
+        // 2I/Borisov - second confirmed interstellar object
+        // Discovery: August 30, 2019 by amateur astronomer Gennadiy Borisov
+        // Active comet with coma, typical Oort Cloud composition
+        // Nucleus estimated at 0.4-1 km diameter
+        _interstellarObjects["borisov"] = new InterstellarObject(
+            id: "borisov",
+            designation: "2I/2019 Q4",
+            name: "2I/Borisov",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: -0.851,  // Negative for hyperbolic orbit
+                eccentricity: 3.357,
+                inclination: 44.053,
+                longitudeOfAscendingNode: 308.151,
+                argumentOfPeriapsis: 209.124,
+                meanAnomalyAtEpoch: 0.0,
+                epoch: 2458826.5        // Perihelion 2019-12-08
+            ),
+            discoveryDate: new DateTimeOffset(2019, 8, 30, 0, 0, 0, TimeSpan.Zero),
+            discoverer: "Gennadiy Borisov",
+            visual: VisualProperties.Comet(radius: 500.0, albedo: 0.04),
+            estimatedDiameterMeters: 1000.0
+        );
+
+        // 3I/ATLAS (C/2024 S1) - third confirmed interstellar object
+        // Discovery: July 1, 2025 by ATLAS survey
+        // Record-breaking eccentricity of 6.14
+        // Passed perihelion on October 29, 2025 at 1.35653 AU
+        // Interstellar velocity: 58 km/s
+        _interstellarObjects["atlas"] = new InterstellarObject(
+            id: "atlas",
+            designation: "3I/2024 S1",
+            name: "3I/ATLAS",
+            orbitalElements: new OrbitalElements(
+                semiMajorAxis: -0.193,   // Negative for hyperbolic orbit
+                eccentricity: 6.14,      // Record eccentricity (previous: 3.357)
+                inclination: 88.5,       // Nearly perpendicular to ecliptic
+                longitudeOfAscendingNode: 125.4,
+                argumentOfPeriapsis: 342.1,
+                meanAnomalyAtEpoch: 0.0,
+                epoch: 2460613.98194     // Perihelion 2025-10-29 11:36 UT
+            ),
+            discoveryDate: new DateTimeOffset(2025, 7, 1, 0, 0, 0, TimeSpan.Zero),
+            discoverer: "ATLAS Survey",
+            visual: VisualProperties.Comet(radius: 800.0, albedo: 0.04),
+            estimatedDiameterMeters: 1600.0
+        );
+    }
+}

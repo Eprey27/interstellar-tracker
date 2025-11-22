@@ -18,4 +18,9 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Domain\InterstellarTracker.Domain\InterstellarTracker.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\Infrastructure\InterstellarTracker.Infrastructure\InterstellarTracker.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
