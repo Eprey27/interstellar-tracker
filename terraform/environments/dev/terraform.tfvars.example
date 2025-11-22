@@ -1,0 +1,18 @@
+# Development Environment Terraform Variables
+# Copy this file to terraform.tfvars and fill in your values
+# IMPORTANT: Never commit terraform.tfvars to version control!
+
+# Azure Subscription
+subscription_id = "9fff6f2c-c722-4906-bb36-19bcd059d6d6"
+
+# Owner Information
+owner_email = "your-email@example.com"  # UPDATE THIS
+
+# Alert Configuration
+alert_email = "your-email@example.com"  # UPDATE THIS
+
+# Optional: Override default Key Vault name if needed
+# key_vault_name = "interstellar-dev-kv-unique"
+
+# Optional: Add your IP for Key Vault access
+# key_vault_allowed_ips = ["YOUR.IP.ADDRESS.HERE"]

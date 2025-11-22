@@ -408,7 +408,18 @@ FodyWeavers.xsd
 .env
 .env.local
 .env.*.local
+.env.azure
+.env.terraform
 *.env
+
+# Terraform files
+terraform/**/*.tfvars
+terraform/**/*.tfstate
+terraform/**/*.tfstate.*
+terraform/**/.terraform/
+terraform/**/.terraform.lock.hcl
+terraform/**/*.tfplan
+terraform/**/backend.tf
 
 # Kubernetes secrets
 k8s/secrets/
