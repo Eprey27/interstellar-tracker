@@ -83,8 +83,6 @@ resource "azurerm_key_vault_secret" "calculation_service_api_key" {
 
 # Diagnostic settings for Key Vault audit logs
 resource "azurerm_monitor_diagnostic_setting" "key_vault" {
-  count = var.log_analytics_workspace_id != null ? 1 : 0
-
   name                       = "${var.key_vault_name}-diagnostics"
   target_resource_id         = azurerm_key_vault.main.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
@@ -92,11 +90,5 @@ resource "azurerm_monitor_diagnostic_setting" "key_vault" {
   # Audit logs
   enabled_log {
     category = "AuditEvent"
-  }
-
-  # Metrics
-  metric {
-    category = "AllMetrics"
-    enabled  = true
   }
 }

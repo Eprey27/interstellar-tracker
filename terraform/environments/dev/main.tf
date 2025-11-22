@@ -2,7 +2,7 @@
 # Main Terraform configuration for Azure infrastructure
 
 terraform {
-  required_version = ">= 1.9.0"
+  required_version = ">= 1.0.0"
 
   required_providers {
     azurerm = {
@@ -26,7 +26,7 @@ provider "azurerm" {
       purge_soft_delete_on_destroy    = true
       recover_soft_deleted_key_vaults = true
     }
-    
+
     resource_group {
       prevent_deletion_if_contains_resources = false
     }
@@ -64,17 +64,17 @@ module "monitoring" {
 module "security" {
   source = "../../modules/security"
 
-  resource_group_name                   = azurerm_resource_group.main.name
-  location                              = azurerm_resource_group.main.location
-  key_vault_name                        = var.key_vault_name
-  key_vault_sku                         = var.key_vault_sku
-  soft_delete_retention_days            = var.soft_delete_retention_days
-  purge_protection_enabled              = var.purge_protection_enabled
-  key_vault_network_default_action      = var.key_vault_network_default_action
-  key_vault_allowed_ips                 = var.key_vault_allowed_ips
+  resource_group_name                    = azurerm_resource_group.main.name
+  location                               = azurerm_resource_group.main.location
+  key_vault_name                         = var.key_vault_name
+  key_vault_sku                          = var.key_vault_sku
+  soft_delete_retention_days             = var.soft_delete_retention_days
+  purge_protection_enabled               = var.purge_protection_enabled
+  key_vault_network_default_action       = var.key_vault_network_default_action
+  key_vault_allowed_ips                  = var.key_vault_allowed_ips
   application_insights_connection_string = module.monitoring.application_insights_connection_string
-  log_analytics_workspace_id            = module.monitoring.log_analytics_workspace_id
-  common_tags                           = local.common_tags
+  log_analytics_workspace_id             = module.monitoring.log_analytics_workspace_id
+  common_tags                            = local.common_tags
 
   depends_on = [module.monitoring]
 }

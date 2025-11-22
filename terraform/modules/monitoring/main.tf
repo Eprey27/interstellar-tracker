@@ -42,7 +42,7 @@ resource "azurerm_application_insights" "main" {
   retention_in_days = var.retention_in_days
 
   # Enable features
-  disable_ip_masking = false
+  disable_ip_masking            = false
   local_authentication_disabled = false
 
   tags = merge(
@@ -74,19 +74,8 @@ resource "azurerm_monitor_action_group" "main" {
   )
 }
 
-# Smart Detection - Failure Anomalies (built-in)
-resource "azurerm_application_insights_smart_detection_rule" "failure_anomalies" {
-  name                    = "Failure Anomalies"
-  application_insights_id = azurerm_application_insights.main.id
-  enabled                 = true
-}
-
-# Smart Detection - Performance Anomalies
-resource "azurerm_application_insights_smart_detection_rule" "performance_anomalies" {
-  name                    = "Slow page load time"
-  application_insights_id = azurerm_application_insights.main.id
-  enabled                 = true
-}
+# Note: Smart Detection rules are enabled by default in Application Insights
+# No need to create them explicitly - they're automatically available
 
 # Metric Alert - High Response Time
 resource "azurerm_monitor_metric_alert" "high_response_time" {
@@ -143,7 +132,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "dependency_failures" 
   name                = "${var.application_insights_name}-dependency-failures"
   resource_group_name = var.resource_group_name
   location            = var.location
-  
+
   evaluation_frequency = "PT5M"
   window_duration      = "PT5M"
   scopes               = [azurerm_application_insights.main.id]
@@ -176,49 +165,5 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "dependency_failures" 
   tags = var.common_tags
 }
 
-# Workbook - Service Health Dashboard
-resource "azurerm_application_insights_workbook" "service_health" {
-  name                = "service-health-dashboard"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  display_name        = "Interstellar Tracker - Service Health"
-  source_id           = azurerm_application_insights.main.id
-
-  data_json = jsonencode({
-    version = "Notebook/1.0"
-    items = [
-      {
-        type = 1
-        content = {
-          json = "## Interstellar Tracker - Service Health Dashboard\nReal-time monitoring of all services"
-        }
-      },
-      {
-        type = 3
-        content = {
-          version = "KqlItem/1.0"
-          query = <<-QUERY
-            requests
-            | where timestamp > ago(1h)
-            | summarize 
-                TotalRequests = count(),
-                FailedRequests = countif(success == false),
-                AvgDuration = avg(duration)
-            by name
-            | extend FailureRate = (FailedRequests * 100.0) / TotalRequests
-            | order by TotalRequests desc
-          QUERY
-          size = 0
-          title = "Request Summary (Last Hour)"
-          timeContext = {
-            durationMs = 3600000
-          }
-          queryType = 0
-          resourceType = "microsoft.insights/components"
-        }
-      }
-    ]
-  })
-
-  tags = var.common_tags
-}
+# Note: Workbooks can be created manually in Azure Portal
+# or via separate deployment after infrastructure is established

@@ -87,7 +87,6 @@ variable "calculation_service_api_key" {
 variable "log_analytics_workspace_id" {
   description = "Log Analytics workspace ID for diagnostics"
   type        = string
-  default     = null
 }
 
 variable "common_tags" {
