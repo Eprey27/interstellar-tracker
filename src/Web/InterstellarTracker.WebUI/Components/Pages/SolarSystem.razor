@@ -1,0 +1,230 @@
+@page "/solar-system"
+@rendermode InteractiveServer
+@inject InterstellarTracker.WebUI.Services.CalculationServiceClient CalculationService
+@inject ILogger<SolarSystem> Logger
+
+<PageTitle>Solar System - Interstellar Tracker</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="bi bi-globe"></i> Celestial Bodies</h5>
+                </div>
+                <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                    @if (_loading)
+                    {
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    }
+                    else if (_bodies.Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var body in _bodies)
+                            {
+                                <button type="button" 
+                                        class="list-group-item list-group-item-action @(body.Id == _selectedBodyId ? "active" : "")"
+                                        @onclick="() => SelectBody(body.Id)">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@body.Name</h6>
+                                        <small>@body.Type</small>
+                                    </div>
+                                </button>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No celestial bodies found.</p>
+                    }
+                </div>
+            </div>
+
+            @if (_interstellarObjects.Any())
+            {
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5><i class="bi bi-star"></i> Interstellar Objects</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @foreach (var obj in _interstellarObjects)
+                            {
+                                <button type="button" 
+                                        class="list-group-item list-group-item-action @(obj.Id == _selectedObjectId ? "active" : "")"
+                                        @onclick="() => SelectInterstellarObject(obj.Id)">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@obj.Name</h6>
+                                        <small class="badge bg-danger">e=@obj.Eccentricity.ToString("F2")</small>
+                                    </div>
+                                    <small class="text-muted">@obj.Designation</small>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5><i class="bi bi-diagram-3"></i> 3D Visualization</h5>
+                        <div>
+                            <input type="datetime-local" class="form-control form-control-sm d-inline-block" style="width: auto;" 
+                                   @bind="_selectedDate" @bind:after="UpdatePositions" />
+                            <button class="btn btn-sm btn-primary ms-2" @onclick="ResetToNow">
+                                <i class="bi bi-clock"></i> Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (_selectedPosition != null)
+                    {
+                        <div class="alert alert-info">
+                            <h6>@_selectedPosition.Name (@_selectedPosition.Type)</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Position (meters):</strong>
+                                    <ul class="list-unstyled ms-3">
+                                        <li>X: @_selectedPosition.Position.X.ToString("N0")</li>
+                                        <li>Y: @_selectedPosition.Position.Y.ToString("N0")</li>
+                                        <li>Z: @_selectedPosition.Position.Z.ToString("N0")</li>
+                                        <li><strong>Magnitude:</strong> @_selectedPosition.Position.Magnitude.ToString("N0") m</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Velocity (m/s):</strong>
+                                    <ul class="list-unstyled ms-3">
+                                        <li>X: @_selectedPosition.Velocity.X.ToString("N2")</li>
+                                        <li>Y: @_selectedPosition.Velocity.Y.ToString("N2")</li>
+                                        <li>Z: @_selectedPosition.Velocity.Z.ToString("N2")</li>
+                                        <li><strong>Speed:</strong> @_selectedPosition.Velocity.Magnitude.ToString("N2") m/s</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <small class="text-muted">Calculated at: @_selectedPosition.CalculationDate.ToString("yyyy-MM-dd HH:mm:ss UTC")</small>
+                        </div>
+                    }
+                    else if (_selectedInterstellarPosition != null)
+                    {
+                        <div class="alert alert-warning">
+                            <h6>@_selectedInterstellarPosition.Name (@_selectedInterstellarPosition.Designation)</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Position (meters):</strong>
+                                    <ul class="list-unstyled ms-3">
+                                        <li>X: @_selectedInterstellarPosition.Position.X.ToString("N0")</li>
+                                        <li>Y: @_selectedInterstellarPosition.Position.Y.ToString("N0")</li>
+                                        <li>Z: @_selectedInterstellarPosition.Position.Z.ToString("N0")</li>
+                                        <li><strong>Distance:</strong> @(_selectedInterstellarPosition.Position.Magnitude / 149_597_870_700).ToString("N2") AU</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Velocity (m/s):</strong>
+                                    <ul class="list-unstyled ms-3">
+                                        <li>X: @_selectedInterstellarPosition.Velocity.X.ToString("N2")</li>
+                                        <li>Y: @_selectedInterstellarPosition.Velocity.Y.ToString("N2")</li>
+                                        <li>Z: @_selectedInterstellarPosition.Velocity.Z.ToString("N2")</li>
+                                        <li><strong>Speed:</strong> @(_selectedInterstellarPosition.Velocity.Magnitude / 1000).ToString("N2") km/s</li>
+                                    </ul>
+                                    <p class="mt-2"><strong>Eccentricity:</strong> @_selectedInterstellarPosition.Eccentricity.ToString("F3") (hyperbolic)</p>
+                                    <p><strong>Discovered:</strong> @_selectedInterstellarPosition.DiscoveryDate.ToString("yyyy-MM-dd") by @_selectedInterstellarPosition.Discoverer</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary">
+                            <i class="bi bi-info-circle"></i> Select a celestial body or interstellar object to view its current position and velocity.
+                        </div>
+                    }
+
+                    <div class="text-center mt-4">
+                        <p class="text-muted">
+                            <i class="bi bi-box"></i> 3D WebGL visualization will be integrated here.<br/>
+                            <small>Use the desktop OpenGL application for full 3D rendering.</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Models.CelestialBodyDto> _bodies = new();
+    private List<Models.InterstellarObjectDto> _interstellarObjects = new();
+    private bool _loading = true;
+    private string? _selectedBodyId;
+    private string? _selectedObjectId;
+    private Models.CelestialBodyPositionDto? _selectedPosition;
+    private Models.InterstellarObjectPositionDto? _selectedInterstellarPosition;
+    private DateTime _selectedDate = DateTime.UtcNow;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _loading = true;
+        try
+        {
+            _bodies = await CalculationService.GetAllCelestialBodiesAsync();
+            _interstellarObjects = await CalculationService.GetAllInterstellarObjectsAsync();
+            Logger.LogInformation("Loaded {BodyCount} celestial bodies and {ObjectCount} interstellar objects", 
+                _bodies.Count, _interstellarObjects.Count);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading data");
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task SelectBody(string bodyId)
+    {
+        _selectedBodyId = bodyId;
+        _selectedObjectId = null;
+        _selectedInterstellarPosition = null;
+        _selectedPosition = await CalculationService.GetCelestialBodyPositionAsync(bodyId, _selectedDate);
+    }
+
+    private async Task SelectInterstellarObject(string objectId)
+    {
+        _selectedObjectId = objectId;
+        _selectedBodyId = null;
+        _selectedPosition = null;
+        _selectedInterstellarPosition = await CalculationService.GetInterstellarObjectPositionAsync(objectId, _selectedDate);
+    }
+
+    private async Task UpdatePositions()
+    {
+        if (!string.IsNullOrEmpty(_selectedBodyId))
+        {
+            _selectedPosition = await CalculationService.GetCelestialBodyPositionAsync(_selectedBodyId, _selectedDate);
+        }
+        else if (!string.IsNullOrEmpty(_selectedObjectId))
+        {
+            _selectedInterstellarPosition = await CalculationService.GetInterstellarObjectPositionAsync(_selectedObjectId, _selectedDate);
+        }
+    }
+
+    private async Task ResetToNow()
+    {
+        _selectedDate = DateTime.UtcNow;
+        await UpdatePositions();
+    }
+}

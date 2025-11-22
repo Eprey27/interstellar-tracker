@@ -1,0 +1,60 @@
+﻿@page "/"
+
+<PageTitle>Home - Interstellar Tracker</PageTitle>
+
+<div class="text-center">
+    <h1 class="display-3">🌌 Interstellar Tracker</h1>
+    <p class="lead">3D Visualization System for Tracking Interstellar Object 2I/Borisov</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-globe"></i> Solar System</h5>
+                <p class="card-text">Visualize and track all celestial bodies in our solar system with real-time orbital calculations.</p>
+                <a href="/solar-system" class="btn btn-primary">Explore</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-star"></i> Interstellar Objects</h5>
+                <p class="card-text">Track hyperbolic trajectories of interstellar visitors like 'Oumuamua and 2I/Borisov.</p>
+                <a href="/solar-system" class="btn btn-primary">Track</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-calculator"></i> Calculations</h5>
+                <p class="card-text">Access REST API for orbital mechanics calculations and ephemeris data.</p>
+                <a href="/swagger" class="btn btn-outline-primary">API Docs</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="alert alert-info">
+            <h5><i class="bi bi-info-circle"></i> About This Project</h5>
+            <p>
+                This system implements Clean Architecture with microservices to track the passage of interstellar object 2I/Borisov through our solar system.
+                Features include:
+            </p>
+            <ul>
+                <li>Real-time 3D visualization with OpenGL (desktop application)</li>
+                <li>Web-based dashboard for position calculations</li>
+                <li>RESTful API for orbital mechanics</li>
+                <li>Support for elliptical and hyperbolic orbits</li>
+                <li>Accurate ephemeris calculations using Keplerian orbital elements</li>
+            </ul>
+            <p class="mb-0">
+                <strong>Technologies:</strong> .NET 9.0, Blazor Server, Silk.NET, OpenGL 3.3, Docker, Kubernetes
+            </p>
+        </div>
+    </div>
+</div>

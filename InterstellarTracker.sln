@@ -53,6 +53,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CalculationService", "Calcu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterstellarTracker.CalculationService", "src\Services\CalculationService\InterstellarTracker.CalculationService\InterstellarTracker.CalculationService.csproj", "{54378082-C9B6-4232-B626-3C8AD6044996}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterstellarTracker.WebUI", "src\Web\InterstellarTracker.WebUI\InterstellarTracker.WebUI.csproj", "{7D301D17-4A8E-40DA-B856-448244F860BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -195,6 +197,18 @@ Global
 		{54378082-C9B6-4232-B626-3C8AD6044996}.Release|x64.Build.0 = Release|Any CPU
 		{54378082-C9B6-4232-B626-3C8AD6044996}.Release|x86.ActiveCfg = Release|Any CPU
 		{54378082-C9B6-4232-B626-3C8AD6044996}.Release|x86.Build.0 = Release|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Debug|x64.Build.0 = Debug|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Debug|x86.Build.0 = Debug|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Release|x64.ActiveCfg = Release|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Release|x64.Build.0 = Release|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Release|x86.ActiveCfg = Release|Any CPU
+		{7D301D17-4A8E-40DA-B856-448244F860BA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -223,5 +237,6 @@ Global
 		{007DF09A-62E0-466A-90DB-61DA0B4F8DC3} = {0CBD8A84-ADDB-80AC-D34C-93737CE66ECA}
 		{F3903627-939B-F72D-5FDC-E4235DF56919} = {984BB9B3-3FA3-BE33-9484-CAC21695A33C}
 		{54378082-C9B6-4232-B626-3C8AD6044996} = {F3903627-939B-F72D-5FDC-E4235DF56919}
+		{7D301D17-4A8E-40DA-B856-448244F860BA} = {03997797-E7F5-0643-168D-B8EA7178C2FE}
 	EndGlobalSection
 EndGlobal
