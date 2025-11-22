@@ -196,6 +196,314 @@ git commit -m "feat: initial workspace setup..."
 
 ---
 
+## Session 5 - 3D Visualization Frontend
+
+**Date:** 2025-11-22  
+**Duration:** ~3 hours  
+**Status:** ✅ COMPLETED
+
+### Objectives
+
+- [x] Install Silk.NET packages for 3D rendering
+- [x] Implement OpenGL rendering pipeline
+- [x] Create camera system with orbital controls
+- [x] Generate sphere meshes and orbit paths
+- [x] Integrate with Application/Infrastructure layers
+- [x] Build complete window with input handling
+- [x] Test real-time solar system visualization
+
+### Accomplishments
+
+#### 1. Silk.NET Integration
+
+**Packages Installed (v2.22.0):**
+- Silk.NET.OpenGL - Core OpenGL bindings
+- Silk.NET.Windowing.Glfw - Cross-platform windowing
+- Silk.NET.Maths - Vector and matrix math
+- Silk.NET.Input - Mouse and keyboard input
+- Microsoft.Extensions.DependencyInjection (v10.0.0)
+
+**Project Configuration:**
+```xml
+<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+```
+Required for OpenGL buffer pointer operations.
+
+#### 2. Rendering Infrastructure
+
+**Shader.cs (118 lines)**
+- OpenGL shader program management
+- Compile GLSL with error checking
+- Uniform variable setters (Matrix4, Vector3, float)
+- Type alias to avoid Silk.NET.OpenGL.Shader conflict
+
+**ShaderSources.cs (104 lines)**
+- Embedded GLSL shader source code
+- Vertex shader: MVP transformation + normal matrix
+- Fragment shader: Phong lighting (ambient + diffuse + specular)
+- Emissive flag for Sun rendering
+- Line shaders for orbit path visualization
+
+**Camera.cs (145 lines)**
+- Orbital camera with spherical coordinates
+- Methods: Orbit(), Zoom(), Pan(), Reset(), FocusOn()
+- View matrix: LookAt transformation
+- Projection: Perspective (FOV=45°, Near=0.1, Far=10000 AU)
+- Default: distance=50 AU, azimuth=45°, elevation=30°
+
+**MeshGenerator.cs (183 lines)**
+- GenerateSphere(): UV sphere with interleaved position+normal
+- CreateBuffers(): VAO/VBO/EBO setup with attribute pointers
+- GenerateOrbitPath(): Elliptical orbit using r = a(1-e²)/(1+e*cos(nu))
+- CreateLineBuffers(): Line strip rendering for orbits
+- Unsafe code for direct OpenGL buffer manipulation
+
+#### 3. Window and Rendering Loop
+
+**Window.cs (370 lines)**
+- IWindow implementation with OpenGL context
+- OnLoad(): Initialize GL, create shaders/camera/mesh, load data
+- OnRender(): Clear → Draw orbits → Draw Sun → Draw bodies → Draw interstellar objects
+- OnUpdate(): Advance Julian Date with time simulation
+- LoadCelestialBodies(): Async fetch from ICelestialBodyRepository
+- CalculatePosition(): Calls OrbitalElements.CalculatePosition(), converts meters→AU
+- RenderCelestialBody(): Logarithmic size scaling, Phong lighting
+- RenderInterstellarObject(): Fixed 0.1 AU size, slightly emissive
+
+**Program.cs**
+- ServiceCollection with DI container
+- Register Application and Infrastructure services
+- Instantiate Window with ICelestialBodyRepository
+- Run main loop
+
+#### 4. Controls Implementation
+
+**Mouse:**
+- Left button + drag: Orbit camera around target
+- Mouse wheel: Zoom in/out (min=1 AU, max=5000 AU)
+- Middle button + drag: Pan camera target
+
+**Keyboard:**
+- Space: Pause/Resume time simulation
+- R: Reset camera and time to defaults
+- +/-: Increase/Decrease time speed (×2 or ÷2)
+- Esc: Exit application
+
+#### 5. Visual Details
+
+**Lighting:**
+- Directional light from origin (Sun position)
+- Ambient: 0.1, Diffuse: 1.0, Specular: 0.5 (n=32)
+- Sun rendered with emissive flag (bypasses lighting)
+
+**Scaling:**
+- Bodies: Logarithmic `max(0.05, log10(radiusAU+1)*0.2)`
+- Interstellar objects: Fixed 0.1 AU for visibility
+- Orbits: Generated at actual scale
+
+**Data:**
+- 19 celestial bodies (Sun, 8 planets, 5 dwarf planets, 5 comets)
+- 3 interstellar objects ('Oumuamua, 2I/Borisov, C/2019 Q4 ATLAS)
+- All loaded asynchronously from InMemoryCelestialBodyRepository
+
+#### 6. Repository Enhancement
+
+**ICelestialBodyRepository.cs**
+- Added: `Task<IEnumerable<InterstellarObject>> GetAllInterstellarObjectsAsync()`
+
+**InMemoryCelestialBodyRepository.cs**
+- Implemented: Returns `_interstellarObjects.Values`
+- Separated interstellar objects from celestial bodies
+
+#### 7. Compilation Issues Resolved
+
+**Problems:**
+1. Shader namespace ambiguity (Silk.NET vs custom class)
+2. Unsafe code disabled (OpenGL pointers)
+3. Type mismatches (System.Numerics.Vector2 vs Silk.NET.Maths.Vector2D)
+4. InterstellarObject vs CelestialBody casting
+5. VisualProperties vs Visual property name
+
+**Solutions:**
+1. Added `using Shader = InterstellarTracker.Web.Rendering.Shader` alias
+2. Enabled `<AllowUnsafeBlocks>true</AllowUnsafeBlocks>`
+3. Used System.Numerics.Vector2 for mouse callbacks
+4. Created separate RenderInterstellarObject() method
+5. Wrapped DrawElements(null) in unsafe block
+6. Corrected property access to Visual
+
+### Technical Details
+
+**OpenGL:**
+- Version: 3.3 Core Profile
+- Shader-based rendering (no fixed pipeline)
+- VAO/VBO/EBO for mesh data
+- Interleaved vertex attributes (position + normal)
+
+**Time Simulation:**
+- Julian Date starting at J2000.0 (2451545.0)
+- Default speed: 1 day per second
+- Adjustable with +/- keys
+
+**Coordinate System:**
+- X: Vernal equinox direction
+- Y: 90° from X in ecliptic plane
+- Z: North ecliptic pole
+- Positions converted from meters to AU for rendering
+
+### Build & Test Results
+
+```
+Build: ✅ SUCCESS (2.7s, 7 projects)
+Warning: CS0414 - _rightMouseDown field assigned but never used (cosmetic)
+Tests: ✅ 54 PASSING (31 Domain + 14 Application + 9 Integration)
+```
+
+### Known Issues
+
+1. **Orbit Alignment Bug** ⚠️ MEDIUM PRIORITY
+   - Orbital path lines appear perpendicular to ecliptic
+   - Should be nearly flat on XY plane (ecliptic)
+   - Suspected coordinate transformation issue
+   - Documented in `docs/issues/orbit-alignment-bug.md`
+   - **Investigation needed:** MeshGenerator.GenerateOrbitPath() and OrbitalElements.CalculatePosition()
+
+2. **Unused Field Warning** (Minor)
+   - `_rightMouseDown` field in Window.cs
+   - **Priority:** LOW (cosmetic)
+
+### Future Enhancements
+
+**Visual Testing:**
+- Implement screenshot capture using GL.ReadPixels()
+- Create reference images for golden master testing
+- Use ImageSharp for perceptual diff comparison
+- Integrate into CI pipeline for regression detection
+
+**UI Overlay:**
+- Body name labels with selection
+- HUD with Julian Date display
+- Controls help overlay
+- Frame rate counter
+
+**Performance:**
+- Instancing for multiple spheres (reduce draw calls)
+- LOD system for distant bodies
+- Frustum culling for off-screen objects
+
+**Visual Refinement:**
+- Adjust size scaling (logarithmic may be too subtle)
+- Orbit line colors/thickness/alpha
+- Star background skybox
+- Lens flare for Sun
+
+### Git Status
+
+```
+Branch: master
+Commit: a9b2077 - feat(web): implement 3D solar system visualization with Silk.NET
+Files Changed:
+  - Added: Shader.cs, Camera.cs, ShaderSources.cs, MeshGenerator.cs, Window.cs
+  - Modified: Program.cs, InterstellarTracker.Web.csproj
+  - Modified: ICelestialBodyRepository.cs, InMemoryCelestialBodyRepository.cs
+  - Added: docs/issues/orbit-alignment-bug.md
+Lines: +1429 insertions, -3 deletions
+```
+
+### Commands Used
+
+```powershell
+# Package installation
+dotnet add package Silk.NET.OpenGL --version 2.22.0
+dotnet add package Silk.NET.Windowing.Glfw --version 2.22.0
+dotnet add package Silk.NET.Maths --version 2.22.0
+dotnet add package Silk.NET.Input --version 2.22.0
+dotnet add package Microsoft.Extensions.DependencyInjection
+
+# Build and run
+dotnet build InterstellarTracker.sln
+dotnet run --project src/Web/InterstellarTracker.Web
+
+# Git
+git add -A
+git commit -m "feat(web): implement 3D solar system visualization..."
+```
+
+### Files Created/Modified This Session
+
+**New Files:**
+- `src/Web/InterstellarTracker.Web/Rendering/Shader.cs`
+- `src/Web/InterstellarTracker.Web/Rendering/Camera.cs`
+- `src/Web/InterstellarTracker.Web/Rendering/ShaderSources.cs`
+- `src/Web/InterstellarTracker.Web/Rendering/MeshGenerator.cs`
+- `src/Web/InterstellarTracker.Web/Window.cs`
+- `docs/issues/orbit-alignment-bug.md`
+
+**Modified Files:**
+- `src/Web/InterstellarTracker.Web/Program.cs`
+- `src/Web/InterstellarTracker.Web/InterstellarTracker.Web.csproj`
+- `src/Application/InterstellarTracker.Application/Common/Interfaces/ICelestialBodyRepository.cs`
+- `src/Infrastructure/InterstellarTracker.Infrastructure/Persistence/InMemoryCelestialBodyRepository.cs`
+- `InterstellarTracker.sln` (temporarily removed CalculationService)
+
+### Lessons Learned
+
+1. **Silk.NET Input Uses System.Numerics**
+   - Mouse callbacks expect System.Numerics.Vector2
+   - Not Silk.NET.Maths.Vector2D<float>
+   - Convert between types explicitly
+
+2. **Type Aliases Resolve Ambiguity**
+   - `using Shader = InterstellarTracker.Web.Rendering.Shader`
+   - Essential when wrapping library types
+
+3. **Unsafe Code for OpenGL Pointers**
+   - BufferData with null pointer requires unsafe context
+   - Enable at project level: `<AllowUnsafeBlocks>true</AllowUnsafeBlocks>`
+
+4. **Visual Testing Needs Automation**
+   - Manual observation caught orbit alignment bug
+   - Screenshot + image comparison = automated visual regression
+   - Critical for 3D graphics validation
+
+5. **DI Integration Simplifies Testing**
+   - Window receives repository via constructor
+   - Easy to mock for unit tests
+   - Follows Clean Architecture principles
+
+### Next Session Priorities
+
+1. **Investigate Orbit Alignment Bug**
+   - Debug MeshGenerator.GenerateOrbitPath()
+   - Verify OrbitalElements rotation matrices
+   - Add ecliptic plane grid for visual reference
+   - Test with zero-inclination orbit (should be XY circle)
+
+2. **Re-add CalculationService**
+   - `dotnet sln add CalculationService.csproj`
+   - Fix Microsoft.OpenApi.Models errors
+   - Verify GetAllInterstellarObjectsAsync usage
+
+3. **Implement Visual Testing**
+   - Create screenshot capture utility
+   - Add reference images to tests/Integration.Tests/ReferenceImages/
+   - Integrate ImageSharp for comparison
+   - Add CI workflow for visual regression
+
+4. **Build Microservices**
+   - ApiGateway: Ocelot + gateway patterns
+   - AuthService: Keycloak integration
+   - CalculationService: Orbital mechanics API
+   - VisualizationService: Pre-rendered trajectories
+
+5. **CI/CD Setup**
+   - GitHub Actions workflow
+   - Build, test, coverage gates
+   - Docker build and push
+   - Kubernetes deployment
+
+---
+
 ## Session 2 - Hyperbolic Orbit Fix
 
 **Date:** 2025-11-22  

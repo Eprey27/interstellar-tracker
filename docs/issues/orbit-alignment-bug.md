@@ -6,20 +6,24 @@
 **Labels:** bug, visualization, orbital-mechanics
 
 ## Description
+
 The orbital path lines rendered in the 3D visualization appear to be perpendicular to the ecliptic plane instead of lying on the XY plane (ecliptic).
 
 ## Expected Behavior
+
 - Orbital paths should be rendered on or near the ecliptic plane (XY plane in our coordinate system)
 - Inclination should only tilt orbits slightly from this plane
 - Camera looking down Z-axis should see orbits as nearly flat ellipses
 
 ## Observed Behavior
+
 - Orbit lines appear nearly perpendicular to ecliptic from default camera view
 - Suggests coordinate transformation issue or incorrect plane calculation
 
 ## Potential Root Causes
 
 ### 1. MeshGenerator.GenerateOrbitPath()
+
 ```csharp
 // Current implementation generates vertices in 2D then converts to 3D
 // May not be applying inclination/ascending node rotations correctly
@@ -27,15 +31,18 @@ for (int i = 0; i <= segments; i++) { ... }
 ```
 
 ### 2. OrbitalElements.CalculatePosition()
+
 - Coordinate transformation from orbital frame to ecliptic frame
-- Rotation matrix order: R_z(Ω) * R_x(i) * R_z(ω)
+- Rotation matrix order: R_z(Ω) *R_x(i)* R_z(ω)
 - May have wrong axis or order
 
 ### 3. Camera Default Orientation
+
 - Camera.cs default: distance=50 AU, azimuth=45°, elevation=30°
 - May not be looking at ecliptic plane from expected angle
 
 ## Investigation Steps
+
 - [ ] Add debug visualization for ecliptic plane (XY grid at Z=0)
 - [ ] Print orbital elements for Earth: i≈0°, Ω≈0°, should be nearly flat
 - [ ] Verify rotation matrix multiplication order in CalculatePosition()
@@ -46,7 +53,9 @@ for (int i = 0; i <= segments; i++) { ... }
 ## Proposed Solutions
 
 ### Option A: Fix Coordinate Transformation
+
 Review `OrbitalElements.CalculatePosition()` rotation matrices:
+
 ```csharp
 // Correct order for ecliptic coordinates:
 // 1. Rotate by argument of periapsis (ω) in orbital plane
@@ -55,15 +64,19 @@ Review `OrbitalElements.CalculatePosition()` rotation matrices:
 ```
 
 ### Option B: Fix Orbit Path Generation
+
 Update `MeshGenerator.GenerateOrbitPath()` to apply same transformations as CalculatePosition().
 
 ### Option C: Both
+
 Ensure both methods use identical coordinate system definitions.
 
 ## Future Testing Strategy
 
 ### Automated Visual Testing
+
 1. **Screenshot Capture:**
+
    ```csharp
    // Use Silk.NET framebuffer read
    GL.ReadPixels(0, 0, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, buffer);
@@ -79,6 +92,7 @@ Ensure both methods use identical coordinate system definitions.
    - Threshold-based comparison with tolerance for anti-aliasing
 
 4. **CI Integration:**
+
    ```yaml
    # .github/workflows/visual-regression.yml
    - name: Visual Regression Tests
@@ -89,6 +103,7 @@ Ensure both methods use identical coordinate system definitions.
    ```
 
 ### Unit Tests for Orbital Mechanics
+
 ```csharp
 [Fact]
 public void Earth_Orbit_Should_Be_Nearly_Flat()
@@ -109,17 +124,20 @@ public void GenerateOrbitPath_ZeroInclination_Should_Be_XY_Plane()
 ```
 
 ## Files to Review
+
 - `src/Web/InterstellarTracker.Web/Rendering/MeshGenerator.cs` (line 150-183)
 - `src/Domain/InterstellarTracker.Domain/ValueObjects/OrbitalElements.cs` (CalculatePosition method)
 - `src/Web/InterstellarTracker.Web/Window.cs` (LoadCelestialBodies, line 90-130)
 - `src/Web/InterstellarTracker.Web/Rendering/Camera.cs` (default orientation)
 
 ## References
+
 - [Orbital Elements - NASA](https://ssd.jpl.nasa.gov/planets/approx_pos.html)
 - [Coordinate Systems - JPL Horizons](https://ssd.jpl.nasa.gov/horizons/manual.html#frames)
 - Vallado, "Fundamentals of Astrodynamics and Applications", Chapter 3
 
 ## Notes
+
 User observation: "las líneas que describen las órbitas no están bien alineadas con la eclíptica, de hecho me ha parecido que eran casi perpendiculares"
 
 This is a critical visual bug affecting usability - users cannot properly understand orbital relationships if planes are incorrect.
