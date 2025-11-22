@@ -1,0 +1,6 @@
+@InterstellarTracker.AuthService_HostAddress = http://localhost:5172
+
+GET {{InterstellarTracker.AuthService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

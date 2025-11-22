@@ -1,0 +1,81 @@
+# Docker Compose for Local Development
+# Services: PostgreSQL, Keycloak, MailHog
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:17-alpine
+    container_name: interstellar-postgres
+    environment:
+      POSTGRES_DB: interstellar
+      POSTGRES_USER: interstellar_user
+      POSTGRES_PASSWORD: Dev_Password_123!
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - interstellar-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U interstellar_user -d interstellar"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Keycloak Identity & Access Management
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    container_name: interstellar-keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: interstellar_user
+      KC_DB_PASSWORD: Dev_Password_123!
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HTTP_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      - start-dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - interstellar-network
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
+  # MailHog - Email Testing Tool
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: interstellar-mailhog
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web UI
+    networks:
+      - interstellar-network
+    restart: unless-stopped
+
+networks:
+  interstellar-network:
+    driver: bridge
+    name: interstellar-network
+
+volumes:
+  postgres_data:
+    name: interstellar-postgres-data
