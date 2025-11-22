@@ -82,6 +82,7 @@ public sealed class OrbitalElements : IEquatable<OrbitalElements>
 
     /// <summary>
     /// Calculate the position vector at a given time using Keplerian orbital mechanics.
+    /// Supports elliptical (e &lt; 1), parabolic (e = 1), and hyperbolic (e &gt; 1) orbits.
     /// </summary>
     /// <param name="julianDate">Time for calculation.</param>
     /// <returns>Position vector in meters from parent body.</returns>
@@ -90,23 +91,42 @@ public sealed class OrbitalElements : IEquatable<OrbitalElements>
         // Time since epoch in seconds
         var timeSinceEpoch = (julianDate - EpochJulianDate) * 86400.0;
 
-        // Mean motion (rad/s)
-        var meanMotion = Math.Sqrt(GravitationalParameter / Math.Pow(SemiMajorAxisMeters, 3));
+        // Mean motion (rad/s) - note: abs() for hyperbolic orbits
+        var meanMotion = Math.Sqrt(GravitationalParameter / Math.Pow(Math.Abs(SemiMajorAxisMeters), 3));
 
         // Current mean anomaly
         var meanAnomaly = MeanAnomalyAtEpochRadians + meanMotion * timeSinceEpoch;
 
-        // Solve Kepler's equation for eccentric anomaly (Newton-Raphson iteration)
-        var eccentricAnomaly = SolveKeplersEquation(meanAnomaly, Eccentricity);
+        double trueAnomaly, distance;
 
-        // True anomaly
-        var trueAnomaly = 2.0 * Math.Atan2(
-            Math.Sqrt(1.0 + Eccentricity) * Math.Sin(eccentricAnomaly / 2.0),
-            Math.Sqrt(1.0 - Eccentricity) * Math.Cos(eccentricAnomaly / 2.0)
-        );
+        if (Eccentricity < 1.0)
+        {
+            // Elliptical orbit
+            var eccentricAnomaly = SolveKeplersEquation(meanAnomaly, Eccentricity);
 
-        // Distance from parent
-        var distance = SemiMajorAxisMeters * (1.0 - Eccentricity * Math.Cos(eccentricAnomaly));
+            // True anomaly
+            trueAnomaly = 2.0 * Math.Atan2(
+                Math.Sqrt(1.0 + Eccentricity) * Math.Sin(eccentricAnomaly / 2.0),
+                Math.Sqrt(1.0 - Eccentricity) * Math.Cos(eccentricAnomaly / 2.0)
+            );
+
+            // Distance from parent
+            distance = SemiMajorAxisMeters * (1.0 - Eccentricity * Math.Cos(eccentricAnomaly));
+        }
+        else
+        {
+            // Hyperbolic orbit (e > 1)
+            var hyperbolicAnomaly = SolveHyperbolicKeplersEquation(meanAnomaly, Eccentricity);
+
+            // True anomaly for hyperbolic orbit
+            trueAnomaly = 2.0 * Math.Atan2(
+                Math.Sqrt(Eccentricity + 1.0) * Math.Sinh(hyperbolicAnomaly / 2.0),
+                Math.Sqrt(Eccentricity - 1.0) * Math.Cosh(hyperbolicAnomaly / 2.0)
+            );
+
+            // Distance from parent (note: SemiMajorAxisMeters is negative for hyperbolic)
+            distance = SemiMajorAxisMeters * (1.0 - Eccentricity * Math.Cosh(hyperbolicAnomaly));
+        }
 
         // Position in orbital plane
         var x = distance * Math.Cos(trueAnomaly);
@@ -118,27 +138,44 @@ public sealed class OrbitalElements : IEquatable<OrbitalElements>
 
     /// <summary>
     /// Calculate the velocity vector at a given time.
+    /// Supports elliptical (e &lt; 1) and hyperbolic (e &gt; 1) orbits.
     /// </summary>
     public Vector3 CalculateVelocity(double julianDate)
     {
         // Time since epoch
         var timeSinceEpoch = (julianDate - EpochJulianDate) * 86400.0;
-        var meanMotion = Math.Sqrt(GravitationalParameter / Math.Pow(SemiMajorAxisMeters, 3));
+        var meanMotion = Math.Sqrt(GravitationalParameter / Math.Pow(Math.Abs(SemiMajorAxisMeters), 3));
         var meanAnomaly = MeanAnomalyAtEpochRadians + meanMotion * timeSinceEpoch;
-        var eccentricAnomaly = SolveKeplersEquation(meanAnomaly, Eccentricity);
 
-        // Velocity in orbital plane
-        var distance = SemiMajorAxisMeters * (1.0 - Eccentricity * Math.Cos(eccentricAnomaly));
-        var velocityMagnitude = Math.Sqrt(GravitationalParameter * SemiMajorAxisMeters) / distance;
+        double vx, vy, distance;
 
-        var vx = -velocityMagnitude * Math.Sin(eccentricAnomaly);
-        var vy = velocityMagnitude * Math.Sqrt(1.0 - Eccentricity * Eccentricity) * Math.Cos(eccentricAnomaly);
+        if (Eccentricity < 1.0)
+        {
+            // Elliptical orbit
+            var eccentricAnomaly = SolveKeplersEquation(meanAnomaly, Eccentricity);
+            distance = SemiMajorAxisMeters * (1.0 - Eccentricity * Math.Cos(eccentricAnomaly));
+            var velocityMagnitude = Math.Sqrt(GravitationalParameter * SemiMajorAxisMeters) / distance;
+
+            vx = -velocityMagnitude * Math.Sin(eccentricAnomaly);
+            vy = velocityMagnitude * Math.Sqrt(1.0 - Eccentricity * Eccentricity) * Math.Cos(eccentricAnomaly);
+        }
+        else
+        {
+            // Hyperbolic orbit
+            var hyperbolicAnomaly = SolveHyperbolicKeplersEquation(meanAnomaly, Eccentricity);
+            distance = SemiMajorAxisMeters * (1.0 - Eccentricity * Math.Cosh(hyperbolicAnomaly));
+            var velocityMagnitude = Math.Sqrt(GravitationalParameter * Math.Abs(SemiMajorAxisMeters)) / Math.Abs(distance);
+
+            vx = -velocityMagnitude * Math.Sinh(hyperbolicAnomaly);
+            vy = velocityMagnitude * Math.Sqrt(Eccentricity * Eccentricity - 1.0) * Math.Cosh(hyperbolicAnomaly);
+        }
 
         return RotateToEcliptic(vx, vy, 0);
     }
 
     /// <summary>
     /// Solve Kepler's equation: M = E - e*sin(E) using Newton-Raphson method.
+    /// For elliptical and circular orbits (e < 1).
     /// </summary>
     private static double SolveKeplersEquation(double meanAnomaly, double eccentricity, int maxIterations = 10)
     {
@@ -154,6 +191,33 @@ public sealed class OrbitalElements : IEquatable<OrbitalElements>
         }
 
         return E;
+    }
+
+    /// <summary>
+    /// Solve hyperbolic Kepler's equation: M = e*sinh(H) - H using Newton-Raphson method.
+    /// For hyperbolic orbits (e > 1).
+    /// </summary>
+    private static double SolveHyperbolicKeplersEquation(double meanAnomaly, double eccentricity, int maxIterations = 20)
+    {
+        // Initial guess for hyperbolic anomaly
+        var H = Math.Log(2.0 * Math.Abs(meanAnomaly) / eccentricity + 1.8);
+        if (meanAnomaly < 0) H = -H;
+
+        for (int i = 0; i < maxIterations; i++)
+        {
+            var sinhH = Math.Sinh(H);
+            var coshH = Math.Cosh(H);
+            var f = eccentricity * sinhH - H - meanAnomaly;
+            var fPrime = eccentricity * coshH - 1.0;
+
+            var deltaH = f / fPrime;
+            H -= deltaH;
+
+            if (Math.Abs(deltaH) < 1e-10)
+                break;
+        }
+
+        return H;
     }
 
     /// <summary>

@@ -68,7 +68,7 @@ public class InterstellarObjectTests
         );
     }
 
-    [Fact(Skip = "Hyperbolic orbit calculations need specialized implementation (e > 1). TODO: Implement hyperbolic Kepler solver.")]
+    [Fact]
     public void CalculatePosition_ReturnsValidVector()
     {
         var borisov = InterstellarObject.CreateBorisov();
@@ -77,9 +77,12 @@ public class InterstellarObjectTests
         var position = borisov.CalculatePosition(julianDate);
         
         Assert.NotEqual(double.NaN, position.X);
+        Assert.NotEqual(double.NaN, position.Y);
+        Assert.NotEqual(double.NaN, position.Z);
+        Assert.True(position.Magnitude > 0, "Position magnitude should be positive");
     }
 
-    [Fact(Skip = "Hyperbolic orbit calculations need specialized implementation (e > 1). TODO: Implement hyperbolic Kepler solver.")]
+    [Fact]
     public void CalculateVelocity_ReturnsValidVector()
     {
         var borisov = InterstellarObject.CreateBorisov();
@@ -88,6 +91,9 @@ public class InterstellarObjectTests
         var velocity = borisov.CalculateVelocity(julianDate);
         
         Assert.NotEqual(double.NaN, velocity.X);
+        Assert.NotEqual(double.NaN, velocity.Y);
+        Assert.NotEqual(double.NaN, velocity.Z);
+        Assert.True(velocity.Magnitude > 0, "Velocity magnitude should be positive");
     }
 
     [Fact]
