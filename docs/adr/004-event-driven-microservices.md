@@ -8,11 +8,13 @@
 ## Context
 
 Currently, Interstellar Tracker uses a hybrid architecture where:
+
 - Domain, Application, and Infrastructure layers are shared libraries
 - Services communicate via synchronous HTTP calls
 - WebUI directly calls CalculationService REST API
 
 While this approach works well for the initial MVP, it has limitations:
+
 - **Tight coupling** between services via HTTP dependencies
 - **Synchronous blocking** - services wait for responses
 - **Limited scalability** - can't independently scale components
@@ -20,6 +22,7 @@ While this approach works well for the initial MVP, it has limitations:
 - **No event history** - lost context of what happened when
 
 As the system grows, we need to evolve toward a truly distributed, event-driven architecture where:
+
 - Services are autonomous and loosely coupled
 - Communication is asynchronous via message queues
 - Each service has its own data store
@@ -33,6 +36,7 @@ We will evolve the architecture to **Event-Driven Microservices** using:
 ### 1. Message Broker: RabbitMQ (Preferred Choice)
 
 **Why RabbitMQ over Kafka:**
+
 - ✅ **Simplicity**: Easier to set up and operate for smaller teams
 - ✅ **Message Patterns**: Native support for publish/subscribe, routing, topics
 - ✅ **Low Latency**: Better for command/query patterns with immediate responses
@@ -42,6 +46,7 @@ We will evolve the architecture to **Event-Driven Microservices** using:
 - ✅ **Management UI**: Excellent web-based monitoring console
 
 **When to Consider Kafka:**
+
 - Need for massive throughput (>100k msgs/sec)
 - Log retention and replay critical
 - Stream processing requirements
@@ -52,9 +57,11 @@ For Interstellar Tracker's use case (orbital calculations, user requests, notifi
 ### 2. Communication Patterns
 
 #### Command Pattern (Point-to-Point)
+
 Commands represent actions that must be executed by a specific service.
 
 **Example: Calculate Orbital Position**
+
 ```csharp
 public record CalculatePositionCommand
 {
@@ -71,9 +78,11 @@ public record CalculatePositionCommand
 ```
 
 #### Event Pattern (Publish/Subscribe)
+
 Events represent facts that have occurred. Multiple services can react.
 
 **Example: Position Calculated**
+
 ```csharp
 public record PositionCalculatedEvent
 {
@@ -132,6 +141,7 @@ If any step fails → Compensating transactions rollback
 ```
 
 **Saga State Machine Example (MassTransit):**
+
 ```csharp
 public class InterstellarObjectDiscoverySaga : MassTransitStateMachine<InterstellarObjectDiscoveryState>
 {
@@ -221,19 +231,23 @@ Each service will own its data and expose it only via events:
 ### 5. Technology Stack
 
 **Message Broker:**
+
 - RabbitMQ 3.13+ (container: rabbitmq:3.13-management-alpine)
 - Port 5672 (AMQP), 15672 (Management UI)
 
 **.NET Integration:**
+
 - MassTransit 8.2+ (abstraction over RabbitMQ)
 - MassTransit.RabbitMQ
 - MassTransit.EntityFrameworkCore (saga persistence)
 
 **Service Discovery:**
+
 - Consul or built-in Kubernetes DNS
 - Service mesh consideration: Linkerd (lightweight)
 
 **Observability:**
+
 - Distributed tracing: OpenTelemetry
 - MassTransit metrics exposed to Prometheus
 - RabbitMQ metrics scraped by Prometheus
@@ -241,6 +255,7 @@ Each service will own its data and expose it only via events:
 ## Architecture Diagram
 
 ### Before (Current - Synchronous)
+
 ```
 ┌─────────┐  HTTP/REST  ┌────────────────────┐
 │  WebUI  │ ──────────→ │ CalculationService │
@@ -249,6 +264,7 @@ Each service will own its data and expose it only via events:
 ```
 
 ### After (Proposed - Asynchronous)
+
 ```
 ┌─────────┐                             ┌────────────────────┐
 │  WebUI  │                             │ CalculationService │
@@ -276,6 +292,7 @@ Each service will own its data and expose it only via events:
 ## Message Exchange Examples
 
 ### 1. User Queries Position
+
 ```
 WebUI → RabbitMQ: CalculatePositionCommand
   {
@@ -301,6 +318,7 @@ AuditService ← RabbitMQ: (logs query)
 ```
 
 ### 2. Batch Orbit Updates (Background Job)
+
 ```
 SchedulerService → RabbitMQ: UpdateOrbitsCommand
   (no response needed, fire-and-forget)
@@ -341,22 +359,26 @@ NotificationService ← RabbitMQ: (notifies subscribers)
 ## Migration Strategy
 
 ### Phase 1: Hybrid Approach (Current)
+
 - Keep synchronous HTTP for MVP
 - Prove the domain model works
 - Focus on orbital calculation correctness
 
 ### Phase 2: Add RabbitMQ Alongside HTTP ⬅️ **YOU ARE HERE**
+
 - Introduce RabbitMQ to docker-compose
 - Keep HTTP endpoints but also publish events
 - Services can consume events or use HTTP
 - Gradual transition without breaking existing functionality
 
 ### Phase 3: Event-First Architecture
+
 - New features use events exclusively
 - HTTP endpoints become thin facades over message bus
 - Introduce Saga pattern for complex workflows
 
 ### Phase 4: Pure Microservices
+
 - Each service has own database
 - All communication via events
 - API Gateway becomes message router
@@ -365,6 +387,7 @@ NotificationService ← RabbitMQ: (notifies subscribers)
 ## Implementation Checklist
 
 ### Infrastructure Setup
+
 - [ ] Add RabbitMQ to docker-compose.yml
 - [ ] Configure RabbitMQ management UI
 - [ ] Add MassTransit NuGet packages to all services
@@ -372,30 +395,35 @@ NotificationService ← RabbitMQ: (notifies subscribers)
 - [ ] Configure Prometheus to scrape RabbitMQ metrics
 
 ### Message Contracts
+
 - [ ] Define command messages (CalculatePosition, UpdateOrbit, etc.)
 - [ ] Define event messages (PositionCalculated, OrbitUpdated, etc.)
 - [ ] Create correlation ID infrastructure
 - [ ] Implement message versioning strategy
 
 ### Service Modifications
+
 - [ ] CalculationService: Add message consumers
 - [ ] WebUI: Add message publishers and response handlers
 - [ ] Create CacheService as first pure event-driven service
 - [ ] Create AuditService for event logging
 
 ### Saga Implementation
+
 - [ ] Set up saga state persistence (EF Core)
 - [ ] Implement InterstellarObjectDiscoverySaga
 - [ ] Add compensating transaction logic
 - [ ] Create saga monitoring dashboard
 
 ### Observability
+
 - [ ] Add OpenTelemetry for distributed tracing
 - [ ] Create RabbitMQ Grafana dashboard
 - [ ] Implement message retry and dead letter queue handling
 - [ ] Add correlation ID to all log messages
 
 ### Testing
+
 - [ ] Unit tests with InMemoryTestHarness (MassTransit)
 - [ ] Integration tests for saga workflows
 - [ ] Load testing with message throughput metrics
@@ -414,6 +442,7 @@ NotificationService ← RabbitMQ: (notifies subscribers)
 **Status: APPROVED for Future Implementation**
 
 We will proceed with the hybrid approach (Phase 2) after completing:
+
 1. Current MVP with HTTP communication
 2. Azure Container Apps deployment
 3. Application Insights integration

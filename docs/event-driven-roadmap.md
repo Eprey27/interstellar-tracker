@@ -28,6 +28,7 @@ This document outlines the step-by-step evolution from the current hybrid monoli
 ```
 
 **Characteristics:**
+
 - Synchronous HTTP/REST communication
 - Shared domain/application/infrastructure libraries
 - Single deployment unit per service
@@ -60,6 +61,7 @@ This document outlines the step-by-step evolution from the current hybrid monoli
 ```
 
 **Characteristics:**
+
 - Asynchronous message-based communication
 - Each service owns its data store
 - Loose coupling via events and commands
@@ -75,6 +77,7 @@ This document outlines the step-by-step evolution from the current hybrid monoli
 **Duration:** Sessions 1-6  
 
 **Features:**
+
 - Clean Architecture layers
 - REST APIs with Swagger
 - Blazor Server WebUI
@@ -94,6 +97,7 @@ This document outlines the step-by-step evolution from the current hybrid monoli
 #### Step 1: Infrastructure (2 days)
 
 1. **Add RabbitMQ to docker-compose.yml**
+
    ```yaml
    rabbitmq:
      image: rabbitmq:3.13-management-alpine
@@ -108,6 +112,7 @@ This document outlines the step-by-step evolution from the current hybrid monoli
    ```
 
 2. **Install MassTransit NuGet packages**
+
    ```bash
    # All services
    dotnet add package MassTransit
@@ -116,6 +121,7 @@ This document outlines the step-by-step evolution from the current hybrid monoli
    ```
 
 3. **Create Messages Library**
+
    ```bash
    dotnet new classlib -n InterstellarTracker.Messages
    dotnet sln add src/Messages/InterstellarTracker.Messages
@@ -126,6 +132,7 @@ This document outlines the step-by-step evolution from the current hybrid monoli
 Create command and event DTOs in `InterstellarTracker.Messages`:
 
 **Commands** (requests for action):
+
 ```csharp
 // InterstellarTracker.Messages/Commands/CalculatePositionCommand.cs
 public record CalculatePositionCommand
@@ -139,6 +146,7 @@ public record CalculatePositionCommand
 ```
 
 **Events** (notifications of what happened):
+
 ```csharp
 // InterstellarTracker.Messages/Events/PositionCalculatedEvent.cs
 public record PositionCalculatedEvent
@@ -156,6 +164,7 @@ public record PositionCalculatedEvent
 #### Step 3: Configure MassTransit (1 day)
 
 **CalculationService/Program.cs:**
+
 ```csharp
 builder.Services.AddMassTransit(x =>
 {
@@ -186,6 +195,7 @@ builder.Services.AddMassTransit(x =>
 #### Step 4: Implement Consumers (3 days)
 
 **CalculationService - Message Consumer:**
+
 ```csharp
 public class CalculatePositionConsumer : IConsumer<CalculatePositionCommand>
 {
@@ -233,6 +243,7 @@ public class CalculatePositionConsumer : IConsumer<CalculatePositionCommand>
 ```
 
 **WebUI - Message Publisher:**
+
 ```csharp
 // Services/CalculationServiceClient.cs (modified)
 public class CalculationServiceClient
@@ -267,6 +278,7 @@ public class CalculationServiceClient
 #### Step 5: Create First Pure Event Service (2 days)
 
 **InterstellarTracker.CacheService** - new project:
+
 ```csharp
 public class PositionCacheConsumer : IConsumer<PositionCalculatedEvent>
 {
@@ -314,9 +326,10 @@ public class PositionCacheConsumer : IConsumer<PositionCalculatedEvent>
 **Duration:** 3-4 weeks  
 **Goal:** New features use events, HTTP endpoints become thin wrappers
 
-#### Changes:
+#### Changes
 
 1. **HTTP Controllers become Publishers**
+
    ```csharp
    [HttpGet("{id}/position")]
    public async Task<IActionResult> GetPosition(string id, [FromQuery] DateTimeOffset date)
@@ -350,7 +363,7 @@ public class PositionCacheConsumer : IConsumer<PositionCalculatedEvent>
 **Duration:** 6-8 weeks  
 **Goal:** Complete autonomy, each service owns data
 
-#### Changes:
+#### Changes
 
 1. **Database per Service**
    - CalculationService → PostgreSQL (calculations)
@@ -372,18 +385,21 @@ public class PositionCacheConsumer : IConsumer<PositionCalculatedEvent>
 ### When to Move to Next Phase?
 
 **Phase 1 → Phase 2 (Add RabbitMQ):**
+
 - ✅ MVP is deployed to Azure
 - ✅ Application Insights integrated
 - ✅ Authentication working
 - ✅ Team comfortable with current architecture
 
 **Phase 2 → Phase 3 (Event-First):**
+
 - ✅ RabbitMQ proven stable in production
 - ✅ Message patterns well understood
 - ✅ Observability (tracing) in place
 - ✅ At least 2 services using events successfully
 
 **Phase 3 → Phase 4 (Pure Microservices):**
+
 - ✅ Need for independent scaling demonstrated
 - ✅ Team has experience with distributed systems
 - ✅ Saga pattern proven with real workflows
@@ -399,20 +415,23 @@ At each phase, maintain ability to rollback:
 
 ## Metrics for Success
 
-### Phase 2 Success Criteria:
+### Phase 2 Success Criteria
+
 - [ ] RabbitMQ uptime > 99.9%
 - [ ] Message latency < 50ms p99
 - [ ] Zero message loss
 - [ ] HTTP and events coexist without conflicts
 - [ ] Team confident publishing/consuming messages
 
-### Phase 3 Success Criteria:
+### Phase 3 Success Criteria
+
 - [ ] >50% of requests use event path
 - [ ] Saga workflow completion rate > 99%
 - [ ] Distributed tracing shows full message flow
 - [ ] No cascading failures from one service
 
-### Phase 4 Success Criteria:
+### Phase 4 Success Criteria
+
 - [ ] Each service independently deployable
 - [ ] Service failures don't affect others
 - [ ] Can scale services based on load
@@ -421,13 +440,14 @@ At each phase, maintain ability to rollback:
 ## References
 
 - **ADR-004:** `docs/adr/004-event-driven-microservices.md`
-- **MassTransit Docs:** https://masstransit.io/
-- **RabbitMQ Tutorial:** https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html
-- **Saga Pattern:** https://microservices.io/patterns/data/saga.html
+- **MassTransit Docs:** <https://masstransit.io/>
+- **RabbitMQ Tutorial:** <https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html>
+- **Saga Pattern:** <https://microservices.io/patterns/data/saga.html>
 
 ## Next Actions
 
 Current focus: **Complete Phase 1 MVP**
+
 - Application Insights
 - Azure deployment
 - Authentication
