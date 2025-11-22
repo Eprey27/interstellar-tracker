@@ -14,6 +14,14 @@ builder.Services.AddRazorComponents()
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
+// Add Application Insights telemetry
+builder.Services.AddApplicationInsightsTelemetry(options =>
+{
+    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+    options.EnableAdaptiveSampling = true;
+    options.EnableQuickPulseMetricStream = true;
+});
+
 // Add HTTP client for Calculation Service
 var calculationServiceUrl = builder.Configuration.GetValue<string>("CalculationServiceUrl") ?? "http://localhost:5001";
 builder.Services.AddHttpClient<CalculationServiceClient>(client =>
