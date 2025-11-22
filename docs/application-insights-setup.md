@@ -9,6 +9,7 @@ Application Insights provides comprehensive monitoring, diagnostics, and analyti
 ### 1. Create Application Insights Resource
 
 **Via Azure Portal:**
+
 1. Navigate to Azure Portal → Create a resource
 2. Search for "Application Insights"
 3. Click "Create"
@@ -21,6 +22,7 @@ Application Insights provides comprehensive monitoring, diagnostics, and analyti
 5. Click "Review + Create" → "Create"
 
 **Via Azure CLI:**
+
 ```bash
 # Create Log Analytics workspace first
 az monitor log-analytics workspace create \
@@ -39,12 +41,14 @@ az monitor app-insights component create \
 ### 2. Get Connection String
 
 **Via Azure Portal:**
+
 1. Navigate to your Application Insights resource
 2. Go to "Overview" blade
 3. Copy the **Connection String** (NOT the Instrumentation Key)
    - Format: `InstrumentationKey=00000000-0000-0000-0000-000000000000;IngestionEndpoint=https://...`
 
 **Via Azure CLI:**
+
 ```bash
 az monitor app-insights component show \
   --app interstellar-tracker-appinsights \
@@ -56,6 +60,7 @@ az monitor app-insights component show \
 ### 3. Store Connection String Securely
 
 **Option 1: Azure Key Vault (Recommended for Production)**
+
 ```bash
 # Create Key Vault
 az keyvault create \
@@ -77,12 +82,14 @@ az keyvault set-policy \
 ```
 
 **Option 2: Environment Variables (For Development)**
+
 ```bash
 # Local .env file (NOT committed to git)
 ApplicationInsights__ConnectionString=InstrumentationKey=...;IngestionEndpoint=...
 ```
 
 **Option 3: User Secrets (Local Development)**
+
 ```powershell
 # CalculationService
 cd src/Services/CalculationService/InterstellarTracker.CalculationService
@@ -137,27 +144,32 @@ builder.Services.AddApplicationInsightsTelemetry(options =>
 ## What Gets Tracked Automatically
 
 ### HTTP Requests
+
 - Request URL, method, status code
 - Response time
 - Server name
 - User agent
 
 ### Dependencies
+
 - HTTP calls to CalculationService (from WebUI)
 - Database queries (future: when EF Core added)
 - Redis cache operations (future)
 
 ### Exceptions
+
 - Unhandled exceptions with full stack traces
 - Custom exceptions logged via ILogger
 
 ### Performance Counters
+
 - CPU usage
 - Memory usage
 - Process metrics
 - GC statistics
 
 ### Custom Events
+
 - Page views (Blazor)
 - Button clicks (Blazor)
 - User actions
@@ -299,6 +311,7 @@ var position = await _calculationServiceClient.GetPositionAsync("earth", date);
 ### Application Map
 
 Shows topology of services:
+
 ```
 WebUI → CalculationService
   ↓           ↓
@@ -315,6 +328,7 @@ Cache    PostgreSQL
 ### Transaction Search
 
 Find specific requests:
+
 1. Navigate to "Transaction search"
 2. Filter by:
    - Time range
@@ -393,6 +407,7 @@ exceptions
 Navigate to Application Insights → Alerts → Create alert rule:
 
 **1. Slow Response Time**
+
 ```kusto
 requests
 | where timestamp > ago(5m)
@@ -401,6 +416,7 @@ requests
 ```
 
 **2. High Failure Rate**
+
 ```kusto
 requests
 | where timestamp > ago(5m)
@@ -410,6 +426,7 @@ requests
 ```
 
 **3. Dependency Failures**
+
 ```kusto
 dependencies
 | where timestamp > ago(5m)
@@ -421,6 +438,7 @@ dependencies
 ### Action Groups
 
 Create action groups for notifications:
+
 - Email to dev team
 - SMS to on-call
 - Webhook to Slack/Teams
@@ -508,6 +526,7 @@ _telemetryClient.TrackMetric("AverageOrbitalPeriodDays", avgPeriod);
 
 1. **Enable Adaptive Sampling**: Done by default
 2. **Filter Telemetry**:
+
    ```csharp
    builder.Services.Configure<TelemetryConfiguration>(config =>
    {
