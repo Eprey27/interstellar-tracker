@@ -184,13 +184,119 @@ git commit -m "feat: initial workspace setup..."
 
 ---
 
-## Session 2 - [Next Session]
+## Session 2 - Hyperbolic Orbit Fix
+**Date:** 2025-11-22  
+**Duration:** ~30 minutes  
+**Status:** ✅ COMPLETED
+
+### Objectives
+- [x] Fix hyperbolic orbit calculations (critical blocker)
+- [x] Enable 2 skipped tests for 2I/Borisov
+- [x] Verify all tests pass
+
+### Accomplishments
+
+#### 1. Hyperbolic Kepler Solver Implemented
+- Added `SolveHyperbolicKeplersEquation()` method
+- Uses Newton-Raphson with sinh/cosh for e > 1
+- Initial guess: `H = log(2|M|/e + 1.8)`
+- Converges in ~20 iterations max
+- Precision: 1e-10
+
+#### 2. Updated Orbital Calculations
+- `CalculatePosition()`: Now handles both elliptical and hyperbolic orbits
+- `CalculateVelocity()`: Separate logic for e < 1 and e > 1
+- Uses `Math.Abs(SemiMajorAxisMeters)` for mean motion (negative for hyperbolic)
+- Hyperbolic distance formula: `a(1 - e·cosh(H))`
+- Hyperbolic true anomaly: `2·atan2(√(e+1)·sinh(H/2), √(e-1)·cosh(H/2))`
+
+#### 3. Tests Updated
+- Removed `Skip` attributes from 2 Borisov tests
+- Added assertions for valid X, Y, Z components
+- Added magnitude validation (must be > 0)
+- **31 tests passing, 0 skipped** ✅
+
+### Technical Details
+
+**Hyperbolic Kepler Equation:**
+```
+M = e·sinh(H) - H
+```
+
+Where:
+- M = Mean anomaly
+- H = Hyperbolic anomaly
+- e = Eccentricity (> 1)
+
+**Key Formulas Implemented:**
+- Distance: `r = a(1 - e·cosh(H))`
+- True anomaly: Uses atan2 with sinh/cosh
+- Velocity: `v = √(μ·|a|) / |r|`
+
+### Build & Test Results
+```text
+Build: ✅ SUCCESS (7.2s)
+Tests: ✅ 31 PASSED, 0 SKIPPED
+Coverage: Generated (cobertura.xml)
+```
+
+### Git Status
+```text
+Branch: master
+Commits: 2 (including hyperbolic fix)
+Status: Ready for next task
+```
+
+### Next Session Priorities
+
+1. **Push to GitHub**
+   - Create remote repository
+   - Push master branch
+   - Setup branch protection
+
+2. **Application Layer**
+   - Install MediatR
+   - Create use case interfaces
+   - Implement GetCelestialBodyPosition use case
+   - Add validation with FluentValidation
+
+3. **Start Microservices**
+   - Begin with Calculation Service
+   - REST API for orbital calculations
+   - Swagger documentation
+   - Basic health checks
+
+### Files Modified
+- `src/Domain/InterstellarTracker.Domain/ValueObjects/OrbitalElements.cs` (3 methods updated)
+- `tests/Domain.Tests/InterstellarTracker.Domain.Tests/Entities/InterstellarObjectTests.cs` (2 tests enabled)
+- `SESSIONS.md` (this file)
+
+### Lessons Learned
+
+1. **Hyperbolic vs Elliptical Orbits**
+   - Require completely different Kepler solvers
+   - sinh/cosh instead of sin/cos
+   - Semi-major axis is negative for hyperbolic
+   - Mean motion needs abs() to avoid NaN
+
+2. **Initial Guess Matters**
+   - `log(2|M|/e + 1.8)` converges faster than `M`
+   - Sign of M determines sign of H
+   - Poor initial guess can cause divergence
+
+3. **Test-Driven Bug Fixes**
+   - Skip attribute preserves test intent
+   - Easy to re-enable when fixed
+   - Additional assertions catch edge cases
+
+---
+
+## Session 3 - [Next Session]
 **Date:** TBD  
 **Status:** 📋 PLANNED
 
 ### Planned Objectives
 - [ ] Push repository to GitHub
-- [ ] Fix hyperbolic orbit calculations
 - [ ] Implement Application layer use cases
 - [ ] Start Calculation Service implementation
 - [ ] Add Swagger/OpenAPI documentation
