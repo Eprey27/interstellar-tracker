@@ -29,11 +29,11 @@ public class MeshGeneratorTests
             float z = vertices[j + 2];
 
             // Z should be essentially zero for ecliptic plane
-            Assert.True(Math.Abs(z) < 0.0001f, $"Point {j/3}: Z={z} should be near zero for ecliptic plane orbit");
-            
+            Assert.True(Math.Abs(z) < 0.0001f, $"Point {j / 3}: Z={z} should be near zero for ecliptic plane orbit");
+
             // Radius should be ~1 AU for circular orbit
             float radius = MathF.Sqrt(x * x + y * y);
-            Assert.True(Math.Abs(radius - 1.0f) < 0.01f, $"Point {j/3}: radius={radius} should be ~1.0 AU");
+            Assert.True(Math.Abs(radius - 1.0f) < 0.01f, $"Point {j / 3}: radius={radius} should be ~1.0 AU");
         }
     }
 
@@ -60,10 +60,10 @@ public class MeshGeneratorTests
 
             // For 90° inclination with Ω=0, orbit should be in XZ plane
             // So Y should be near zero
-            Assert.True(Math.Abs(y) < 0.0001f, $"Point {j/3}: Y={y} should be near zero for 90° inclined orbit with Ω=0");
-            
+            Assert.True(Math.Abs(y) < 0.0001f, $"Point {j / 3}: Y={y} should be near zero for 90° inclined orbit with Ω=0");
+
             float radius = MathF.Sqrt(x * x + z * z);
-            Assert.True(Math.Abs(radius - 1.0f) < 0.01f, $"Point {j/3}: radius={radius} should be ~1.0 AU");
+            Assert.True(Math.Abs(radius - 1.0f) < 0.01f, $"Point {j / 3}: radius={radius} should be ~1.0 AU");
         }
     }
 
@@ -120,7 +120,7 @@ public class MeshGeneratorTests
             float y = vertices[j + 1];
             float z = vertices[j + 2];
             float r = MathF.Sqrt(x * x + y * y + z * z);
-            
+
             minR = Math.Min(minR, r);
             maxR = Math.Max(maxR, r);
         }
@@ -129,9 +129,9 @@ public class MeshGeneratorTests
         float expectedPerihelion = a * (1 - e); // 2.5 * 0.5 = 1.25
         float expectedAphelion = a * (1 + e);   // 2.5 * 1.5 = 3.75
 
-        Assert.True(Math.Abs(minR - expectedPerihelion) < 0.01f, 
+        Assert.True(Math.Abs(minR - expectedPerihelion) < 0.01f,
             $"Perihelion distance {minR} should be ~{expectedPerihelion}");
-        Assert.True(Math.Abs(maxR - expectedAphelion) < 0.01f, 
+        Assert.True(Math.Abs(maxR - expectedAphelion) < 0.01f,
             $"Aphelion distance {maxR} should be ~{expectedAphelion}");
     }
 }
