@@ -2,6 +2,7 @@ using InterstellarTracker.Application;
 using InterstellarTracker.Infrastructure;
 using InterstellarTracker.WebUI.Components;
 using InterstellarTracker.WebUI.Services;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,10 @@ builder.Services.AddHttpClient<CalculationServiceClient>(client =>
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 
+// Add health checks with dependency on CalculationService
+builder.Services.AddHealthChecks()
+    .AddUrlGroup(new Uri($"{calculationServiceUrl}/health"), "CalculationService");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,8 +38,16 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Prometheus metrics middleware
+app.UseHttpMetrics();
 
 app.UseAntiforgery();
+
+// Map health check endpoint
+app.MapHealthChecks("/health");
+
+// Prometheus metrics endpoint
+app.MapMetrics();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()

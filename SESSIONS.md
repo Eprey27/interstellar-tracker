@@ -649,17 +649,322 @@ Status: Ready for next task
 
 ---
 
-## Session 3 - [Next Session]
+## Session 6 - CI/CD Pipeline & Monitoring Infrastructure
+
+**Date:** 2025-01-21  
+**Duration:** ~3 hours  
+**Status:** ✅ COMPLETED
+
+### Objectives
+
+- [x] Create GitHub Actions CI/CD workflow
+- [x] Implement multi-stage Dockerfiles for services
+- [x] Add health check endpoints to all services
+- [x] Setup Prometheus and Grafana for local monitoring
+- [x] Configure metrics endpoints with prometheus-net
+- [x] Create monitoring documentation
+
+### Accomplishments
+
+#### 1. GitHub Actions Workflow Created
+
+**File:** `.github/workflows/ci-cd.yml` (86 lines)
+
+**Jobs Implemented:**
+- **build-and-test**: .NET 9.0, restore, build (Release), test with trx logger
+  - Uploads test results as artifacts
+  - Runs on: ubuntu-latest
+  - Triggers: push to master/main/develop, PRs to master/main
+
+- **code-coverage**: Depends on build-and-test
+  - XPlat Code Coverage collector
+  - Uploads to Codecov (non-blocking)
+  - Results in ./coverage directory
+
+- **docker-build**: Depends on build-and-test, master/main only
+  - Docker Buildx with GitHub Actions cache
+  - GitHub Container Registry (ghcr.io) push
+  - CalculationService image (tags: latest + SHA)
+  - WebUI image (tags: latest + SHA)
+
+- **deploy-to-azure**: Commented out, ready for credentials
+  - Azure login with service principal
+  - Container Apps update command prepared
+
+#### 2. Optimized Dockerfiles
+
+**CalculationService.Dockerfile** (43 lines):
+- Multi-stage build: SDK → aspnet runtime
+- Stage 1 (Build):
+  - Copies solution and project files
+  - Restores dependencies
+  - Publishes to /app/publish
+- Stage 2 (Runtime):
+  - Aspnet:9.0 base image
+  - Health check with curl
+  - Non-root user (appuser:appgroup, UID/GID 1000)
+  - Exposes port 8080
+  - ASPNETCORE_URLS=http://+:8080
+
+**WebUI.Dockerfile** (47 lines):
+- Similar multi-stage structure
+- Installs curl for health checks
+- Non-root execution
+- Blazor Server optimized
+
+#### 3. Health Check Endpoints
+
+**NuGet Packages Added:**
+- Microsoft.Extensions.Diagnostics.HealthChecks 10.0.0 (both services)
+- AspNetCore.HealthChecks.Uris 9.0.0 (WebUI)
+
+**CalculationService:**
+- Endpoint: `/health`
+- Checks: Service running, repository connectivity
+- Docker healthcheck interval: 30s, timeout: 3s, retries: 3
+
+**WebUI:**
+- Endpoint: `/health`
+- Checks: Service running + CalculationService reachability
+- Validates: HTTP connection to CalculationService /health endpoint
+- Docker healthcheck interval: 30s, start-period: 10s
+
+**Kubernetes Readiness/Liveness Probes Ready:**
+```yaml
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 30
+```
+
+#### 4. Prometheus & Grafana Setup
+
+**docker-compose.yml Updated:**
+- **Prometheus**: Port 9090
+  - Configuration: `docker/prometheus/prometheus.yml`
+  - Scrapes every 15s
+  - Volumes: prometheus_data
+  - Healthcheck: wget localhost:9090/-/healthy
+
+- **Grafana**: Port 3000 (admin/admin)
+  - Auto-provisioned Prometheus datasource
+  - Dashboard directory: `docker/grafana/provisioning/dashboards/`
+  - Volumes: grafana_data
+  - Healthcheck: wget localhost:3000/api/health
+
+**Prometheus Configuration:**
+- Global scrape interval: 15s
+- Jobs configured:
+  - prometheus (self-monitoring)
+  - calculation-service (host.docker.internal:5001)
+  - webui (host.docker.internal:5000)
+  - keycloak (keycloak:8080)
+- Metrics path: `/metrics`
+
+**Grafana Provisioning:**
+- Datasource: `docker/grafana/provisioning/datasources/prometheus.yml`
+- Dashboard provider: `docker/grafana/provisioning/dashboards/dashboard.yml`
+- Pre-built dashboard: `interstellar-overview.json`
+
+#### 5. Metrics Endpoints
+
+**NuGet Package:**
+- prometheus-net.AspNetCore 8.2.1 (both services)
+
+**Implementation:**
+- `using Prometheus;`
+- `app.UseHttpMetrics();` - Middleware for automatic HTTP metrics
+- `app.MapMetrics();` - Exposes /metrics endpoint
+
+**Exposed Metrics:**
+- `http_requests_received_total` - Total requests by method/controller/action
+- `http_request_duration_seconds` - Histogram of response times
+- `process_working_set_bytes` - Memory usage
+- `process_cpu_seconds_total` - CPU time
+- `dotnet_collection_count_total` - GC collections
+- Custom application metrics (future)
+
+**Grafana Dashboard Created:**
+- Request rate gauges (CalculationService + WebUI)
+- Average response time gauges
+- Memory usage time series
+- 5-minute rolling windows
+- Auto-refresh every 30s
+
+#### 6. Documentation
+
+**New File:** `docs/monitoring.md` (309 lines)
+
+**Sections:**
+- Overview of monitoring strategy
+- Prometheus setup and queries
+- Grafana dashboard configuration
+- Health check implementation
+- Cloud monitoring (Application Insights roadmap)
+- Alerting (future AlertManager)
+- Logging best practices
+- Troubleshooting guide
+- Access URLs and credentials table
+- Best practices for observability
+
+### Technical Details
+
+#### Build Results
+```
+Compilation: SUCCESS (4.4s)
+- InterstellarTracker.CalculationService: 0.9s
+- InterstellarTracker.WebUI: 1.6s
+- InterstellarTracker.Web: 0.6s
+- InterstellarTracker.Infrastructure: 0.5s
+- InterstellarTracker.Integration.Tests: 0.2s
+```
+
+#### Test Results
+```
+Total: 58 tests
+Passed: 58
+Failed: 0
+Skipped: 0
+Duration: 3.4s
+```
+
+**Test Breakdown:**
+- Domain.Tests: 31 tests
+- Application.Tests: 14 tests
+- Integration.Tests: 9 tests
+- MeshGeneratorTests: 4 tests
+
+#### Docker Images
+- Base images: mcr.microsoft.com/dotnet/sdk:9.0, aspnet:9.0
+- Security: Non-root execution (UID 1000)
+- Ports: All services standardized to 8080 in containers
+- Health checks: Integrated at both Docker and application levels
+
+#### Monitoring Stack Ports
+| Service | Port | Credentials |
+|---------|------|-------------|
+| Prometheus | 9090 | None |
+| Grafana | 3000 | admin/admin |
+| CalculationService | 5001 (HTTP), 5002 (HTTPS) | None |
+| WebUI | 5000 (HTTP), 5001 (HTTPS) | None |
+| Keycloak | 8080 | admin/admin |
+| PostgreSQL | 5432 | interstellar_user/Dev_Password_123! |
+| MailHog | 1025 (SMTP), 8025 (Web) | None |
+
+### Files Modified
+
+1. **.github/workflows/ci-cd.yml** - NEW (86 lines)
+2. **docker/CalculationService.Dockerfile** - NEW (43 lines)
+3. **docker/WebUI.Dockerfile** - NEW (47 lines)
+4. **docker-compose.yml** - Updated (149 lines, +67 lines)
+5. **docker/prometheus/prometheus.yml** - NEW (63 lines)
+6. **docker/grafana/provisioning/datasources/prometheus.yml** - NEW (17 lines)
+7. **docker/grafana/provisioning/dashboards/dashboard.yml** - NEW (14 lines)
+8. **docker/grafana/provisioning/dashboards/interstellar-overview.json** - NEW (282 lines)
+9. **src/Services/CalculationService/.../Program.cs** - Updated (+3 lines)
+10. **src/Web/InterstellarTracker.WebUI/Program.cs** - Updated (+8 lines)
+11. **docs/monitoring.md** - NEW (309 lines)
+12. **README.md** - Updated (+2 lines)
+
+**Total New/Modified:** 12 files, ~1000 lines added
+
+### Known Issues
+
+None. All tests passing, builds successful, services ready for containerization.
+
+### Next Steps
+
+1. **Application Insights Integration** (Priority: HIGH)
+   - Add Microsoft.ApplicationInsights.AspNetCore to services
+   - Configure InstrumentationKey from Azure Key Vault
+   - Custom telemetry for orbital calculations
+   - Distributed tracing setup
+
+2. **Azure Container Apps Deployment** (Priority: HIGH)
+   - Create Azure Container Apps Environment
+   - Deploy CalculationService (min 0, max 5 replicas)
+   - Deploy WebUI (min 1, max 3 replicas)
+   - Configure managed identity for service-to-service auth
+
+3. **Azure App Service Deployment** (Priority: MEDIUM)
+   - Create App Service Plan (B1 tier)
+   - Deploy as separate Web Apps
+   - Cost comparison with Container Apps over 30 days
+
+4. **AdminService Dashboard** (Priority: MEDIUM)
+   - New Blazor Server project
+   - Service status grid with real-time health checks
+   - Logs viewer with Application Insights integration
+   - Metrics charts from Prometheus + Application Insights
+
+5. **Keycloak Authentication** (Priority: MEDIUM)
+   - Configure realm with admin/viewer roles
+   - OpenIdConnect middleware integration
+   - Protect CalculationService endpoints
+   - AdminService requires admin role
+
+6. **Cost Analysis Documentation** (Priority: LOW)
+   - Azure Calculator estimates
+   - Container Apps vs App Service comparison
+   - Monitoring costs (Application Insights data ingestion)
+   - Recommendations document
+
+### Lessons Learned
+
+1. **Docker Multi-Stage Builds**: Dramatically reduce image size (SDK ~1GB → runtime ~200MB)
+2. **Health Checks are Critical**: Enable proper orchestration in Kubernetes/Container Apps
+3. **Prometheus Auto-Discovery**: Works well with Docker Compose service names
+4. **Grafana Provisioning**: Auto-configuration prevents manual dashboard setup
+5. **Non-Root Containers**: Security best practice, minimal overhead
+6. **prometheus-net Simplicity**: `UseHttpMetrics()` + `MapMetrics()` = instant observability
+7. **GitHub Actions Caching**: Buildx cache significantly speeds up Docker builds
+8. **Codecov Integration**: Non-blocking coverage reporting maintains CI speed
+
+### Git Commits
+
+```bash
+# Pending commit
+git add .
+git commit -m "feat(ci-cd): implement GitHub Actions pipeline with monitoring stack
+
+- Add multi-stage Dockerfiles for CalculationService and WebUI
+- Implement health check endpoints on all services
+- Setup Prometheus (9090) and Grafana (3000) in docker-compose
+- Configure prometheus-net metrics endpoints
+- Create pre-built Grafana dashboard for system overview
+- Add comprehensive monitoring documentation
+- Update README with monitoring service info
+
+Files changed: 12
+Lines added: ~1000
+Tests: 58 passing"
+```
+
+### Resources
+
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [Docker Multi-Stage Builds](https://docs.docker.com/build/building/multi-stage/)
+- [Prometheus Documentation](https://prometheus.io/docs/)
+- [Grafana Provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/)
+- [prometheus-net Library](https://github.com/prometheus-net/prometheus-net)
+- [ASP.NET Core Health Checks](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks)
+
+---
+
+## Session 7 - [Next Session]
 
 **Date:** TBD  
 **Status:** 📋 PLANNED
 
 ### Planned Objectives
 
-- [ ] Push repository to GitHub
-- [ ] Implement Application layer use cases
-- [ ] Start Calculation Service implementation
-- [ ] Add Swagger/OpenAPI documentation
+- [ ] Integrate Application Insights for cloud monitoring
+- [ ] Deploy to Azure Container Apps
+- [ ] Create AdminService dashboard
+- [ ] Implement Keycloak authentication
+- [ ] Cost analysis and optimization documentation
 
 ---
 

@@ -1,0 +1,64 @@
+# Prometheus Configuration for Interstellar Tracker
+# Scrape interval and evaluation interval
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: "interstellar-tracker"
+    environment: "local"
+
+# Alertmanager configuration (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: []
+
+# Rule files for alerting (optional)
+# rule_files:
+#   - "alerts/*.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+        labels:
+          service: "prometheus"
+
+  # CalculationService metrics
+  - job_name: "calculation-service"
+    static_configs:
+      - targets: ["host.docker.internal:5001"]
+        labels:
+          service: "calculation-service"
+          environment: "local"
+    metrics_path: "/metrics"
+    scrape_interval: 10s
+
+  # WebUI metrics
+  - job_name: "webui"
+    static_configs:
+      - targets: ["host.docker.internal:5000"]
+        labels:
+          service: "webui"
+          environment: "local"
+    metrics_path: "/metrics"
+    scrape_interval: 10s
+
+  # Keycloak metrics (if enabled)
+  - job_name: "keycloak"
+    static_configs:
+      - targets: ["keycloak:8080"]
+        labels:
+          service: "keycloak"
+    metrics_path: "/metrics"
+    scrape_interval: 30s
+
+  # PostgreSQL metrics (requires postgres_exporter)
+  # - job_name: 'postgres'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
+  #       labels:
+  #         service: 'postgres'

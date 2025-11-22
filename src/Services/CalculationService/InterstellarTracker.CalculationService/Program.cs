@@ -1,6 +1,7 @@
 using InterstellarTracker.Application;
 using InterstellarTracker.Infrastructure;
 using System.Reflection;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,9 +48,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Prometheus metrics middleware
+app.UseHttpMetrics();
+
 app.MapControllers();
 
 // Health check endpoint
 app.MapHealthChecks("/health");
+
+// Prometheus metrics endpoint
+app.MapMetrics();
 
 app.Run();

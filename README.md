@@ -64,32 +64,40 @@ This project follows **Clean Architecture** with microservices pattern:
 ### Local Development Setup
 
 1. **Clone the repository**
+
    ```powershell
    git clone https://github.com/YOUR_USERNAME/interstellar-tracker.git
    cd interstellar-tracker
    ```
 
 2. **Start infrastructure services**
+
    ```powershell
    docker-compose up -d
    ```
+
    This starts:
    - PostgreSQL 17 (port 5432)
    - Keycloak 26 (port 8080)
    - MailHog (SMTP: 1025, Web: 8025)
+   - Prometheus (port 9090)
+   - Grafana (port 3000, admin/admin)
 
 3. **Build the solution**
+
    ```powershell
    dotnet restore
    dotnet build
    ```
 
 4. **Run tests**
+
    ```powershell
    dotnet test
    ```
 
 5. **Start services** (in separate terminals)
+
    ```powershell
    # API Gateway
    dotnet run --project src/Services/ApiGateway/InterstellarTracker.ApiGateway
@@ -99,6 +107,7 @@ This project follows **Clean Architecture** with microservices pattern:
    ```
 
 6. **Launch 3D visualization**
+
    ```powershell
    dotnet run --project src/Web/InterstellarTracker.Web
    ```
@@ -129,16 +138,19 @@ Target: **>80% code coverage**
 ## 🐳 Docker & Kubernetes
 
 ### Build containers
+
 ```powershell
 docker-compose build
 ```
 
 ### Deploy to local Kubernetes
+
 ```powershell
 kubectl apply -f k8s/
 ```
 
 ### Push to GitHub Container Registry
+
 ```powershell
 docker tag interstellar-tracker/api-gateway ghcr.io/YOUR_USERNAME/interstellar-tracker-api-gateway:latest
 docker push ghcr.io/YOUR_USERNAME/interstellar-tracker-api-gateway:latest
@@ -147,12 +159,15 @@ docker push ghcr.io/YOUR_USERNAME/interstellar-tracker-api-gateway:latest
 ## 🌐 Deployment
 
 ### Local (Docker Desktop)
+
 ```powershell
 docker-compose up
 ```
 
 ### Azure Kubernetes Service (AKS)
+
 See [deployment documentation](docs/deployment.md) for full Azure setup with:
+
 - Azure Kubernetes Service (AKS)
 - Azure Container Registry
 - Azure AD B2C for social authentication
@@ -197,7 +212,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📧 Contact
 
 - **Project Maintainer** - [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- **Email** - eprey27@gmail.com
+- **Email** - <eprey27@gmail.com>
 - **Issues** - [GitHub Issues](https://github.com/YOUR_USERNAME/interstellar-tracker/issues)
 
 ---
