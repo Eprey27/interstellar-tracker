@@ -1,0 +1,88 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (API Gateway)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Services/ApiGateway/InterstellarTracker.ApiGateway/bin/Debug/net9.0/InterstellarTracker.ApiGateway.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Services/ApiGateway/InterstellarTracker.ApiGateway",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
+      "name": ".NET Core Launch (Auth Service)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Services/AuthService/InterstellarTracker.AuthService/bin/Debug/net9.0/InterstellarTracker.AuthService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Services/AuthService/InterstellarTracker.AuthService",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
+      "name": ".NET Core Launch (Calculation Service)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Services/CalculationService/InterstellarTracker.CalculationService/bin/Debug/net9.0/InterstellarTracker.CalculationService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Services/CalculationService/InterstellarTracker.CalculationService",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
+      "name": ".NET Core Launch (Visualization Service)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Services/VisualizationService/InterstellarTracker.VisualizationService/bin/Debug/net9.0/InterstellarTracker.VisualizationService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Services/VisualizationService/InterstellarTracker.VisualizationService",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
+      "name": ".NET Core Launch (Web 3D Client)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Web/InterstellarTracker.Web/bin/Debug/net9.0/InterstellarTracker.Web.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Web/InterstellarTracker.Web",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "All Microservices",
+      "configurations": [
+        ".NET Core Launch (API Gateway)",
+        ".NET Core Launch (Auth Service)",
+        ".NET Core Launch (Calculation Service)",
+        ".NET Core Launch (Visualization Service)"
+      ]
+    }
+  ]
+}

@@ -40,7 +40,7 @@ public class InterstellarObjectTests
         var visual = VisualProperties.Comet(RgbColor.IceBlue);
 
         Assert.Throws<ArgumentException>(() =>
-            new InterstellarObject("", "TEST/2024", "Test", orbitalElements, 
+            new InterstellarObject("", "TEST/2024", "Test", orbitalElements,
                 DateTimeOffset.UtcNow, "Test", visual, 500.0)
         );
     }
@@ -51,7 +51,7 @@ public class InterstellarObjectTests
         var visual = VisualProperties.Comet(RgbColor.IceBlue);
 
         Assert.Throws<ArgumentNullException>(() =>
-            new InterstellarObject("test", "TEST/2024", "Test", null!, 
+            new InterstellarObject("test", "TEST/2024", "Test", null!,
                 DateTimeOffset.UtcNow, "Test", visual, 500.0)
         );
     }
@@ -63,7 +63,7 @@ public class InterstellarObjectTests
         var visual = VisualProperties.Comet(RgbColor.IceBlue);
 
         Assert.Throws<ArgumentOutOfRangeException>(() =>
-            new InterstellarObject("test", "TEST/2024", "Test", orbitalElements, 
+            new InterstellarObject("test", "TEST/2024", "Test", orbitalElements,
                 DateTimeOffset.UtcNow, "Test", visual, -100.0)
         );
     }
@@ -75,7 +75,7 @@ public class InterstellarObjectTests
         var julianDate = 2458826.5; // Epoch date
 
         var position = borisov.CalculatePosition(julianDate);
-        
+
         Assert.NotEqual(double.NaN, position.X);
         Assert.NotEqual(double.NaN, position.Y);
         Assert.NotEqual(double.NaN, position.Z);
@@ -89,7 +89,7 @@ public class InterstellarObjectTests
         var julianDate = 2458826.5;
 
         var velocity = borisov.CalculateVelocity(julianDate);
-        
+
         Assert.NotEqual(double.NaN, velocity.X);
         Assert.NotEqual(double.NaN, velocity.Y);
         Assert.NotEqual(double.NaN, velocity.Z);

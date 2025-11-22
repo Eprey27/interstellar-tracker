@@ -1,0 +1,53 @@
+{
+  // Editor
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.rulers": [120],
+  
+  // Files
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true,
+    "**/.vs": true
+  },
+  "files.watcherExclude": {
+    "**/bin/**": true,
+    "**/obj/**": true
+  },
+  
+  // C#
+  "dotnet.defaultSolution": "InterstellarTracker.sln",
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+  },
+  
+  // Omnisharp
+  "omnisharp.enableRoslynAnalyzers": true,
+  "omnisharp.enableEditorConfigSupport": true,
+  "omnisharp.enableImportCompletion": true,
+  
+  // Git
+  "git.ignoreLimitWarning": true,
+  
+  // Terminal
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  
+  // Testing
+  "dotnet-test-explorer.testProjectPath": "tests/**/*.csproj",
+  
+  // Recommended extensions
+  "recommendations": [
+    "ms-dotnettools.csharp",
+    "ms-dotnettools.csdevkit",
+    "ms-azuretools.vscode-docker",
+    "github.copilot",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "visualstudioexptteam.vscodeintellicode"
+  ],
+  "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true
+}
