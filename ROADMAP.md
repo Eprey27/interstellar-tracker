@@ -3,6 +3,7 @@
 ## 📅 Estado Actual (2025-11-23)
 
 ### ✅ Completado
+
 - [x] Arquitectura limpia con microservicios (.NET 9)
 - [x] Domain models y cálculos orbitales hiperbólicos
 - [x] CalculationService con API REST
@@ -16,8 +17,9 @@
 - [x] Tests unitarios básicos (xUnit)
 
 ### 🎯 Servicios Activos
-- **ApiGateway**: http://localhost:5014 (YARP, health checks, telemetría)
-- **CalculationService**: http://localhost:5001 (cálculos orbitales)
+
+- **ApiGateway**: <http://localhost:5014> (YARP, health checks, telemetría)
+- **CalculationService**: <http://localhost:5001> (cálculos orbitales)
 - **Azure Portal**: Application Insights con alertas configuradas
 
 ---
@@ -28,7 +30,8 @@
 
 **Objetivo**: Documentar exhaustivamente toda la arquitectura y código existente
 
-#### Tareas:
+#### Tareas
+
 - [ ] **README.md principal**: Actualizar con arquitectura actual, servicios, guías de inicio
 - [ ] **Documentación técnica**:
   - [ ] `docs/architecture/system-overview.md` - Diagrama de arquitectura general
@@ -45,6 +48,7 @@
   - [ ] ADR-007: Mensajería (RabbitMQ vs Kafka)
 
 **Entregables**:
+
 - Documentación completa en `docs/`
 - README actualizado con badges de build/coverage
 - Diagramas C4 o similares
@@ -55,7 +59,8 @@
 
 **Objetivo**: Crear servicio para procesar datos orbitales para renderizado 3D
 
-#### Funcionalidades:
+#### Funcionalidades
+
 - [ ] **API REST** con endpoints:
   - `GET /api/trajectories/{objectId}` - Trayectoria completa
   - `GET /api/positions/{objectId}?date={date}` - Posición en fecha específica
@@ -71,9 +76,10 @@
 - [ ] **Health checks y telemetría**: Application Insights
 - [ ] **Tests unitarios** (TDD desde el inicio)
 
-**Puerto**: http://localhost:5002
+**Puerto**: <http://localhost:5002>
 
 **Entregables**:
+
 - Proyecto `InterstellarTracker.VisualizationService` funcionando
 - Tests con >80% cobertura
 - Documentación de API (Swagger)
@@ -85,9 +91,10 @@
 
 **Objetivo**: Desgranar servicios actuales en microservicios especializados
 
-#### Propuesta de Microservicios:
+#### Propuesta de Microservicios
 
 **Dominio: Orbital Calculations**
+
 - [ ] **OrbitalCalculationService** (puerto 5011)
   - Cálculos de posición orbital
   - Ephemerides
@@ -99,6 +106,7 @@
   - Conversiones entre sistemas
 
 **Dominio: Visualization**
+
 - [ ] **TrajectoryService** (puerto 5021)
   - Generación de trayectorias optimizadas
   - Caché de paths calculados
@@ -108,6 +116,7 @@
   - Sistemas de referencia
 
 **Dominio: Data Management**
+
 - [ ] **ObjectCatalogService** (puerto 5031)
   - CRUD de objetos interestelares
   - Metadatos y clasificación
@@ -117,11 +126,13 @@
   - Integración con telescopios/APIs externas
 
 **Cross-cutting Concerns**
+
 - [ ] **EventBusService**: Mensajería centralizada
 - [ ] **ConfigurationService**: Configuración centralizada
 - [ ] **LoggingService**: Agregación de logs
 
 **Entregables**:
+
 - Nuevos proyectos de microservicios
 - ApiGateway actualizado con todas las rutas
 - Docker Compose con todos los servicios
@@ -136,6 +147,7 @@
 #### Decisión: RabbitMQ vs Apache Kafka
 
 **Análisis**:
+
 | Criterio | RabbitMQ | Apache Kafka |
 |----------|----------|--------------|
 | Complejidad | Baja | Media-Alta |
@@ -147,14 +159,16 @@
 | Caso de uso | Request/Reply, RPC | Event streaming, logs |
 
 **Recomendación Inicial**: **RabbitMQ**
+
 - Más simple para empezar
 - Suficiente para el volumen actual
 - Mejor para request/reply patterns
 - Fácil migración a Kafka si es necesario
 
-#### Implementación RabbitMQ:
+#### Implementación RabbitMQ
 
 **Exchanges y Queues**:
+
 ```
 Exchange: orbital.calculations (topic)
   └─ Queue: orbital.position.requests
@@ -171,8 +185,9 @@ Exchange: catalog.events (fanout)
 ```
 
 **Tareas**:
+
 - [ ] **Contenedor RabbitMQ**: Agregar a docker-compose.yml
-- [ ] **Management UI**: http://localhost:15672
+- [ ] **Management UI**: <http://localhost:15672>
 - [ ] **MassTransit o RawRabbit**: Librería para .NET
 - [ ] **Event contracts**: Definir eventos en `Domain/Events/`
 - [ ] **Publishers**: En cada microservicio
@@ -183,6 +198,7 @@ Exchange: catalog.events (fanout)
 - [ ] **Tests de integración**: Con TestContainers
 
 **Eventos ejemplo**:
+
 ```csharp
 // Domain/Events/OrbitalPositionCalculated.cs
 public record OrbitalPositionCalculated(
@@ -201,6 +217,7 @@ public record ObjectCatalogUpdated(
 ```
 
 **Entregables**:
+
 - RabbitMQ funcionando en Docker
 - 3-5 eventos implementados
 - Comunicación asíncrona entre servicios
@@ -213,9 +230,10 @@ public record ObjectCatalogUpdated(
 
 **Objetivo**: Análisis estático de código con métricas de calidad
 
-#### Configuración SonarQube:
+#### Configuración SonarQube
 
 **Contenedor Docker**:
+
 ```yaml
 # docker-compose.yml
 sonarqube:
@@ -231,6 +249,7 @@ sonarqube:
 ```
 
 **Quality Gates configurados**:
+
 - [ ] **Cobertura de código**: Mínimo 80%
 - [ ] **Code Smells**: Rating A (0 smells críticos)
 - [ ] **Bugs**: 0 bugs críticos/bloqueantes
@@ -241,11 +260,13 @@ sonarqube:
 - [ ] **Deuda técnica**: <5% del tiempo de desarrollo
 
 **Integración con CI/CD**:
+
 - [ ] GitHub Actions workflow para análisis
 - [ ] Quality Gate check antes de merge
 - [ ] Reportes en Pull Requests
 
 **Tareas**:
+
 - [ ] Levantar SonarQube en Docker
 - [ ] Crear proyecto en SonarQube
 - [ ] Configurar `sonar-project.properties`
@@ -255,7 +276,8 @@ sonarqube:
 - [ ] Documentar proceso en `docs/quality/sonarqube.md`
 
 **Entregables**:
-- SonarQube funcionando en http://localhost:9000
+
+- SonarQube funcionando en <http://localhost:9000>
 - Quality Gates configurados
 - 0 issues críticos/bloqueantes
 - Rating A en mantenibilidad
@@ -266,14 +288,16 @@ sonarqube:
 
 **Objetivo**: Adoptar TDD como metodología principal + tests como documentación
 
-#### Principios TDD:
+#### Principios TDD
+
 1. **Red**: Escribir test que falle
 2. **Green**: Implementar código mínimo para pasar
 3. **Refactor**: Mejorar sin romper tests
 
-#### Estrategia de Testing:
+#### Estrategia de Testing
 
 **Estructura de tests**:
+
 ```
 tests/
 ├── Unit.Tests/                    # Tests unitarios (80% cobertura)
@@ -313,6 +337,7 @@ tests/
 ```
 
 **Tests como Documentación**:
+
 ```csharp
 /// <summary>
 /// Documenta el comportamiento del cálculo de posición orbital para órbitas hiperbólicas.
@@ -364,12 +389,14 @@ public class HyperbolicOrbitCalculatorTests
 ```
 
 **Cobertura Objetivo**:
+
 - **Unit Tests**: 80%+ (crítico)
 - **Integration Tests**: 60%+
 - **E2E Tests**: Escenarios principales
 - **Performance Tests**: Endpoints críticos
 
 **Herramientas**:
+
 - [ ] **xUnit**: Framework principal
 - [ ] **FluentAssertions**: Asserts legibles
 - [ ] **Moq**: Mocking
@@ -381,6 +408,7 @@ public class HyperbolicOrbitCalculatorTests
 - [ ] **NBomber o K6**: Performance testing
 
 **Tareas**:
+
 - [ ] Refactorizar tests existentes con documentación mejorada
 - [ ] Implementar tests faltantes para llegar a 80%
 - [ ] Crear `docs/testing/tdd-guidelines.md`
@@ -389,6 +417,7 @@ public class HyperbolicOrbitCalculatorTests
 - [ ] **Regla**: No merge sin tests + >80% cobertura
 
 **Entregables**:
+
 - Tests unitarios documentando cada caso de uso
 - Cobertura >80% en SonarQube
 - Pipeline CI/CD con quality gates
@@ -400,9 +429,10 @@ public class HyperbolicOrbitCalculatorTests
 
 **Objetivo**: Consolidar todo el trabajo previo
 
-#### Checklist de Revisión:
+#### Checklist de Revisión
 
 **Código**:
+
 - [ ] Todos los servicios compilan sin warnings
 - [ ] No hay código comentado sin motivo
 - [ ] Nomenclatura consistente en todo el proyecto
@@ -410,12 +440,14 @@ public class HyperbolicOrbitCalculatorTests
 - [ ] DRY: No hay duplicación significativa
 
 **Tests**:
+
 - [ ] Todos los tests pasan
 - [ ] Cobertura >80% en componentes críticos
 - [ ] Tests son legibles y documentan comportamiento
 - [ ] No hay tests ignorados sin justificación
 
 **Documentación**:
+
 - [ ] README actualizado con estado real
 - [ ] Todos los ADR documentados
 - [ ] Guías de desarrollo completas
@@ -423,12 +455,14 @@ public class HyperbolicOrbitCalculatorTests
 - [ ] Diagramas reflejan arquitectura actual
 
 **Infraestructura**:
+
 - [ ] Docker Compose funciona en limpio
 - [ ] Scripts de setup probados
 - [ ] Variables de entorno documentadas
 - [ ] Secrets no commiteados
 
 **Calidad**:
+
 - [ ] SonarQube rating A
 - [ ] 0 security vulnerabilities
 - [ ] Deuda técnica <5%
@@ -441,26 +475,31 @@ public class HyperbolicOrbitCalculatorTests
 Al finalizar todas las tareas, el proyecto debe cumplir:
 
 ✅ **Arquitectura**:
+
 - 6-8 microservicios independientes y desplegables
 - Event-driven con RabbitMQ
 - API Gateway centralizando acceso
 
 ✅ **Calidad**:
+
 - Cobertura de tests >80%
 - SonarQube rating A
 - 0 bugs/vulnerabilities críticas
 
 ✅ **Documentación**:
+
 - README completo y actualizado
 - Docs técnicos exhaustivos
 - Tests documentando comportamiento
 
 ✅ **DevOps**:
+
 - CI/CD con quality gates
 - Docker Compose con todos los servicios
 - Monitoreo completo (App Insights + Prometheus)
 
 ✅ **TDD**:
+
 - Todos los nuevos features con tests primero
 - Tests como documentación viva
 - Pipeline bloqueando sin cobertura
@@ -470,6 +509,7 @@ Al finalizar todas las tareas, el proyecto debe cumplir:
 ## 🎯 Orden de Ejecución Recomendado
 
 **Fase 1 - Fundamentos (Sesión 1)**:
+
 1. Documentación actual (README, arquitectura)
 2. TDD setup (guidelines, tools)
 3. SonarQube container + primer análisis
@@ -494,6 +534,7 @@ Al finalizar todas las tareas, el proyecto debe cumplir:
 ## 📝 Notas para la Próxima Sesión
 
 **Contexto Importante**:
+
 - Terraform state en Azure Storage (backend configurado)
 - Application Insights activo con 10 recursos en West Europe
 - Alertas configuradas (high-failure-rate ya probada)
@@ -501,6 +542,7 @@ Al finalizar todas las tareas, el proyecto debe cumplir:
 - Puertos ocupados: 5001 (Calc), 5014 (Gateway), 5159 (WebUI)
 
 **Quick Start Commands**:
+
 ```powershell
 # Iniciar servicios actuales
 cd d:\Repos\astronomy\interstellar-tracker
