@@ -74,15 +74,15 @@ jobs:
             /d:sonar.coverage.exclusions="**Tests.cs,**Mock.cs"
 
           dotnet build --configuration Release --no-restore
-          
+
           dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
         shell: bash
 
       - name: Generate CycloneDX BOM
         run: |
           dotnet tool install --global CycloneDX
-          cyclonedx-dotnet -o . -format json
-          cyclonedx-dotnet -o . -format xml
+          dotnet CycloneDX -o . -format json
+          dotnet CycloneDX -o . -format xml
 
       - name: Upload BOM artifacts
         uses: actions/upload-artifact@v4
