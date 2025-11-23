@@ -1,41 +1,61 @@
+using Prometheus;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Add YARP reverse proxy
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
+// Add Application Insights telemetry
+builder.Services.AddApplicationInsightsTelemetry(options =>
+{
+    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+    options.EnableAdaptiveSampling = true;
+    options.EnableQuickPulseMetricStream = true;
+});
+
+// Add health checks for downstream services
+builder.Services.AddHealthChecks()
+    .AddUrlGroup(
+        new Uri(builder.Configuration["Services:CalculationService"] ?? "http://localhost:5001/health"),
+        name: "calculation-service",
+        timeout: TimeSpan.FromSeconds(5))
+    .AddUrlGroup(
+        new Uri(builder.Configuration["Services:VisualizationService"] ?? "http://localhost:5002/health"),
+        name: "visualization-service",
+        timeout: TimeSpan.FromSeconds(5));
+
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseCors("AllowAll");
 }
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// Prometheus metrics middleware
+app.UseHttpMetrics();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+// Map YARP reverse proxy
+app.MapReverseProxy();
+
+// Health check endpoint
+app.MapHealthChecks("/health");
+
+// Prometheus metrics endpoint
+app.MapMetrics();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
