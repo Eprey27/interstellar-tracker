@@ -25,7 +25,7 @@ public class CalculationServiceMock : IDisposable
     private void ConfigureDefaultStubs()
     {
         // Mock successful trajectory response for 2I/Borisov
-        _server
+        _server!
             .Given(Request.Create()
                 .WithPath("/api/calculations/trajectory")
                 .WithBody(body => body.Contains("2I/Borisov"))

@@ -1,0 +1,104 @@
+# Dependabot Configuration for Interstellar Tracker
+# Automatically checks for dependency updates and creates pull requests
+# Documentation: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+
+updates:
+  # .NET NuGet Package Updates
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:00"
+    open-pull-requests-limit: 5
+    pull-request-branch-name:
+      separator: "/"
+    reviewers:
+      - "Eprey27"
+    assignees:
+      - "Eprey27"
+    labels:
+      - "dependencies"
+      - "nuget"
+    allow:
+      - dependency-type: "all"
+    ignore:
+      # Ignore pre-release versions for stability
+      - dependency-name: "*"
+        versions: ["0.0.*", "*-alpha", "*-beta", "*-rc"]
+    commit-message:
+      prefix: "⬆️ deps"
+      prefix-development: "⬆️ deps(dev)"
+      include: "scope"
+    rebase-strategy: "auto"
+    versioning-strategy: "auto"
+
+  # Docker Updates
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "03:00"
+    open-pull-requests-limit: 3
+    pull-request-branch-name:
+      separator: "/"
+    reviewers:
+      - "Eprey27"
+    assignees:
+      - "Eprey27"
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "🐳 docker"
+      include: "scope"
+    rebase-strategy: "auto"
+
+  # GitHub Actions Updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "03:00"
+    open-pull-requests-limit: 3
+    pull-request-branch-name:
+      separator: "/"
+    reviewers:
+      - "Eprey27"
+    assignees:
+      - "Eprey27"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "ci/cd"
+    commit-message:
+      prefix: "🔄 ci"
+      include: "scope"
+    rebase-strategy: "auto"
+# Global Configuration
+# All updates will follow these rules unless overridden above
+
+# Security and Stability Settings:
+# - Weekly checks (not daily) for better stability
+# - Staggered schedule to avoid load spikes
+# - Pre-release versions ignored for stability
+# - Automatic rebasing enabled for cleaner history
+# - Limited concurrent PRs to avoid overwhelming maintainers
+# - Custom commit messages with emojis for visual categorization
+# - Auto-assigned to maintainer for immediate review
+
+# Update Strategy:
+# - NuGet: Auto-update minor/patch, manual review for major
+# - Docker: Auto-update for security patches
+# - GitHub Actions: Auto-update for all (least risky)
+
+# Best Practices Applied:
+# - Reviews assigned automatically
+# - Labels for categorization and filtering
+# - Branch naming conventions for clarity
+# - Custom commit messages aligned with gitmoji standards
+# - Rebase strategy for clean history

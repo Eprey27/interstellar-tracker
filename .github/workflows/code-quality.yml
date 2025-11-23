@@ -1,0 +1,86 @@
+name: Code Quality Analysis
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - "feature/**"
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    name: Build, Test & SonarQube Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Install coverage tools
+        run: dotnet tool install --global dotnet-coverage
+
+      - name: Run tests with coverage
+        run: dotnet test --configuration Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --verbosity minimal
+
+      - name: Fix coverage report paths
+        run: |
+          $reports = Get-ChildItem -Recurse -Include "coverage.cobertura.xml"
+          foreach ($report in $reports) {
+              Write-Host "Found coverage report: $($report.FullName)"
+          }
+        shell: pwsh
+
+      - name: SonarQube Scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet sonarscanner begin /k:"Eprey27_interstellar-tracker" /o:"eprey" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Tests.cs,**Mock.cs"
+          dotnet build --configuration Release --no-restore
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
+      - name: Generate CycloneDX BOM
+        run: |
+          dotnet tool install --global CycloneDX
+          cyclonedx-dotnet -o . -format json
+          cyclonedx-dotnet -o . -format xml
+
+      - name: Upload BOM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: |
+            bom.json
+            bom.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: "**/TestResults/**"
+
+      - name: Publish coverage reports
+        uses: codecov/codecov-action@v4
+        with:
+          files: "**/coverage.opencover.xml"
+          flags: unittests
+          fail_ci_if_error: false

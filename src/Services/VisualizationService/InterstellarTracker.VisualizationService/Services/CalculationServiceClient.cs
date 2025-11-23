@@ -133,7 +133,7 @@ public class CalculationServiceClient : ICalculationServiceClient
 
     #region DTOs for CalculationService API
 
-    private record TrajectoryRequest
+    private sealed record TrajectoryRequest
     {
         public required string ObjectId { get; init; }
         public DateTime? StartDate { get; init; }
@@ -141,14 +141,14 @@ public class CalculationServiceClient : ICalculationServiceClient
         public int IntervalHours { get; init; }
     }
 
-    private record TrajectoryResponseDto
+    private sealed record TrajectoryResponseDto
     {
         public required string ObjectId { get; init; }
         public required List<TrajectoryPoint> Points { get; init; }
         public DateTime GeneratedAt { get; init; }
     }
 
-    private record PositionResponseDto
+    private sealed record PositionResponseDto
     {
         public required string ObjectId { get; init; }
         public DateTime Timestamp { get; init; }
