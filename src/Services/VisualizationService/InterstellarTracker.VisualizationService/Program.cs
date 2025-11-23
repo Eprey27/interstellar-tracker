@@ -31,4 +31,11 @@ app.MapControllers();
 app.Run();
 
 // Make Program accessible to tests
-public partial class Program { }
+public partial class Program
+{
+    /// <summary>
+    /// Protected constructor required for integration tests.
+    /// This partial class enables test discovery and configuration.
+    /// </summary>
+    protected Program() { }
+}
