@@ -73,6 +73,7 @@ src/Web/ (UI Layer)
 ```
 
 ### ✅ FINDINGS - Positive
+
 1. **Proper Dependency Inversion**: Infrastructure implements domain/app interfaces
 2. **Clear Layer Separation**: No cross-layer violations detected
 3. **Domain Purity**: Domain layer has zero external dependencies ✅
@@ -81,19 +82,23 @@ src/Web/ (UI Layer)
 ### ⚠️ FINDINGS - Issues Detected
 
 #### Issue #1: Circular Reference Risk in Services
+
 **Location:** `src/Services/VisualizationService/`  
 **Severity:** MEDIUM  
 **Pattern:**
+
 ```
 VisualizationService
   └─ depends on CalculationServiceClient (HTTP)
      └─ CalculationService (external)
         └─ depends on... (potential circular reference in future)
 ```
+
 **Impact:** Could create tight coupling between services  
 **Recommendation:** Use event-driven messaging (RabbitMQ/Azure Service Bus)
 
 #### Issue #2: Application Layer Too Thin
+
 **Location:** `src/Application/CelestialBodies/`  
 **Severity:** LOW  
 **Current:** Handlers mostly delegate to repositories  
@@ -106,6 +111,7 @@ VisualizationService
 ### Single Responsibility Principle (SRP)
 
 #### ✅ GOOD Examples
+
 ```csharp
 // Domain/ValueObjects/OrbitalElements.cs
 // RESPONSIBILITY: Calculate orbital mechanics
@@ -124,6 +130,7 @@ public class OrbitalElements : ValueObject
 #### ⚠️ VIOLATIONS Found
 
 **Violation #1: Program.cs (multiple services)**
+
 ```csharp
 // src/Services/ApiGateway/Program.cs
 // VIOLATIONS:
@@ -140,6 +147,7 @@ public static WebApplicationBuilder AddRoutingConfiguration(this WebApplicationB
 ```
 
 **Violation #2: CalculationServiceClient**
+
 ```csharp
 // src/Services/VisualizationService/Services/CalculationServiceClient.cs
 // RESPONSIBILITIES:
@@ -158,6 +166,7 @@ public static WebApplicationBuilder AddRoutingConfiguration(this WebApplicationB
 ### Open/Closed Principle (OCP)
 
 #### ✅ GOOD Examples
+
 ```csharp
 // TrajectoryService is open for extension via dependency injection
 public class TrajectoryService : ITrajectoryService
@@ -170,6 +179,7 @@ public class TrajectoryService : ITrajectoryService
 #### ⚠️ VIOLATIONS Found
 
 **Violation #1: Hardcoded CORS Origins**
+
 ```csharp
 // Not open for extension via configuration ❌
 app.UseCors(policy => policy
@@ -188,6 +198,7 @@ app.UseCors(policy => policy
 ### Liskov Substitution Principle (LSP)
 
 #### ✅ GOOD
+
 ```csharp
 // ITrajectoryService implementations are substitutable ✅
 public interface ITrajectoryService
@@ -198,11 +209,13 @@ public interface ITrajectoryService
 ```
 
 #### ⚠️ CHECK NEEDED
+
 - **InMemoryCelestialBodyRepository**: Verify parameter naming matches interface exactly
 
 ### Interface Segregation Principle (ISP)
 
 #### ✅ GOOD
+
 ```csharp
 // Focused interfaces - clients depend only on what they need ✅
 public interface ITrajectoryService { }
@@ -213,6 +226,7 @@ public interface ICelestialBodyRepository { }
 #### ⚠️ VIOLATIONS Found
 
 **Violation #1: Repository Interface Too Fat**
+
 ```csharp
 // Current: ICelestialBodyRepository has both read and write
 // BETTER: Split into
@@ -224,6 +238,7 @@ public interface IWriteCelestialBodyRepository : IWriteRepository<CelestialBody>
 ### Dependency Inversion Principle (DIP)
 
 #### ✅ GOOD
+
 ```csharp
 // Depends on abstractions, not concretions ✅
 public class VisualizationService
@@ -236,6 +251,7 @@ public class VisualizationService
 ```
 
 #### ✅ GOOD DI Configuration
+
 ```csharp
 // Services registered as interfaces ✅
 builder.Services.AddScoped<ITrajectoryService, TrajectoryService>();
@@ -249,6 +265,7 @@ builder.Services.AddHttpClient<ICalculationServiceClient, CalculationServiceClie
 ### Anti-Pattern #1: Configuration as Magic Strings
 
 **Evidence:**
+
 ```csharp
 // src/Services/ApiGateway/Program.cs:20
 client.BaseAddress = new Uri("http://localhost:5001");  // ❌ Hardcoded
@@ -259,7 +276,8 @@ builder.Services.AddHttpClient<ApiClient>()
         client.BaseAddress = new Uri("https://localhost:7159"));  // ❌ Hardcoded
 ```
 
-**Impact:** 
+**Impact:**
+
 - Can't run in different environments
 - Configuration scattered across code
 - Requires code recompilation to change
@@ -267,6 +285,7 @@ builder.Services.AddHttpClient<ApiClient>()
 **Severity:** 🔴 CRITICAL
 
 **Solution:** Configuration Provider Pattern
+
 ```csharp
 public interface IServiceConfiguration
 {
@@ -289,6 +308,7 @@ public class ServiceConfiguration : IServiceConfiguration
 ### Anti-Pattern #2: Permissive CORS Policy
 
 **Evidence:**
+
 ```csharp
 // src/Services/ApiGateway/Program.cs:33
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
@@ -299,6 +319,7 @@ app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
 ```
 
 **Impact:**
+
 - CSRF attacks possible
 - Any website can call your API
 - No origin validation
@@ -306,6 +327,7 @@ app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
 **Severity:** 🔴 CRITICAL (Security)
 
 **Solution:** Explicit Origins Configuration
+
 ```csharp
 var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins")
     .Get<string[]>() ?? Array.Empty<string>();
@@ -322,6 +344,7 @@ app.UseCors(policy => policy
 ### Anti-Pattern #3: God Object in Program.cs
 
 **Evidence:**
+
 ```
 Program.cs: Line count > 70
   - Service registration
@@ -333,6 +356,7 @@ Program.cs: Line count > 70
 ```
 
 **Impact:**
+
 - Hard to test
 - Hard to maintain
 - Violates SRP
@@ -340,6 +364,7 @@ Program.cs: Line count > 70
 **Severity:** 🟡 MEDIUM
 
 **Solution:** Extension Methods Pattern
+
 ```csharp
 // src/Services/ApiGateway/ServiceConfiguration.cs
 public static class ApiGatewayServiceExtensions
@@ -361,6 +386,7 @@ app.UseApiGatewayMiddleware();
 ### Anti-Pattern #4: Test Classes without Assertions
 
 **Evidence:**
+
 ```csharp
 // UnitTest1.cs files
 [Fact]
@@ -377,6 +403,7 @@ public void Test2()
 ```
 
 **Impact:**
+
 - False sense of code coverage
 - Tests don't validate behavior
 - Maintenance nightmare
@@ -388,6 +415,7 @@ public void Test2()
 ### Anti-Pattern #5: Mixed Concerns in Rendering Layer
 
 **Evidence:**
+
 ```csharp
 // src/Web/InterstellarTracker.Web/Window.cs
 private float _mouseX, _mouseY, _rightMouseDown;
@@ -399,6 +427,7 @@ private Shader _shader;
 ```
 
 **Impact:**
+
 - Hard to test
 - Hard to maintain
 - Difficult to reuse components
