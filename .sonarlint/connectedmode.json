@@ -1,0 +1,8 @@
+{
+  "sonarCloud": {
+    "organization": "eprey",
+    "projectKey": "Eprey27_interstellar-tracker"
+  },
+  "bindingType": "SonarCloud",
+  "serverId": "SonarCloud"
+}
