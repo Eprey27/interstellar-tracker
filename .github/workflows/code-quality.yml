@@ -70,7 +70,7 @@ jobs:
             /o:"eprey" \
             /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml" \
             /d:sonar.coverage.exclusions="**Tests.cs,**Mock.cs"
 
           dotnet build --configuration Release --no-restore
@@ -102,6 +102,6 @@ jobs:
       - name: Publish coverage reports
         uses: codecov/codecov-action@v4
         with:
-          files: "**/coverage.opencover.xml"
+          files: "**/coverage.cobertura.xml"
           flags: unittests
           fail_ci_if_error: false
