@@ -29,7 +29,6 @@
   // Omnisharp
   "omnisharp.enableRoslynAnalyzers": true,
   "omnisharp.enableEditorConfigSupport": true,
-  "omnisharp.enableImportCompletion": true,
   
   // Git
   "git.ignoreLimitWarning": true,

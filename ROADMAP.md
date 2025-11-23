@@ -1,5 +1,8 @@
 # 🗺️ Roadmap - Interstellar Tracker
 
+> **Principio de Completion Culture**: *"Termina lo que empieces o no terminarás nunca nada"*  
+> Este roadmap guía el **100% completado de InterstellarTracker** antes de iniciar nuevos proyectos.
+
 ## 📅 Estado Actual (2025-11-23)
 
 ### ✅ Completado
@@ -568,6 +571,38 @@ dotnet test /p:CollectCoverage=true
 
 ---
 
+## 🔮 Future Vision: Project Intelligence Agent (PIA)
+
+**Status**: CONCEPT (Post-InterstellarTracker)  
+**Document**: [`PIA-VISION.md`](./PIA-VISION.md)
+
+### Concepto
+
+Multi-agent LLM system para desarrollo de software con:
+
+- **Onboarding instantáneo**: 0 → productivo en <1 hora
+- **Compliance as Code**: GDPR, ISO27001, IEC62443 automation
+- **Multi-stakeholder**: Traduce contexto técnico para cualquier audiencia
+- **Living Documentation**: Docs auto-generados desde codebase
+- **Specialist Agents**: Architecture Expert, Code Mentor, Testing Specialist, Security Auditor, Compliance Officer, Communications Translator
+
+### Strategic Decision
+
+**NO implementar hasta completar InterstellarTracker 100%**. PIA se desarrollará como proyecto independiente cuando:
+
+1. ✅ InterstellarTracker completado (todas fases 1-7)
+2. ✅ Principio de completion culture validado
+3. ✅ InterstellarTracker como primer use case de PIA
+
+**Rationale**: *"Un proyecto terminado al 80% vale infinitamente más que 10 proyectos al 50%"*
+
+**Next Review**: Post-InterstellarTracker completion (Q2 2026)
+
+Ver [`PIA-VISION.md`](./PIA-VISION.md) para concepto completo (arquitectura, business model, roadmap, competencia).
+
+---
+
 **Creado**: 2025-11-23  
+**Última Actualización**: 2025-11-23 (PIA Future Vision añadida)
 **Última actualización**: 2025-11-23  
 **Estado**: 🟢 Listo para siguiente sesión

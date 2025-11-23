@@ -55,6 +55,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterstellarTracker.Calcula
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterstellarTracker.WebUI", "src\Web\InterstellarTracker.WebUI\InterstellarTracker.WebUI.csproj", "{7D301D17-4A8E-40DA-B856-448244F860BA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services.Tests", "Services.Tests", "{C240A27C-70F5-0B56-14AD-6E83741807A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterstellarTracker.VisualizationService.Tests", "tests\Services.Tests\InterstellarTracker.VisualizationService.Tests\InterstellarTracker.VisualizationService.Tests.csproj", "{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -209,6 +213,18 @@ Global
 		{7D301D17-4A8E-40DA-B856-448244F860BA}.Release|x64.Build.0 = Release|Any CPU
 		{7D301D17-4A8E-40DA-B856-448244F860BA}.Release|x86.ActiveCfg = Release|Any CPU
 		{7D301D17-4A8E-40DA-B856-448244F860BA}.Release|x86.Build.0 = Release|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Debug|x64.Build.0 = Debug|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Debug|x86.Build.0 = Debug|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Release|x64.ActiveCfg = Release|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Release|x64.Build.0 = Release|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Release|x86.ActiveCfg = Release|Any CPU
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -238,5 +254,7 @@ Global
 		{F3903627-939B-F72D-5FDC-E4235DF56919} = {984BB9B3-3FA3-BE33-9484-CAC21695A33C}
 		{54378082-C9B6-4232-B626-3C8AD6044996} = {F3903627-939B-F72D-5FDC-E4235DF56919}
 		{7D301D17-4A8E-40DA-B856-448244F860BA} = {03997797-E7F5-0643-168D-B8EA7178C2FE}
+		{C240A27C-70F5-0B56-14AD-6E83741807A2} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{9B10B02C-DBE5-4E8C-83D9-8A85889333D1} = {C240A27C-70F5-0B56-14AD-6E83741807A2}
 	EndGlobalSection
 EndGlobal
