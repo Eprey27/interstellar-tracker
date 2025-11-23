@@ -438,3 +438,63 @@ coveragereport/
 # SonarQube
 .sonarqube/
 .sonar/
+
+# ==========================================
+# SECURITY: Sensitive Data & Secrets
+# ==========================================
+
+# Chat histories and session data (contains conversation context)
+chats/
+*.chatreplay.json
+*.chatreplay
+
+# Certificates and private keys
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+*.jks
+
+# Production configuration files
+appsettings.Production.json
+appsettings.production.json
+appsettings.Staging.json
+appsettings.staging.json
+
+# Keycloak configuration
+.keycloak/
+keycloak-realm.json
+keycloak-users.json
+
+# Database credentials and connection strings (local development only)
+database.conf
+db-init.sql
+
+# API Keys and tokens (temporary)
+*.token
+*.jwt
+*.apikey
+
+# SSL/TLS certificates and bundles
+*.csr
+*.ca-bundle
+cacert.pem
+
+# IDE secrets
+.idea/credentials.xml
+.vscode/settings.local.json
+
+# Runtime and temporary files with secrets
+.runtime-secrets
+secrets/
+*.secrets.json
+
+# GitHub Actions runtime artifacts
+.github/workflows/*.env
+
+# Local development overrides (user-specific)
+local.settings.json
+developer.env
+*.local.json
