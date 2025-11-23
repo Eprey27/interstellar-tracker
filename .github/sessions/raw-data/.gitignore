@@ -1,0 +1,24 @@
+# Gitignore for Chat Session Raw Data
+
+# Exclude large uncompressed files from git (use .zip instead)
+export-*/
+extracted/
+
+# Keep compressed archives
+!*.zip
+
+# Keep documentation and scripts
+!README.md
+!*.ps1
+!*.js
+!*.md
+
+# Exclude temporary files
+*.tmp
+*.bak
+*~
+
+# Exclude system files
+.DS_Store
+Thumbs.db
+desktop.ini
