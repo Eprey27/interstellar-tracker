@@ -48,6 +48,9 @@ jobs:
         shell: pwsh
 
       - name: SonarQube Scan
+        # NOTE: This requires Automatic Analysis to be disabled in SonarCloud
+        # See: https://sonarcloud.io/organizations/eprey/projects
+        # Go to Administration → Analysis Method and disable "Automatic Analysis"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
