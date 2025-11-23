@@ -64,7 +64,7 @@ jobs:
           cyclonedx-dotnet -o . -format xml
 
       - name: Upload BOM artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sbom
           path: |
@@ -73,13 +73,13 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: '**/TestResults/**'
 
       - name: Publish coverage reports
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: '**/coverage.opencover.xml'
           flags: unittests
