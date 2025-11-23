@@ -79,7 +79,6 @@ updates:
       prefix: "🔄 ci"
       include: "scope"
     rebase-strategy: "auto"
-
 # Global Configuration
 # All updates will follow these rules unless overridden above
 
