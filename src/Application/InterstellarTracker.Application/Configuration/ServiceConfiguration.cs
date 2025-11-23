@@ -8,6 +8,7 @@ namespace InterstellarTracker.Application.Configuration;
 /// </summary>
 public sealed class ServiceConfiguration : IServiceConfiguration
 {
+    private const string DefaultLocalhost = "http://localhost";
     private readonly IConfiguration _configuration;
     private readonly string _defaultBaseUrl;
 
@@ -19,7 +20,7 @@ public sealed class ServiceConfiguration : IServiceConfiguration
     public ServiceConfiguration(IConfiguration configuration)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        _defaultBaseUrl = "http://localhost";
+        _defaultBaseUrl = _configuration["Services:DefaultBaseUrl"] ?? DefaultLocalhost;
     }
 
     /// <inheritdoc />
