@@ -1,0 +1,147 @@
+﻿2025-11-23T22:26:43.3917172Z ##[group]Run dotnet test --configuration Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --verbosity minimal
+2025-11-23T22:26:43.3917981Z [36;1mdotnet test --configuration Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --verbosity minimal[0m
+2025-11-23T22:26:43.3951144Z shell: /usr/bin/bash -e {0}
+2025-11-23T22:26:43.3951379Z env:
+2025-11-23T22:26:43.3951550Z   DOTNET_ROOT: /usr/share/dotnet
+2025-11-23T22:26:43.3951778Z ##[endgroup]
+2025-11-23T22:26:44.5056663Z Test run for /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/bin/Release/net9.0/InterstellarTracker.Domain.Tests.dll (.NETCoreApp,Version=v9.0)
+2025-11-23T22:26:44.5498351Z Test run for /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Integration.Tests/InterstellarTracker.Integration.Tests/bin/Release/net9.0/InterstellarTracker.Integration.Tests.dll (.NETCoreApp,Version=v9.0)
+2025-11-23T22:26:44.5628926Z Test run for /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/bin/Release/net9.0/InterstellarTracker.Application.Tests.dll (.NETCoreApp,Version=v9.0)
+2025-11-23T22:26:44.7397709Z Test run for /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/bin/Release/net9.0/InterstellarTracker.VisualizationService.Tests.dll (.NETCoreApp,Version=v9.0)
+2025-11-23T22:26:44.8000362Z VSTest version 18.0.1 (x64)VSTest version 18.0.1 (x64)
+2025-11-23T22:26:44.8001209Z 
+2025-11-23T22:26:44.8001738Z VSTest version 18.0.1 (x64)
+2025-11-23T22:26:44.8002316Z VSTest version 18.0.1 (x64)
+2025-11-23T22:26:44.8051191Z 
+2025-11-23T22:26:44.8055056Z 
+2025-11-23T22:26:44.8061071Z 
+2025-11-23T22:26:44.8067824Z 
+2025-11-23T22:26:45.3110745Z Starting test execution, please wait...Starting test execution, please wait...Starting test execution, please wait...Starting test execution, please wait...
+2025-11-23T22:26:45.3128988Z 
+2025-11-23T22:26:45.3129240Z 
+2025-11-23T22:26:45.3129338Z 
+2025-11-23T22:26:45.4332955Z A total of 1 test files matched the specified pattern.
+2025-11-23T22:26:45.4340877Z A total of 1 test files matched the specified pattern.
+2025-11-23T22:26:45.4342023Z A total of 1 test files matched the specified pattern.
+2025-11-23T22:26:45.4352079Z A total of 1 test files matched the specified pattern.
+2025-11-23T22:26:51.5580877Z Results File: /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/TestResults/_runnervmg1sw1_2025-11-23_22_26_50.trx
+2025-11-23T22:26:51.5590757Z 
+2025-11-23T22:26:51.5627288Z Results File: /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Integration.Tests/InterstellarTracker.Integration.Tests/TestResults/_runnervmg1sw1_2025-11-23_22_26_50.trx
+2025-11-23T22:26:51.5632687Z 
+2025-11-23T22:26:51.5667787Z Passed!  - Failed:     0, Passed:    29, Skipped:     0, Total:    29, Duration: 90 ms - InterstellarTracker.Domain.Tests.dll (net9.0)
+2025-11-23T22:26:51.5710800Z Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 111 ms - InterstellarTracker.Integration.Tests.dll (net9.0)
+2025-11-23T22:26:51.6461912Z Results File: /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/TestResults/_runnervmg1sw1_2025-11-23_22_26_51.trx
+2025-11-23T22:26:51.6464566Z 
+2025-11-23T22:26:51.6504201Z Passed!  - Failed:     0, Passed:    24, Skipped:     0, Total:    24, Duration: 231 ms - InterstellarTracker.Application.Tests.dll (net9.0)
+2025-11-23T22:26:53.2468831Z [xUnit.net 00:00:02.96]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsPositionData [FAIL]
+2025-11-23T22:26:53.2892758Z [xUnit.net 00:00:03.00]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsOk [FAIL]
+2025-11-23T22:26:53.2973497Z [xUnit.net 00:00:03.01]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_InvalidObjectId_ReturnsNotFound [FAIL]
+2025-11-23T22:26:53.3052360Z [xUnit.net 00:00:03.02]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsTrajectoryData [FAIL]
+2025-11-23T22:26:53.3115821Z [xUnit.net 00:00:03.02]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsOk [FAIL]
+2025-11-23T22:26:53.3180582Z [xUnit.net 00:00:03.03]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_WithDateRange_ReturnsFilteredPoints [FAIL]
+2025-11-23T22:26:53.7593975Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsPositionData [2 s]
+2025-11-23T22:26:53.7595333Z   Error Message:
+2025-11-23T22:26:53.7596458Z    System.Text.Json.JsonException : 'S' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7597877Z ---- System.Text.Json.JsonReaderException : 'S' is an invalid start of a value. LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7599094Z   Stack Trace:
+2025-11-23T22:26:53.7599750Z      at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, JsonReaderException ex)
+2025-11-23T22:26:53.7601154Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7603121Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize(ReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+2025-11-23T22:26:53.7605039Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7606986Z    at System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsyncCore[T](HttpContent content, JsonSerializerOptions options, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7610667Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsPositionData() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 114
+2025-11-23T22:26:53.7613297Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7613801Z ----- Inner Stack Trace -----
+2025-11-23T22:26:53.7614817Z    at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+2025-11-23T22:26:53.7615553Z    at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+2025-11-23T22:26:53.7615968Z    at System.Text.Json.Utf8JsonReader.ReadFirstToken(Byte first)
+2025-11-23T22:26:53.7616367Z    at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+2025-11-23T22:26:53.7616706Z    at System.Text.Json.Utf8JsonReader.Read()
+2025-11-23T22:26:53.7617300Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7618321Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsOk [43 ms]
+2025-11-23T22:26:53.7619261Z   Error Message:
+2025-11-23T22:26:53.7619707Z    Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.InternalServerError {value: 500}.
+2025-11-23T22:26:53.7620189Z   Stack Trace:
+2025-11-23T22:26:53.7620510Z      at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+2025-11-23T22:26:53.7621068Z    at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+2025-11-23T22:26:53.7621727Z    at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+2025-11-23T22:26:53.7622587Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7623104Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7623641Z    at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+2025-11-23T22:26:53.7624263Z    at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+2025-11-23T22:26:53.7625771Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsOk() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 35
+2025-11-23T22:26:53.7627717Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7629252Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_InvalidObjectId_ReturnsNotFound [8 ms]
+2025-11-23T22:26:53.7630819Z   Error Message:
+2025-11-23T22:26:53.7631734Z    Expected response.StatusCode to be HttpStatusCode.NotFound {value: 404}, but found HttpStatusCode.InternalServerError {value: 500}.
+2025-11-23T22:26:53.7632739Z   Stack Trace:
+2025-11-23T22:26:53.7633335Z      at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+2025-11-23T22:26:53.7634404Z    at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+2025-11-23T22:26:53.7635685Z    at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+2025-11-23T22:26:53.7636882Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7637905Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7639027Z    at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+2025-11-23T22:26:53.7640202Z    at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+2025-11-23T22:26:53.7643138Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_InvalidObjectId_ReturnsNotFound() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 86
+2025-11-23T22:26:53.7645808Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7647225Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsTrajectoryData [7 ms]
+2025-11-23T22:26:53.7648755Z   Error Message:
+2025-11-23T22:26:53.7649494Z    System.Text.Json.JsonException : 'S' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7650834Z ---- System.Text.Json.JsonReaderException : 'S' is an invalid start of a value. LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7651637Z   Stack Trace:
+2025-11-23T22:26:53.7652254Z      at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, JsonReaderException ex)
+2025-11-23T22:26:53.7653634Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7655716Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize(ReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+2025-11-23T22:26:53.7657646Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7659762Z    at System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsyncCore[T](HttpContent content, JsonSerializerOptions options, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7663398Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsTrajectoryData() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 47
+2025-11-23T22:26:53.7666045Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7666681Z ----- Inner Stack Trace -----
+2025-11-23T22:26:53.7667754Z    at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+2025-11-23T22:26:53.7669285Z    at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+2025-11-23T22:26:53.7670046Z    at System.Text.Json.Utf8JsonReader.ReadFirstToken(Byte first)
+2025-11-23T22:26:53.7670787Z    at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+2025-11-23T22:26:53.7671432Z    at System.Text.Json.Utf8JsonReader.Read()
+2025-11-23T22:26:53.7672864Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7674840Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsOk [6 ms]
+2025-11-23T22:26:53.7676289Z   Error Message:
+2025-11-23T22:26:53.7677151Z    Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.InternalServerError {value: 500}.
+2025-11-23T22:26:53.7678031Z   Stack Trace:
+2025-11-23T22:26:53.7678860Z      at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+2025-11-23T22:26:53.7679915Z    at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+2025-11-23T22:26:53.7681129Z    at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+2025-11-23T22:26:53.7682303Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7683259Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7684288Z    at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+2025-11-23T22:26:53.7685448Z    at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+2025-11-23T22:26:53.7688372Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsOk() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 101
+2025-11-23T22:26:53.7691228Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7692634Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_WithDateRange_ReturnsFilteredPoints [6 ms]
+2025-11-23T22:26:53.7694039Z   Error Message:
+2025-11-23T22:26:53.7694776Z    System.Text.Json.JsonException : 'S' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7696351Z ---- System.Text.Json.JsonReaderException : 'S' is an invalid start of a value. LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7697195Z   Stack Trace:
+2025-11-23T22:26:53.7697837Z      at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, JsonReaderException ex)
+2025-11-23T22:26:53.7699440Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7701317Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize(ReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+2025-11-23T22:26:53.7702777Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7704227Z    at System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsyncCore[T](HttpContent content, JsonSerializerOptions options, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7706491Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_WithDateRange_ReturnsFilteredPoints() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 67
+2025-11-23T22:26:53.7707925Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7708244Z ----- Inner Stack Trace -----
+2025-11-23T22:26:53.7709065Z    at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+2025-11-23T22:26:53.7709755Z    at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+2025-11-23T22:26:53.7710159Z    at System.Text.Json.Utf8JsonReader.ReadFirstToken(Byte first)
+2025-11-23T22:26:53.7710710Z    at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+2025-11-23T22:26:53.7711037Z    at System.Text.Json.Utf8JsonReader.Read()
+2025-11-23T22:26:53.7711641Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7874352Z Results File: /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/TestResults/_runnervmg1sw1_2025-11-23_22_26_51.trx
+2025-11-23T22:26:53.7876883Z 
+2025-11-23T22:26:53.7917743Z Failed!  - Failed:     6, Passed:    17, Skipped:     0, Total:    23, Duration: 2 s - InterstellarTracker.VisualizationService.Tests.dll (net9.0)
+2025-11-23T22:26:54.0090129Z 
+2025-11-23T22:26:54.0097436Z Attachments:
+2025-11-23T22:26:54.0100762Z   /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Integration.Tests/InterstellarTracker.Integration.Tests/TestResults/4f595286-44eb-490b-8601-f50353c1096a/coverage.cobertura.xml
+2025-11-23T22:26:54.0103354Z   /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/TestResults/6abecd47-8c88-42b3-962a-dc06baffc5c0/coverage.cobertura.xml
+2025-11-23T22:26:54.0105334Z   /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/TestResults/125ed10f-835c-47c3-b081-8c1b6879f25c/coverage.cobertura.xml
+2025-11-23T22:26:54.0106671Z   /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/TestResults/574901ba-ff4c-4ebf-b418-79a2dc847017/coverage.cobertura.xml
+2025-11-23T22:26:54.0596408Z ##[error]Process completed with exit code 1.

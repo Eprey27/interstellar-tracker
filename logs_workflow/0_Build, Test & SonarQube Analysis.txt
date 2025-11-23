@@ -1,0 +1,393 @@
+﻿2025-11-23T22:26:02.8634341Z Current runner version: '2.329.0'
+2025-11-23T22:26:02.8669051Z ##[group]Runner Image Provisioner
+2025-11-23T22:26:02.8670503Z Hosted Compute Agent
+2025-11-23T22:26:02.8671513Z Version: 20251016.436
+2025-11-23T22:26:02.8672633Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+2025-11-23T22:26:02.8674053Z Build Date: 2025-10-15T20:44:12Z
+2025-11-23T22:26:02.8675102Z ##[endgroup]
+2025-11-23T22:26:02.8676192Z ##[group]Operating System
+2025-11-23T22:26:02.8677254Z Ubuntu
+2025-11-23T22:26:02.8678062Z 24.04.3
+2025-11-23T22:26:02.8679187Z LTS
+2025-11-23T22:26:02.8680031Z ##[endgroup]
+2025-11-23T22:26:02.8680904Z ##[group]Runner Image
+2025-11-23T22:26:02.8682012Z Image: ubuntu-24.04
+2025-11-23T22:26:02.8682851Z Version: 20251112.124.1
+2025-11-23T22:26:02.8684696Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251112.124/images/ubuntu/Ubuntu2404-Readme.md
+2025-11-23T22:26:02.8687528Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251112.124
+2025-11-23T22:26:02.8689815Z ##[endgroup]
+2025-11-23T22:26:02.8691724Z ##[group]GITHUB_TOKEN Permissions
+2025-11-23T22:26:02.8694431Z Contents: read
+2025-11-23T22:26:02.8695329Z Metadata: read
+2025-11-23T22:26:02.8696207Z Packages: read
+2025-11-23T22:26:02.8697188Z ##[endgroup]
+2025-11-23T22:26:02.8700366Z Secret source: Actions
+2025-11-23T22:26:02.8701537Z Prepare workflow directory
+2025-11-23T22:26:02.9174063Z Prepare all required actions
+2025-11-23T22:26:02.9232315Z Getting action download info
+2025-11-23T22:26:03.2033996Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2025-11-23T22:26:03.5025175Z Download action repository 'actions/setup-dotnet@v4' (SHA:67a3573c9a986a3f9c594539f4ab511d57bb3ce9)
+2025-11-23T22:26:03.7533216Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-11-23T22:26:03.8719396Z Download action repository 'codecov/codecov-action@v4' (SHA:b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238)
+2025-11-23T22:26:04.2625445Z Complete job name: Build, Test & SonarQube Analysis
+2025-11-23T22:26:04.3483908Z ##[group]Run actions/checkout@v4
+2025-11-23T22:26:04.3485301Z with:
+2025-11-23T22:26:04.3486153Z   fetch-depth: 0
+2025-11-23T22:26:04.3487081Z   repository: Eprey27/interstellar-tracker
+2025-11-23T22:26:04.3488582Z   token: ***
+2025-11-23T22:26:04.3489494Z   ssh-strict: true
+2025-11-23T22:26:04.3490298Z   ssh-user: git
+2025-11-23T22:26:04.3491154Z   persist-credentials: true
+2025-11-23T22:26:04.3492113Z   clean: true
+2025-11-23T22:26:04.3492941Z   sparse-checkout-cone-mode: true
+2025-11-23T22:26:04.3493970Z   fetch-tags: false
+2025-11-23T22:26:04.3494879Z   show-progress: true
+2025-11-23T22:26:04.3495712Z   lfs: false
+2025-11-23T22:26:04.3496496Z   submodules: false
+2025-11-23T22:26:04.3497305Z   set-safe-directory: true
+2025-11-23T22:26:04.3498750Z ##[endgroup]
+2025-11-23T22:26:04.4590839Z Syncing repository: Eprey27/interstellar-tracker
+2025-11-23T22:26:04.4593641Z ##[group]Getting Git version info
+2025-11-23T22:26:04.4595578Z Working directory is '/home/runner/work/interstellar-tracker/interstellar-tracker'
+2025-11-23T22:26:04.4597842Z [command]/usr/bin/git version
+2025-11-23T22:26:04.4675615Z git version 2.51.2
+2025-11-23T22:26:04.4701705Z ##[endgroup]
+2025-11-23T22:26:04.4715604Z Temporarily overriding HOME='/home/runner/work/_temp/8440d3ab-7f0f-4771-8f10-a37d952cebc0' before making global git config changes
+2025-11-23T22:26:04.4718744Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-23T22:26:04.4721821Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/interstellar-tracker/interstellar-tracker
+2025-11-23T22:26:04.4756636Z Deleting the contents of '/home/runner/work/interstellar-tracker/interstellar-tracker'
+2025-11-23T22:26:04.4759984Z ##[group]Initializing the repository
+2025-11-23T22:26:04.4764162Z [command]/usr/bin/git init /home/runner/work/interstellar-tracker/interstellar-tracker
+2025-11-23T22:26:04.4868791Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-11-23T22:26:04.4871082Z hint: is subject to change. To configure the initial branch name to use in all
+2025-11-23T22:26:04.4873497Z hint: of your new repositories, which will suppress this warning, call:
+2025-11-23T22:26:04.4875021Z hint:
+2025-11-23T22:26:04.4876037Z hint: 	git config --global init.defaultBranch <name>
+2025-11-23T22:26:04.4877770Z hint:
+2025-11-23T22:26:04.4879182Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-11-23T22:26:04.4881018Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-11-23T22:26:04.4882715Z hint:
+2025-11-23T22:26:04.4884258Z hint: 	git branch -m <name>
+2025-11-23T22:26:04.4885806Z hint:
+2025-11-23T22:26:04.4887775Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-11-23T22:26:04.4891261Z Initialized empty Git repository in /home/runner/work/interstellar-tracker/interstellar-tracker/.git/
+2025-11-23T22:26:04.4894983Z [command]/usr/bin/git remote add origin https://github.com/Eprey27/interstellar-tracker
+2025-11-23T22:26:04.4920022Z ##[endgroup]
+2025-11-23T22:26:04.4922730Z ##[group]Disabling automatic garbage collection
+2025-11-23T22:26:04.4925015Z [command]/usr/bin/git config --local gc.auto 0
+2025-11-23T22:26:04.4954518Z ##[endgroup]
+2025-11-23T22:26:04.4956844Z ##[group]Setting up auth
+2025-11-23T22:26:04.4962122Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-11-23T22:26:04.4994600Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-11-23T22:26:04.5328827Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-23T22:26:04.5360962Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-11-23T22:26:04.5586190Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2025-11-23T22:26:04.5619031Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2025-11-23T22:26:04.5838717Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-11-23T22:26:04.5871756Z ##[endgroup]
+2025-11-23T22:26:04.5873504Z ##[group]Fetching the repository
+2025-11-23T22:26:04.5881613Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +3d0edd5469d176dfb97585714ec81a6c3e116877:refs/remotes/pull/3/merge
+2025-11-23T22:26:05.0162253Z From https://github.com/Eprey27/interstellar-tracker
+2025-11-23T22:26:05.0164839Z  * [new branch]      develop                                  -> origin/develop
+2025-11-23T22:26:05.0168203Z  * [new branch]      feature/iter1.1-architecture-audit       -> origin/feature/iter1.1-architecture-audit
+2025-11-23T22:26:05.0171933Z  * [new branch]      main                                     -> origin/main
+2025-11-23T22:26:05.0174786Z  * [new tag]         iter1.0-sonarqube-setup                  -> iter1.0-sonarqube-setup
+2025-11-23T22:26:05.0176954Z  * [new ref]         3d0edd5469d176dfb97585714ec81a6c3e116877 -> pull/3/merge
+2025-11-23T22:26:05.0206239Z ##[endgroup]
+2025-11-23T22:26:05.0208083Z ##[group]Determining the checkout info
+2025-11-23T22:26:05.0209820Z ##[endgroup]
+2025-11-23T22:26:05.0212953Z [command]/usr/bin/git sparse-checkout disable
+2025-11-23T22:26:05.0252478Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-11-23T22:26:05.0277407Z ##[group]Checking out the ref
+2025-11-23T22:26:05.0280592Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/3/merge
+2025-11-23T22:26:05.0717286Z Note: switching to 'refs/remotes/pull/3/merge'.
+2025-11-23T22:26:05.0719229Z 
+2025-11-23T22:26:05.0720402Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-11-23T22:26:05.0723191Z changes and commit them, and you can discard any commits you make in this
+2025-11-23T22:26:05.0726006Z state without impacting any branches by switching back to a branch.
+2025-11-23T22:26:05.0727575Z 
+2025-11-23T22:26:05.0728244Z If you want to create a new branch to retain commits you create, you may
+2025-11-23T22:26:05.0730124Z do so (now or later) by using -c with the switch command. Example:
+2025-11-23T22:26:05.0731018Z 
+2025-11-23T22:26:05.0731577Z   git switch -c <new-branch-name>
+2025-11-23T22:26:05.0732627Z 
+2025-11-23T22:26:05.0733055Z Or undo this operation with:
+2025-11-23T22:26:05.0733671Z 
+2025-11-23T22:26:05.0733988Z   git switch -
+2025-11-23T22:26:05.0734418Z 
+2025-11-23T22:26:05.0735166Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-11-23T22:26:05.0736516Z 
+2025-11-23T22:26:05.0737831Z HEAD is now at 3d0edd5 Merge 9dea769890a345c42c3b4796e57c28906413c97c into 12139cb7431a14582dc8db34cb57f00f3e7ac1ef
+2025-11-23T22:26:05.0803149Z ##[endgroup]
+2025-11-23T22:26:05.0806776Z [command]/usr/bin/git log -1 --format=%H
+2025-11-23T22:26:05.0808657Z 3d0edd5469d176dfb97585714ec81a6c3e116877
+2025-11-23T22:26:05.1041366Z ##[group]Run actions/setup-dotnet@v4
+2025-11-23T22:26:05.1042282Z with:
+2025-11-23T22:26:05.1042917Z   dotnet-version: 9.0.x
+2025-11-23T22:26:05.1043665Z   cache: false
+2025-11-23T22:26:05.1044323Z ##[endgroup]
+2025-11-23T22:26:05.2825093Z [command]/home/runner/work/_actions/actions/setup-dotnet/v4/externals/install-dotnet.sh --skip-non-versioned-files --runtime dotnet --channel LTS
+2025-11-23T22:26:05.6723155Z dotnet-install: .NET Core Runtime with version '10.0.0' is already installed.
+2025-11-23T22:26:05.6753637Z [command]/home/runner/work/_actions/actions/setup-dotnet/v4/externals/install-dotnet.sh --skip-non-versioned-files --channel 9.0
+2025-11-23T22:26:05.9853413Z dotnet-install: Attempting to download using aka.ms link https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.308/dotnet-sdk-9.0.308-linux-x64.tar.gz
+2025-11-23T22:26:07.3160559Z dotnet-install: Remote file https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.308/dotnet-sdk-9.0.308-linux-x64.tar.gz size is 218066196 bytes.
+2025-11-23T22:26:07.3163757Z dotnet-install: Extracting archive from https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.308/dotnet-sdk-9.0.308-linux-x64.tar.gz
+2025-11-23T22:26:11.5900899Z dotnet-install: Downloaded file size is 218066196 bytes.
+2025-11-23T22:26:11.5904564Z dotnet-install: The remote and local file sizes are equal.
+2025-11-23T22:26:11.8513209Z dotnet-install: Installed version is 9.0.308
+2025-11-23T22:26:11.8570217Z dotnet-install: Adding to current process PATH: `/usr/share/dotnet`. Note: This change will be visible only when sourcing script.
+2025-11-23T22:26:11.8576424Z dotnet-install: Note that the script does not resolve dependencies during installation.
+2025-11-23T22:26:11.8602224Z dotnet-install: To check the list of dependencies, go to https://learn.microsoft.com/dotnet/core/install, select your operating system and check the "Dependencies" section.
+2025-11-23T22:26:11.8603619Z dotnet-install: Installation finished successfully.
+2025-11-23T22:26:11.8737819Z ##[group]Run dotnet restore
+2025-11-23T22:26:11.8738140Z [36;1mdotnet restore[0m
+2025-11-23T22:26:11.8776298Z shell: /usr/bin/bash -e {0}
+2025-11-23T22:26:11.8776561Z env:
+2025-11-23T22:26:11.8776770Z   DOTNET_ROOT: /usr/share/dotnet
+2025-11-23T22:26:11.8777026Z ##[endgroup]
+2025-11-23T22:26:17.4546221Z   Determining projects to restore...
+2025-11-23T22:26:21.2937344Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Application/InterstellarTracker.Application/InterstellarTracker.Application.csproj (in 2.2 sec).
+2025-11-23T22:26:21.2941525Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.Web/InterstellarTracker.Web.csproj (in 2.21 sec).
+2025-11-23T22:26:22.1882832Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/AuthService/InterstellarTracker.AuthService/InterstellarTracker.AuthService.csproj (in 567 ms).
+2025-11-23T22:26:22.5105585Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.WebUI/InterstellarTracker.WebUI.csproj (in 3.75 sec).
+2025-11-23T22:26:22.5108921Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/VisualizationService/InterstellarTracker.VisualizationService/InterstellarTracker.VisualizationService.csproj (in 3.75 sec).
+2025-11-23T22:26:22.5220349Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Infrastructure/InterstellarTracker.Infrastructure/InterstellarTracker.Infrastructure.csproj (in 4 ms).
+2025-11-23T22:26:22.5226760Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Domain/InterstellarTracker.Domain/InterstellarTracker.Domain.csproj (in 1 ms).
+2025-11-23T22:26:22.6294331Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/CalculationService/InterstellarTracker.CalculationService/InterstellarTracker.CalculationService.csproj (in 1.31 sec).
+2025-11-23T22:26:22.7098013Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/ApiGateway/InterstellarTracker.ApiGateway/InterstellarTracker.ApiGateway.csproj (in 473 ms).
+2025-11-23T22:26:23.5422607Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/InterstellarTracker.Domain.Tests.csproj (in 907 ms).
+2025-11-23T22:26:23.5449271Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/InterstellarTracker.Application.Tests.csproj (in 819 ms).
+2025-11-23T22:26:23.5461817Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Integration.Tests/InterstellarTracker.Integration.Tests/InterstellarTracker.Integration.Tests.csproj (in 1.01 sec).
+2025-11-23T22:26:27.5863694Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/InterstellarTracker.VisualizationService.Tests.csproj (in 5.05 sec).
+2025-11-23T22:26:27.6299414Z ##[group]Run dotnet build --configuration Release --no-restore
+2025-11-23T22:26:27.6299946Z [36;1mdotnet build --configuration Release --no-restore[0m
+2025-11-23T22:26:27.6332219Z shell: /usr/bin/bash -e {0}
+2025-11-23T22:26:27.6332522Z env:
+2025-11-23T22:26:27.6332756Z   DOTNET_ROOT: /usr/share/dotnet
+2025-11-23T22:26:27.6333045Z ##[endgroup]
+2025-11-23T22:26:34.9233350Z   InterstellarTracker.Domain -> /home/runner/work/interstellar-tracker/interstellar-tracker/src/Domain/InterstellarTracker.Domain/bin/Release/net9.0/InterstellarTracker.Domain.dll
+2025-11-23T22:26:35.2052572Z   InterstellarTracker.AuthService -> /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/AuthService/InterstellarTracker.AuthService/bin/Release/net9.0/InterstellarTracker.AuthService.dll
+2025-11-23T22:26:35.4665183Z   InterstellarTracker.Application -> /home/runner/work/interstellar-tracker/interstellar-tracker/src/Application/InterstellarTracker.Application/bin/Release/net9.0/InterstellarTracker.Application.dll
+2025-11-23T22:26:35.6703678Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/ValueObjects/OrbitalElementsTests.cs(137,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'Vector3'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/InterstellarTracker.Domain.Tests.csproj]
+2025-11-23T22:26:35.8167351Z   InterstellarTracker.Domain.Tests -> /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/bin/Release/net9.0/InterstellarTracker.Domain.Tests.dll
+2025-11-23T22:26:35.9287892Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/CelestialBodies/Queries/GetCelestialBodyPositionQueryHandlerTests.cs(47,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'Vector3'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/InterstellarTracker.Application.Tests.csproj]
+2025-11-23T22:26:36.0862853Z   InterstellarTracker.Application.Tests -> /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/bin/Release/net9.0/InterstellarTracker.Application.Tests.dll
+2025-11-23T22:26:36.1210870Z   InterstellarTracker.Infrastructure -> /home/runner/work/interstellar-tracker/interstellar-tracker/src/Infrastructure/InterstellarTracker.Infrastructure/bin/Release/net9.0/InterstellarTracker.Infrastructure.dll
+2025-11-23T22:26:38.2454746Z   InterstellarTracker.CalculationService -> /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/CalculationService/InterstellarTracker.CalculationService/bin/Release/net9.0/InterstellarTracker.CalculationService.dll
+2025-11-23T22:26:38.3992620Z   InterstellarTracker.VisualizationService -> /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/VisualizationService/InterstellarTracker.VisualizationService/bin/Release/net9.0/InterstellarTracker.VisualizationService.dll
+2025-11-23T22:26:39.7089631Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.Web/Window.cs(42,18): warning CS0414: The field 'Window._rightMouseDown' is assigned but its value is never used [/home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.Web/InterstellarTracker.Web.csproj]
+2025-11-23T22:26:39.8264917Z   InterstellarTracker.Web -> /home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.Web/bin/Release/net9.0/InterstellarTracker.Web.dll
+2025-11-23T22:26:40.2747164Z   InterstellarTracker.ApiGateway -> /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/ApiGateway/InterstellarTracker.ApiGateway/bin/Release/net9.0/InterstellarTracker.ApiGateway.dll
+2025-11-23T22:26:40.5084469Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Infrastructure/CalculationServiceMock.cs(31,35): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/InterstellarTracker.VisualizationService.Tests.csproj]
+2025-11-23T22:26:40.5093070Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Infrastructure/CalculationServiceMock.cs(46,35): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/InterstellarTracker.VisualizationService.Tests.csproj]
+2025-11-23T22:26:40.6888747Z   InterstellarTracker.VisualizationService.Tests -> /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/bin/Release/net9.0/InterstellarTracker.VisualizationService.Tests.dll
+2025-11-23T22:26:40.7444848Z   InterstellarTracker.WebUI -> /home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.WebUI/bin/Release/net9.0/InterstellarTracker.WebUI.dll
+2025-11-23T22:26:40.9924153Z   InterstellarTracker.Integration.Tests -> /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Integration.Tests/InterstellarTracker.Integration.Tests/bin/Release/net9.0/InterstellarTracker.Integration.Tests.dll
+2025-11-23T22:26:41.0207638Z 
+2025-11-23T22:26:41.0215941Z Build succeeded.
+2025-11-23T22:26:41.0217106Z 
+2025-11-23T22:26:41.0222869Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/ValueObjects/OrbitalElementsTests.cs(137,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'Vector3'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/InterstellarTracker.Domain.Tests.csproj]
+2025-11-23T22:26:41.0231735Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/CelestialBodies/Queries/GetCelestialBodyPositionQueryHandlerTests.cs(47,9): warning xUnit2002: Do not use Assert.NotNull() on value type 'Vector3'. Remove this assert. (https://xunit.net/xunit.analyzers/rules/xUnit2002) [/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/InterstellarTracker.Application.Tests.csproj]
+2025-11-23T22:26:41.0241062Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.Web/Window.cs(42,18): warning CS0414: The field 'Window._rightMouseDown' is assigned but its value is never used [/home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.Web/InterstellarTracker.Web.csproj]
+2025-11-23T22:26:41.0247909Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Infrastructure/CalculationServiceMock.cs(31,35): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/InterstellarTracker.VisualizationService.Tests.csproj]
+2025-11-23T22:26:41.0255530Z ##[warning]/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Infrastructure/CalculationServiceMock.cs(46,35): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/InterstellarTracker.VisualizationService.Tests.csproj]
+2025-11-23T22:26:41.0259298Z     5 Warning(s)
+2025-11-23T22:26:41.0259572Z     0 Error(s)
+2025-11-23T22:26:41.0259863Z 
+2025-11-23T22:26:41.0260019Z Time Elapsed 00:00:13.00
+2025-11-23T22:26:41.1151229Z ##[group]Run dotnet tool install --global dotnet-coverage
+2025-11-23T22:26:41.1151917Z [36;1mdotnet tool install --global dotnet-coverage[0m
+2025-11-23T22:26:41.1198173Z shell: /usr/bin/bash -e {0}
+2025-11-23T22:26:41.1198766Z env:
+2025-11-23T22:26:41.1199065Z   DOTNET_ROOT: /usr/share/dotnet
+2025-11-23T22:26:41.1199442Z ##[endgroup]
+2025-11-23T22:26:43.3718242Z You can invoke the tool using the following command: dotnet-coverage
+2025-11-23T22:26:43.3719364Z Tool 'dotnet-coverage' (version '18.1.0') was successfully installed.
+2025-11-23T22:26:43.3917183Z ##[group]Run dotnet test --configuration Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --verbosity minimal
+2025-11-23T22:26:43.3917985Z [36;1mdotnet test --configuration Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --verbosity minimal[0m
+2025-11-23T22:26:43.3951152Z shell: /usr/bin/bash -e {0}
+2025-11-23T22:26:43.3951382Z env:
+2025-11-23T22:26:43.3951553Z   DOTNET_ROOT: /usr/share/dotnet
+2025-11-23T22:26:43.3951780Z ##[endgroup]
+2025-11-23T22:26:44.5056710Z Test run for /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/bin/Release/net9.0/InterstellarTracker.Domain.Tests.dll (.NETCoreApp,Version=v9.0)
+2025-11-23T22:26:44.5498596Z Test run for /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Integration.Tests/InterstellarTracker.Integration.Tests/bin/Release/net9.0/InterstellarTracker.Integration.Tests.dll (.NETCoreApp,Version=v9.0)
+2025-11-23T22:26:44.5629043Z Test run for /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/bin/Release/net9.0/InterstellarTracker.Application.Tests.dll (.NETCoreApp,Version=v9.0)
+2025-11-23T22:26:44.7397756Z Test run for /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/bin/Release/net9.0/InterstellarTracker.VisualizationService.Tests.dll (.NETCoreApp,Version=v9.0)
+2025-11-23T22:26:44.8000408Z VSTest version 18.0.1 (x64)VSTest version 18.0.1 (x64)
+2025-11-23T22:26:44.8001218Z 
+2025-11-23T22:26:44.8001748Z VSTest version 18.0.1 (x64)
+2025-11-23T22:26:44.8002326Z VSTest version 18.0.1 (x64)
+2025-11-23T22:26:44.8051208Z 
+2025-11-23T22:26:44.8055068Z 
+2025-11-23T22:26:44.8061085Z 
+2025-11-23T22:26:44.8067838Z 
+2025-11-23T22:26:45.3110795Z Starting test execution, please wait...Starting test execution, please wait...Starting test execution, please wait...Starting test execution, please wait...
+2025-11-23T22:26:45.3129037Z 
+2025-11-23T22:26:45.3129244Z 
+2025-11-23T22:26:45.3129341Z 
+2025-11-23T22:26:45.4332983Z A total of 1 test files matched the specified pattern.
+2025-11-23T22:26:45.4340893Z A total of 1 test files matched the specified pattern.
+2025-11-23T22:26:45.4342034Z A total of 1 test files matched the specified pattern.
+2025-11-23T22:26:45.4352095Z A total of 1 test files matched the specified pattern.
+2025-11-23T22:26:51.5580926Z Results File: /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/TestResults/_runnervmg1sw1_2025-11-23_22_26_50.trx
+2025-11-23T22:26:51.5590773Z 
+2025-11-23T22:26:51.5627305Z Results File: /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Integration.Tests/InterstellarTracker.Integration.Tests/TestResults/_runnervmg1sw1_2025-11-23_22_26_50.trx
+2025-11-23T22:26:51.5632702Z 
+2025-11-23T22:26:51.5667840Z Passed!  - Failed:     0, Passed:    29, Skipped:     0, Total:    29, Duration: 90 ms - InterstellarTracker.Domain.Tests.dll (net9.0)
+2025-11-23T22:26:51.5710816Z Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 111 ms - InterstellarTracker.Integration.Tests.dll (net9.0)
+2025-11-23T22:26:51.6461959Z Results File: /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/TestResults/_runnervmg1sw1_2025-11-23_22_26_51.trx
+2025-11-23T22:26:51.6464580Z 
+2025-11-23T22:26:51.6504218Z Passed!  - Failed:     0, Passed:    24, Skipped:     0, Total:    24, Duration: 231 ms - InterstellarTracker.Application.Tests.dll (net9.0)
+2025-11-23T22:26:53.2468881Z [xUnit.net 00:00:02.96]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsPositionData [FAIL]
+2025-11-23T22:26:53.2892808Z [xUnit.net 00:00:03.00]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsOk [FAIL]
+2025-11-23T22:26:53.2974028Z [xUnit.net 00:00:03.01]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_InvalidObjectId_ReturnsNotFound [FAIL]
+2025-11-23T22:26:53.3052379Z [xUnit.net 00:00:03.02]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsTrajectoryData [FAIL]
+2025-11-23T22:26:53.3115851Z [xUnit.net 00:00:03.02]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsOk [FAIL]
+2025-11-23T22:26:53.3180601Z [xUnit.net 00:00:03.03]     InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_WithDateRange_ReturnsFilteredPoints [FAIL]
+2025-11-23T22:26:53.7594015Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsPositionData [2 s]
+2025-11-23T22:26:53.7595346Z   Error Message:
+2025-11-23T22:26:53.7596491Z    System.Text.Json.JsonException : 'S' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7597891Z ---- System.Text.Json.JsonReaderException : 'S' is an invalid start of a value. LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7599105Z   Stack Trace:
+2025-11-23T22:26:53.7599759Z      at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, JsonReaderException ex)
+2025-11-23T22:26:53.7601164Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7603137Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize(ReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+2025-11-23T22:26:53.7605064Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7607010Z    at System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsyncCore[T](HttpContent content, JsonSerializerOptions options, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7610685Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsPositionData() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 114
+2025-11-23T22:26:53.7613309Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7613804Z ----- Inner Stack Trace -----
+2025-11-23T22:26:53.7614822Z    at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+2025-11-23T22:26:53.7615555Z    at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+2025-11-23T22:26:53.7615970Z    at System.Text.Json.Utf8JsonReader.ReadFirstToken(Byte first)
+2025-11-23T22:26:53.7616375Z    at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+2025-11-23T22:26:53.7616709Z    at System.Text.Json.Utf8JsonReader.Read()
+2025-11-23T22:26:53.7617302Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7618324Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsOk [43 ms]
+2025-11-23T22:26:53.7619264Z   Error Message:
+2025-11-23T22:26:53.7619717Z    Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.InternalServerError {value: 500}.
+2025-11-23T22:26:53.7620191Z   Stack Trace:
+2025-11-23T22:26:53.7620513Z      at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+2025-11-23T22:26:53.7621071Z    at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+2025-11-23T22:26:53.7621947Z    at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+2025-11-23T22:26:53.7622589Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7623106Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7623643Z    at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+2025-11-23T22:26:53.7624266Z    at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+2025-11-23T22:26:53.7625774Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsOk() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 35
+2025-11-23T22:26:53.7627730Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7629277Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_InvalidObjectId_ReturnsNotFound [8 ms]
+2025-11-23T22:26:53.7630832Z   Error Message:
+2025-11-23T22:26:53.7631748Z    Expected response.StatusCode to be HttpStatusCode.NotFound {value: 404}, but found HttpStatusCode.InternalServerError {value: 500}.
+2025-11-23T22:26:53.7632750Z   Stack Trace:
+2025-11-23T22:26:53.7633343Z      at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+2025-11-23T22:26:53.7634414Z    at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+2025-11-23T22:26:53.7635696Z    at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+2025-11-23T22:26:53.7636894Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7637916Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7639047Z    at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+2025-11-23T22:26:53.7640210Z    at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+2025-11-23T22:26:53.7643155Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_InvalidObjectId_ReturnsNotFound() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 86
+2025-11-23T22:26:53.7645825Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7647241Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsTrajectoryData [7 ms]
+2025-11-23T22:26:53.7648768Z   Error Message:
+2025-11-23T22:26:53.7649502Z    System.Text.Json.JsonException : 'S' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7650855Z ---- System.Text.Json.JsonReaderException : 'S' is an invalid start of a value. LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7651644Z   Stack Trace:
+2025-11-23T22:26:53.7652264Z      at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, JsonReaderException ex)
+2025-11-23T22:26:53.7653652Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7655732Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize(ReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+2025-11-23T22:26:53.7657664Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7660049Z    at System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsyncCore[T](HttpContent content, JsonSerializerOptions options, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7663415Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_ValidObjectId_ReturnsTrajectoryData() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 47
+2025-11-23T22:26:53.7666060Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7666690Z ----- Inner Stack Trace -----
+2025-11-23T22:26:53.7667771Z    at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+2025-11-23T22:26:53.7669302Z    at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+2025-11-23T22:26:53.7670070Z    at System.Text.Json.Utf8JsonReader.ReadFirstToken(Byte first)
+2025-11-23T22:26:53.7670799Z    at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+2025-11-23T22:26:53.7671441Z    at System.Text.Json.Utf8JsonReader.Read()
+2025-11-23T22:26:53.7672900Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7674854Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsOk [6 ms]
+2025-11-23T22:26:53.7676303Z   Error Message:
+2025-11-23T22:26:53.7677160Z    Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.InternalServerError {value: 500}.
+2025-11-23T22:26:53.7678039Z   Stack Trace:
+2025-11-23T22:26:53.7678870Z      at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+2025-11-23T22:26:53.7679923Z    at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+2025-11-23T22:26:53.7681136Z    at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+2025-11-23T22:26:53.7682329Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7683268Z    at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+2025-11-23T22:26:53.7684299Z    at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+2025-11-23T22:26:53.7685459Z    at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+2025-11-23T22:26:53.7688584Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetPosition_ValidObjectIdAndDate_ReturnsOk() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 101
+2025-11-23T22:26:53.7691243Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7692648Z   Failed InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_WithDateRange_ReturnsFilteredPoints [6 ms]
+2025-11-23T22:26:53.7694062Z   Error Message:
+2025-11-23T22:26:53.7694784Z    System.Text.Json.JsonException : 'S' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7696363Z ---- System.Text.Json.JsonReaderException : 'S' is an invalid start of a value. LineNumber: 0 | BytePositionInLine: 0.
+2025-11-23T22:26:53.7697200Z   Stack Trace:
+2025-11-23T22:26:53.7697843Z      at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, JsonReaderException ex)
+2025-11-23T22:26:53.7699451Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7701332Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize(ReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+2025-11-23T22:26:53.7702974Z    at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7704231Z    at System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsyncCore[T](HttpContent content, JsonSerializerOptions options, CancellationToken cancellationToken)
+2025-11-23T22:26:53.7706496Z    at InterstellarTracker.VisualizationService.Tests.Controllers.TrajectoryControllerTests.GetTrajectory_WithDateRange_ReturnsFilteredPoints() in /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/Controllers/TrajectoryControllerTests.cs:line 67
+2025-11-23T22:26:53.7707935Z --- End of stack trace from previous location ---
+2025-11-23T22:26:53.7708246Z ----- Inner Stack Trace -----
+2025-11-23T22:26:53.7709069Z    at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+2025-11-23T22:26:53.7709758Z    at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+2025-11-23T22:26:53.7710168Z    at System.Text.Json.Utf8JsonReader.ReadFirstToken(Byte first)
+2025-11-23T22:26:53.7710713Z    at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+2025-11-23T22:26:53.7711039Z    at System.Text.Json.Utf8JsonReader.Read()
+2025-11-23T22:26:53.7711644Z    at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+2025-11-23T22:26:53.7874368Z Results File: /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/TestResults/_runnervmg1sw1_2025-11-23_22_26_51.trx
+2025-11-23T22:26:53.7876892Z 
+2025-11-23T22:26:53.7917752Z Failed!  - Failed:     6, Passed:    17, Skipped:     0, Total:    23, Duration: 2 s - InterstellarTracker.VisualizationService.Tests.dll (net9.0)
+2025-11-23T22:26:54.0090174Z 
+2025-11-23T22:26:54.0097445Z Attachments:
+2025-11-23T22:26:54.0100801Z   /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Integration.Tests/InterstellarTracker.Integration.Tests/TestResults/4f595286-44eb-490b-8601-f50353c1096a/coverage.cobertura.xml
+2025-11-23T22:26:54.0103360Z   /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/TestResults/6abecd47-8c88-42b3-962a-dc06baffc5c0/coverage.cobertura.xml
+2025-11-23T22:26:54.0105337Z   /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/TestResults/125ed10f-835c-47c3-b081-8c1b6879f25c/coverage.cobertura.xml
+2025-11-23T22:26:54.0106674Z   /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/TestResults/574901ba-ff4c-4ebf-b418-79a2dc847017/coverage.cobertura.xml
+2025-11-23T22:26:54.0596436Z ##[error]Process completed with exit code 1.
+2025-11-23T22:26:54.0691530Z ##[group]Run actions/upload-artifact@v4
+2025-11-23T22:26:54.0691792Z with:
+2025-11-23T22:26:54.0691959Z   name: test-results
+2025-11-23T22:26:54.0692149Z   path: **/TestResults/**
+2025-11-23T22:26:54.0692371Z   if-no-files-found: warn
+2025-11-23T22:26:54.0692567Z   compression-level: 6
+2025-11-23T22:26:54.0692759Z   overwrite: false
+2025-11-23T22:26:54.0692946Z   include-hidden-files: false
+2025-11-23T22:26:54.0693142Z env:
+2025-11-23T22:26:54.0693309Z   DOTNET_ROOT: /usr/share/dotnet
+2025-11-23T22:26:54.0693518Z ##[endgroup]
+2025-11-23T22:26:54.5243153Z With the provided path, there will be 12 files uploaded
+2025-11-23T22:26:54.5250304Z Artifact name is valid!
+2025-11-23T22:26:54.5251941Z Root directory input is valid!
+2025-11-23T22:26:54.6102884Z Beginning upload of artifact content to blob storage
+2025-11-23T22:26:54.7173935Z Uploaded bytes 90309
+2025-11-23T22:26:54.7371101Z Finished uploading artifact content to blob storage!
+2025-11-23T22:26:54.7374590Z SHA256 digest of uploaded artifact zip is f87e31bfc29dc2d1d487fbfd8faa380e9de600d5a08fe74ba8380a32c6d5084b
+2025-11-23T22:26:54.7376492Z Finalizing artifact upload
+2025-11-23T22:26:54.8188565Z Artifact test-results.zip successfully finalized. Artifact ID 4654938591
+2025-11-23T22:26:54.8189407Z Artifact test-results has been successfully uploaded! Final size is 90309 bytes. Artifact ID is 4654938591
+2025-11-23T22:26:54.8196266Z Artifact download URL: https://github.com/Eprey27/interstellar-tracker/actions/runs/19618219363/artifacts/4654938591
+2025-11-23T22:26:54.8345104Z Post job cleanup.
+2025-11-23T22:26:54.9283266Z [command]/usr/bin/git version
+2025-11-23T22:26:54.9324962Z git version 2.51.2
+2025-11-23T22:26:54.9369303Z Temporarily overriding HOME='/home/runner/work/_temp/94d01211-35d2-4e62-8a65-81bc378e09f1' before making global git config changes
+2025-11-23T22:26:54.9370663Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-23T22:26:54.9375826Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/interstellar-tracker/interstellar-tracker
+2025-11-23T22:26:54.9410607Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-11-23T22:26:54.9441844Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-11-23T22:26:54.9667331Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-23T22:26:54.9688157Z http.https://github.com/.extraheader
+2025-11-23T22:26:54.9701233Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-11-23T22:26:54.9730425Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-11-23T22:26:54.9946900Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2025-11-23T22:26:54.9978283Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2025-11-23T22:26:55.0306047Z Cleaning up orphan processes
+2025-11-23T22:26:55.0581924Z Terminate orphan process: pid (2469) (dotnet)
+2025-11-23T22:26:55.0610368Z Terminate orphan process: pid (2470) (dotnet)
+2025-11-23T22:26:55.0637651Z Terminate orphan process: pid (2471) (dotnet)
+2025-11-23T22:26:55.0667549Z Terminate orphan process: pid (2598) (VBCSCompiler)
