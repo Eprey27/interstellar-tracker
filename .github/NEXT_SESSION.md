@@ -2,18 +2,20 @@
 
 **Last Updated:** November 23, 2025  
 **Current Branch:** `main`  
-**Repository:** https://github.com/Eprey27/interstellar-tracker
+**Repository:** <https://github.com/Eprey27/interstellar-tracker>
 
 ---
 
 ## 📋 PIA (Personal Intelligent Assistant) Context
 
 ### Vision Document
+
 **Location:** `PIA-VISION.md` (root directory)  
 **Commit:** `4160485` - 🎯 docs: Add PIA strategic vision  
-**GitHub:** https://github.com/Eprey27/interstellar-tracker/blob/main/PIA-VISION.md
+**GitHub:** <https://github.com/Eprey27/interstellar-tracker/blob/main/PIA-VISION.md>
 
 ### PIA as Independent Project
+
 - **Goal:** Build PIA as standalone, easily integrable into any project
 - **Test Project:** interstellar-tracker serves as proof-of-concept
 - **Key Features:**
@@ -23,6 +25,7 @@
   - Future: Decision approval workflow UI
 
 ### Development Preferences
+
 - ✅ Follow latest community-backed best practices
 - ✅ TDD methodology (RED → GREEN → REFACTOR)
 - ✅ Clean Architecture + SOLID + KISS principles
@@ -38,6 +41,7 @@
 ### Completed Work (Beta Version)
 
 **Phase 1-5 TDD Cycle:** ✅ COMPLETE
+
 - ADR-007: CalculationService integration with 8 FR + 5 NFR
 - CalculationServiceClient: Typed HttpClient implementation
 - TrajectoryService: Refactored to delegate calculations
@@ -46,12 +50,14 @@
 - Documentation: 18 comprehensive documentation files
 
 **Test Suite:** ✅ 81/81 PASSING
+
 - Unit Tests: 17 (TrajectoryService business logic)
 - Integration Tests: 6 (WireMock HTTP mocking)
 - Other Tests: 58 (Domain, Application, Integration)
 - Coverage: ~30% (Target: >80%)
 
 **Git Commits (7 total):**
+
 ```
 3dc4d68 🔧 chore: Update project configuration and roadmap
 2da3dbb ✨ feat: Add VisualizationService Controllers and Models
@@ -63,6 +69,7 @@ b552dd1 docs: Phase 5 - Configuration and documentation
 ```
 
 **Current Warnings (Non-blocking):**
+
 - 2x CS8602: Nullable reference in `CalculationServiceMock.cs` (lines 31, 46)
 - 2x xUnit2002: Assert.NotNull on value type (test analyzer warnings)
 - 1x CS0414: Unused field in `Window.cs`
@@ -74,6 +81,7 @@ b552dd1 docs: Phase 5 - Configuration and documentation
 ### **Iteration 1: Code Quality & Architecture Review** (HIGHEST PRIORITY)
 
 #### 1.1 Clean Architecture Compliance Audit
+
 **Current Gap Assessment:**
 
 | Layer | Status | Gap Level | Priority |
@@ -85,6 +93,7 @@ b552dd1 docs: Phase 5 - Configuration and documentation
 | Controllers | ✅ Good (delegates properly) | Low | P3 |
 
 **Critical Issue Identified:**
+
 ```
 ❌ CURRENT: TrajectoryService (Services layer)
    - Contains business logic + HTTP client calls
@@ -97,6 +106,7 @@ b552dd1 docs: Phase 5 - Configuration and documentation
 ```
 
 **Action Items:**
+
 1. [ ] Audit all layer dependencies (use NDepend or manual)
 2. [ ] Create dependency violation report
 3. [ ] Plan refactoring for TrajectoryService split
@@ -109,14 +119,17 @@ b552dd1 docs: Phase 5 - Configuration and documentation
 **Known Issues to Review:**
 
 **Single Responsibility Violations:**
+
 - [ ] `TrajectoryService` - Does orchestration + HTTP + transformation
 - [ ] Controllers - Check if any contain business logic
 
 **Dependency Inversion:**
+
 - [ ] CalculationServiceClient - Should implement interface in Application
 - [ ] Check all constructor dependencies are abstractions
 
 **Areas to Analyze:**
+
 ```
 src/Services/VisualizationService/Services/TrajectoryService.cs      ← HIGH PRIORITY
 src/Services/VisualizationService/Services/CalculationServiceClient.cs
@@ -130,6 +143,7 @@ src/Domain/InterstellarTracker.Domain/**/*.cs
 #### 1.3 Anti-Patterns & Code Smells Hunt
 
 **Target Files for Review:**
+
 ```
 src/Services/VisualizationService/Services/TrajectoryService.cs    ← Start here
 src/Services/VisualizationService/Controllers/TrajectoryController.cs
@@ -138,6 +152,7 @@ tests/Services.Tests/.../Infrastructure/CalculationServiceMock.cs  ← Fix nulla
 ```
 
 **Code Smells to Check:**
+
 - [ ] Long methods (>50 lines)
 - [ ] Large classes (>300 lines)
 - [ ] Magic numbers/strings
@@ -146,6 +161,7 @@ tests/Services.Tests/.../Infrastructure/CalculationServiceMock.cs  ← Fix nulla
 - [ ] Feature envy
 
 **Tools to Use:**
+
 - SonarQube Community Edition
 - Visual Studio Code Metrics
 - ReSharper (if available)
@@ -159,12 +175,14 @@ tests/Services.Tests/.../Infrastructure/CalculationServiceMock.cs  ← Fix nulla
 **Target Coverage: >80%**
 
 **Gap Analysis Needed:**
+
 - [ ] Run coverage report: `dotnet test --collect:"XPlat Code Coverage"`
 - [ ] Generate HTML report with ReportGenerator
 - [ ] Identify untested critical paths
 - [ ] Create test expansion plan
 
 **Test Quality Checklist:**
+
 - [ ] All tests follow AAA pattern?
 - [ ] Test names descriptive (Should_When_Then)?
 - [ ] No test interdependencies?
@@ -172,6 +190,7 @@ tests/Services.Tests/.../Infrastructure/CalculationServiceMock.cs  ← Fix nulla
 - [ ] WireMock stubs complete?
 
 **Missing Test Scenarios (Priority):**
+
 1. [ ] CalculationServiceClient timeout handling
 2. [ ] CalculationServiceClient retry logic (when Polly added)
 3. [ ] TrajectoryService edge cases (empty results, invalid dates)
@@ -185,6 +204,7 @@ tests/Services.Tests/.../Infrastructure/CalculationServiceMock.cs  ← Fix nulla
 **Known Debt:**
 
 **Nullable Reference Warnings:** 🟡 MEDIUM
+
 ```
 File: tests/.../Infrastructure/CalculationServiceMock.cs
 Lines: 31, 46
@@ -193,6 +213,7 @@ Effort: 5 minutes
 ```
 
 **Unused Field Warning:** 🟢 LOW
+
 ```
 File: src/Web/InterstellarTracker.Web/Window.cs
 Line: 42 - _rightMouseDown
@@ -201,11 +222,13 @@ Effort: 2 minutes
 ```
 
 **Missing Error Handling:** 🔴 HIGH
+
 - [ ] No global exception handler middleware
 - [ ] No ProblemDetails RFC 7807 implementation
 - [ ] Limited HTTP error code usage
 
 **Configuration Issues:** 🟡 MEDIUM
+
 - [ ] No validation for required configuration values
 - [ ] Missing health checks for CalculationService dependency
 - [ ] No circuit breaker pattern (Polly not configured)
@@ -221,6 +244,7 @@ Effort: 2 minutes
 ### Layer-by-Layer Analysis
 
 **Domain Layer** (70/100)
+
 ```
 ✅ No external dependencies
 ✅ Value Objects present (OrbitalElements, Vector3D)
@@ -230,6 +254,7 @@ Effort: 2 minutes
 ```
 
 **Application Layer** (80/100)
+
 ```
 ✅ MediatR for CQRS pattern
 ✅ FluentValidation for rules
@@ -239,6 +264,7 @@ Effort: 2 minutes
 ```
 
 **Infrastructure Layer** (65/100)
+
 ```
 ✅ HTTP client for external service
 ✅ Configuration management
@@ -248,6 +274,7 @@ Effort: 2 minutes
 ```
 
 **Services Layer** (40/100) ⚠️ NEEDS REFACTORING
+
 ```
 ❌ TrajectoryService contains business + infrastructure logic
 ❌ Layer confusion (should be Application or Infrastructure)
@@ -255,6 +282,7 @@ Effort: 2 minutes
 ```
 
 **Web/API Layer** (85/100)
+
 ```
 ✅ Controllers are thin
 ✅ Proper delegation to services
@@ -265,6 +293,7 @@ Effort: 2 minutes
 ### Critical Refactoring Needed
 
 **Priority 1: Services Layer Restructure**
+
 ```
 MOVE:
   src/Services/.../Services/TrajectoryService.cs
@@ -290,6 +319,7 @@ TO:
 ## 🎯 Immediate Action Plan (Next Session Start)
 
 ### Step 1: Architecture Analysis (30 minutes)
+
 ```powershell
 # Generate dependency graph
 dotnet list package --include-transitive
@@ -302,6 +332,7 @@ Get-ChildItem -Recurse -Include *.cs | Measure-Object -Line
 ```
 
 ### Step 2: Run Code Quality Tools (15 minutes)
+
 ```powershell
 # Coverage report
 dotnet test --collect:"XPlat Code Coverage"
@@ -314,12 +345,14 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report
 ```
 
 ### Step 3: Create Issue Backlog (30 minutes)
+
 - [ ] Create GitHub Issues for each identified problem
 - [ ] Label with: `tech-debt`, `architecture`, `testing`, `refactoring`
 - [ ] Prioritize: P1 (Critical), P2 (High), P3 (Medium), P4 (Low)
 - [ ] Assign to milestones: `v0.2-quality`, `v0.3-architecture`
 
 ### Step 4: Plan Refactoring Sprint (15 minutes)
+
 - [ ] Group related refactorings
 - [ ] Estimate effort per task
 - [ ] Create feature branches
@@ -330,6 +363,7 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report
 ## 📚 Reference Documentation
 
 ### Key Files to Review Before Starting
+
 ```
 docs/03-adr/001-clean-architecture-microservices.md  ← Architecture principles
 docs/03-adr/007-calculation-service-integration-tdd.md ← Current implementation
@@ -338,6 +372,7 @@ PIA-VISION.md                                         ← PIA context
 ```
 
 ### External Resources
+
 - [Clean Architecture (Uncle Bob)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [SOLID Principles in C#](https://www.c-sharpcorner.com/UploadFile/damubetha/solid-principles-in-C-Sharp/)
 - [.NET Microservices Architecture](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/)
@@ -347,12 +382,14 @@ PIA-VISION.md                                         ← PIA context
 ## 🔧 Development Environment Setup
 
 **Prerequisites:**
+
 - .NET 9.0 SDK
 - Docker Desktop (for infrastructure)
 - Git (configured with Eprey27 identity)
 - GitHub CLI (authenticated)
 
 **Quick Start Commands:**
+
 ```powershell
 cd d:\Repos\astronomy\interstellar-tracker
 
@@ -374,21 +411,25 @@ dotnet run --project src/Services/VisualizationService/InterstellarTracker.Visua
 ### Decisions Made This Session
 
 **Decision #1: Git Workflow**
+
 - ✅ Chosen: Direct commits to main for closing beta iteration
 - ✅ Future: Feature branches + PR workflow
 - Rationale: Solo developer, trusted changes, time efficiency
 
 **Decision #2: WireMock for Integration Tests**
+
 - ✅ Chosen: WireMock.Net over alternatives (HttpClient mocking, stub endpoint)
 - Rationale: Community best practice, realistic HTTP simulation
 - Result: 23/23 tests passing
 
 **Decision #3: Gitmoji Usage**
+
 - ✅ Chosen: Use gitmojis for visual commit categorization
 - Rationale: Quick visual scanning, user preference
 - Applied: 📚 📝 ✨ 🎯 🔧 for last 4 commits
 
 **Decision #4: Documentation Priority**
+
 - ✅ Chosen: Comprehensive documentation before new features
 - Rationale: Junior developer onboarding, knowledge preservation
 - Result: 18 doc files, 1,166+ lines
@@ -407,24 +448,28 @@ dotnet run --project src/Services/VisualizationService/InterstellarTracker.Visua
 ### Definition of Done
 
 **Architecture Review:**
+
 - [ ] Dependency graph generated and analyzed
 - [ ] Clean Architecture compliance score calculated (X/100)
 - [ ] All SOLID violations documented with severity
 - [ ] Refactoring plan created with effort estimates
 
 **Code Quality:**
+
 - [ ] All anti-patterns cataloged in GitHub Issues
 - [ ] Code smells identified with SonarQube
 - [ ] Technical debt inventory created
 - [ ] Nullable warnings fixed (current: 2)
 
 **Test Quality:**
+
 - [ ] Coverage report generated (current: ~30%)
 - [ ] Test quality checklist completed
 - [ ] Missing test scenarios documented
 - [ ] Test expansion plan created (path to 80%)
 
 **Deliverables:**
+
 - [ ] Architecture audit report (Markdown)
 - [ ] SOLID violations list (GitHub Issues)
 - [ ] Test coverage HTML report
@@ -434,9 +479,9 @@ dotnet run --project src/Services/VisualizationService/InterstellarTracker.Visua
 
 ## 📞 Contact & Resources
 
-**Repository:** https://github.com/Eprey27/interstellar-tracker  
+**Repository:** <https://github.com/Eprey27/interstellar-tracker>  
 **Developer:** Emilio (@Eprey27)  
-**Email:** eprey27@gmail.com
+**Email:** <eprey27@gmail.com>
 
 **This Session Chat:** Saved in Copilot history (November 23, 2025)  
 **Context Preservation:** This file + PIA-VISION.md
