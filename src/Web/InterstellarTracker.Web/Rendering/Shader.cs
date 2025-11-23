@@ -1,4 +1,5 @@
 using Silk.NET.OpenGL;
+using InterstellarTracker.Domain.Exceptions;
 
 namespace InterstellarTracker.Web.Rendering;
 
@@ -33,7 +34,12 @@ public class Shader : IDisposable
         if (linkStatus == 0)
         {
             string infoLog = _gl.GetProgramInfoLog(_program);
-            throw new Exception($"Shader program linking failed: {infoLog}");
+            var ex = new RenderingException($"Shader program linking failed: {infoLog}")
+            {
+                Operation = "shader linking",
+                ErrorDetails = infoLog
+            };
+            throw ex;
         }
 
         // Clean up shaders (already linked into program)
@@ -54,7 +60,12 @@ public class Shader : IDisposable
         if (status == 0)
         {
             string infoLog = _gl.GetShaderInfoLog(shader);
-            throw new Exception($"{type} compilation failed: {infoLog}");
+            var ex = new ShaderCompilationException($"{type} compilation failed: {infoLog}")
+            {
+                ShaderType = type.ToString(),
+                CompilationLog = infoLog
+            };
+            throw ex;
         }
 
         return shader;
