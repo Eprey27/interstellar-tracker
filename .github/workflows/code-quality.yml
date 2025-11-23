@@ -53,9 +53,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"Eprey27_interstellar-tracker" /o:"eprey" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Tests.cs,**Mock.cs"
+          dotnet sonarscanner begin /k:"Eprey27_interstellar-tracker" /o:"eprey" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Tests.cs,**Mock.cs"
           dotnet build --configuration Release --no-restore
-          dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+          dotnet sonarscanner end
 
       - name: Generate CycloneDX BOM
         run: |
