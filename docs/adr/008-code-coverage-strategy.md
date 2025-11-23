@@ -18,18 +18,21 @@ The project currently lacks integrated code coverage reporting across the CI/CD 
 ## Objectives
 
 ### Phase 1: Current (Iteration 1.1)
+
 - ✅ Integrate XPlat Code Coverage in GitHub Actions workflow
 - ✅ Upload coverage reports to SonarQube Cloud (Pro trial)
 - ✅ Establish baseline coverage metrics
 - ✅ Document coverage standards in README
 
 ### Phase 2: Next Iteration
+
 - 🎯 Enforce minimum coverage threshold (80%) in workflow
 - 🎯 Add codecov.io integration for PR comments
 - 🎯 Generate coverage badges for README
 - 🎯 Configure SonarQube quality gates based on coverage
 
 ### Phase 3: Future (Post-Infrastructure)
+
 - 🎯 Migrate to self-hosted SonarQube in Azure
 - 🎯 Add coverage trend analysis
 - 🎯 Integrate with development dashboard
@@ -37,6 +40,7 @@ The project currently lacks integrated code coverage reporting across the CI/CD 
 ## Architecture Decision
 
 ### Coverage Collection
+
 ```
 dotnet test → XPlat Code Coverage → coverage.cobertura.xml
                                   ↓
@@ -129,16 +133,19 @@ Maintainability Rating                 <           A
 ## Benefits
 
 ### Short-term (Now)
+
 ✅ **Visibility** - See what code is tested  
 ✅ **Baseline** - Measure starting point  
 ✅ **Awareness** - Team sees coverage daily  
 
 ### Medium-term (Phase 2)
+
 ✅ **Enforcement** - Coverage gates block PRs  
 ✅ **Trend Analysis** - Historical tracking  
 ✅ **Accountability** - Visibility per PR  
 
 ### Long-term (Phase 3)
+
 ✅ **Scalability** - Works across all projects  
 ✅ **Cost-effective** - Self-hosted vs SaaS  
 ✅ **Integration** - Part of development dashboard  
@@ -146,6 +153,7 @@ Maintainability Rating                 <           A
 ## Consequences
 
 ### Positive
+
 ✅ Forces developers to write tests  
 ✅ Catches untested code paths  
 ✅ Improves overall code quality  
@@ -153,12 +161,14 @@ Maintainability Rating                 <           A
 ✅ Provides metric for project health  
 
 ### Challenges
+
 ⚠️ Coverage alone doesn't guarantee quality (% can be misleading)  
 ⚠️ Requires discipline to maintain standards  
 ⚠️ Can slow down fast iteration if gates are too strict  
 ⚠️ Initial effort to reach baseline 80%  
 
 ### Mitigation
+
 - 🛡️ Start with monitoring-only (Phase 1)
 - 🛡️ Gradually enforce gates (Phase 2)
 - 🛡️ Focus on critical paths first (Domain layer)
@@ -167,12 +177,14 @@ Maintainability Rating                 <           A
 ## Current State (Iteration 1.0)
 
 ✅ **Already Done:**
+
 - XPlat Code Coverage integrated in workflow
 - Coverage reports generated: `coverage.cobertura.xml`
 - Artifacts uploaded to GitHub Actions
 - SonarQube analyzing coverage metrics
 
 📊 **Current Baseline (from latest run):**
+
 - Tests Executed: 81
 - Tests Passed: 81 (100%)
 - Coverage Data: Being collected
@@ -181,6 +193,7 @@ Maintainability Rating                 <           A
 ## Migration Path (Future)
 
 ### When moving to Self-Hosted SonarQube (Azure)
+
 ```
 Current (SonarCloud)           →    Future (Self-Hosted + Azure)
 ───────────────────────────────────────────────────────────────
@@ -193,10 +206,10 @@ $10/mo (Pro trial)             →    ~$5-15/mo (Azure infra)
 
 ## References
 
-- **SonarQube Coverage:** https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/test-coverage/overview/
-- **Cobertura Format:** https://cobertura.github.io/
-- **XPlat Code Coverage:** https://github.com/coverlet-coverage/coverlet
-- **Quality Gates:** https://docs.sonarsource.com/sonarqube/latest/user-guide/quality-gates/
+- **SonarQube Coverage:** <https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/test-coverage/overview/>
+- **Cobertura Format:** <https://cobertura.github.io/>
+- **XPlat Code Coverage:** <https://github.com/coverlet-coverage/coverlet>
+- **Quality Gates:** <https://docs.sonarsource.com/sonarqube/latest/user-guide/quality-gates/>
 
 ## Next Steps
 
