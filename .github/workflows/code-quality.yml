@@ -74,7 +74,8 @@ jobs:
             /d:sonar.coverage.exclusions="**Tests.cs,**Mock.cs"
 
           dotnet build --configuration Release --no-restore
-          dotnet sonarscanner end
+          
+          dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
         shell: bash
 
       - name: Generate CycloneDX BOM
