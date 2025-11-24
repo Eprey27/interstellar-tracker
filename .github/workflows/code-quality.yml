@@ -37,11 +37,11 @@ jobs:
         run: dotnet tool install --global dotnet-coverage
 
       - name: Run tests with coverage
-        run: dotnet test --configuration Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --verbosity minimal
+        run: dotnet test --configuration Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --verbosity minimal -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Fix coverage report paths
         run: |
-          $reports = Get-ChildItem -Recurse -Include "coverage.cobertura.xml"
+          $reports = Get-ChildItem -Recurse -Include "coverage.opencover.xml"
           foreach ($report in $reports) {
               Write-Host "Found coverage report: $($report.FullName)"
           }
@@ -71,7 +71,7 @@ jobs:
             /o:"eprey" \
             /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.cobertura.xml" \
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
             /d:sonar.coverage.exclusions="**Tests.cs,**Mock.cs"
 
           dotnet build --configuration Release --no-restore
@@ -103,6 +103,6 @@ jobs:
       - name: Publish coverage reports
         uses: codecov/codecov-action@v4
         with:
-          files: "**/coverage.cobertura.xml"
+          files: "**/coverage.opencover.xml"
           flags: unittests
           fail_ci_if_error: false
