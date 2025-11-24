@@ -139,6 +139,8 @@ dotnet run --project src/Services/ApiGateway/InterstellarTracker.ApiGateway
 ### 👨‍💻 Development
 
 - [**Getting Started**](docs/04-development/getting-started.md) - < 30min setup guide (new developers start here!)
+- [**SonarQube Setup**](docs/04-development/sonarqube-setup-github-secrets.md) - Configure GitHub Secrets for CI/CD authentication
+- [**Secrets Management**](docs/adr/009-secrets-management.md) - Three-tier strategy: local, CI/CD, production
 - [**Coding Standards**](docs/04-development/coding-standards.md) - C# conventions, SOLID, testing guidelines
 - [**Local Development**](docs/04-development/local-development.md) - Docker Compose, hot reload, debugging
 - [**Git Workflow**](docs/04-development/git-workflow.md) - Branching, commits, PRs
@@ -161,6 +163,15 @@ dotnet run --project src/Services/ApiGateway/InterstellarTracker.ApiGateway
 - [**Contributing**](CONTRIBUTING.md) - How to contribute (when repo is public)
 
 ## 🧪 Testing
+
+### Code Quality & SonarQube
+
+The project uses **SonarCloud** for continuous code quality analysis:
+
+- **Status Badge**: Check [SonarCloud Dashboard](https://sonarcloud.io/organizations/eprey/projects)
+- **Automated Scanning**: Every push to `main`, `develop`, or `feature/*` triggers analysis
+- **Requirements**: SONAR_TOKEN must be configured in GitHub Secrets (see [setup guide](docs/04-development/sonarqube-setup-github-secrets.md))
+- **Build Status**: Quality gates enforced in CI/CD pipeline
 
 ```powershell
 # Run all tests
@@ -242,20 +253,22 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 📊 Project Status
 
-**Current Phase**: 1 - Documentation (~35-40% complete overall)
+**Current Phase**: 3 - Security Hardening (~40-45% complete overall)
 
 | Phase | Component | Status | Coverage |
 |-------|-----------|--------|----------|
 | ✅ 0 | Infrastructure | 80% | Azure deployed, Terraform, App Insights |
 | ✅ 0 | CalculationService | 70% | Hyperbolic orbits, tests |
 | ✅ 0 | API Gateway (YARP) | 60% | Routing, telemetry |
-| 📝 1 | **Documentation** | **IN PROGRESS** | System overview, ADRs, getting-started |
-| ⏳ 2 | VisualizationService | 0% | Planned |
-| ⏳ 3 | Microservices Decomposition | 0% | Planned |
-| ⏳ 4 | Event-Driven (RabbitMQ) | 0% | Planned |
-| ⏳ 5 | SonarQube Quality Gates | 0% | Planned |
-| ⏳ 6 | TDD + 80% Coverage | 30% | Target 80% |
-| ⏳ 7 | General Review | 0% | Final phase |
+| ✅ 1 | **Documentation** | **COMPLETE** | System overview, ADRs, getting-started |
+| ✅ 2 | **Architecture Refactoring** | **COMPLETE** | IServiceConfiguration pattern, CORS, exception handling |
+| 📝 3 | **Security Hardening** | **IN PROGRESS** | Git history clean, .gitignore enhanced, SonarQube fixed |
+| ⏳ 4 | VisualizationService | 0% | Planned |
+| ⏳ 5 | Microservices Decomposition | 0% | Planned |
+| ⏳ 6 | Event-Driven (RabbitMQ) | 0% | Planned |
+| ⏳ 7 | SonarQube Quality Gates | 0% | Planned |
+| ⏳ 8 | TDD + 80% Coverage | 30% | Target 80% |
+| ⏳ 9 | General Review | 0% | Final phase |
 
 **Progress**: [ROADMAP.md](ROADMAP.md) | **Azure**: [Portal Dashboard](https://portal.azure.com/)
 

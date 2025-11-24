@@ -1,0 +1,22 @@
+﻿2025-11-23T22:26:54.0691520Z ##[group]Run actions/upload-artifact@v4
+2025-11-23T22:26:54.0691789Z with:
+2025-11-23T22:26:54.0691956Z   name: test-results
+2025-11-23T22:26:54.0692147Z   path: **/TestResults/**
+2025-11-23T22:26:54.0692369Z   if-no-files-found: warn
+2025-11-23T22:26:54.0692565Z   compression-level: 6
+2025-11-23T22:26:54.0692757Z   overwrite: false
+2025-11-23T22:26:54.0692944Z   include-hidden-files: false
+2025-11-23T22:26:54.0693140Z env:
+2025-11-23T22:26:54.0693307Z   DOTNET_ROOT: /usr/share/dotnet
+2025-11-23T22:26:54.0693516Z ##[endgroup]
+2025-11-23T22:26:54.5243106Z With the provided path, there will be 12 files uploaded
+2025-11-23T22:26:54.5250287Z Artifact name is valid!
+2025-11-23T22:26:54.5251927Z Root directory input is valid!
+2025-11-23T22:26:54.6102860Z Beginning upload of artifact content to blob storage
+2025-11-23T22:26:54.7173906Z Uploaded bytes 90309
+2025-11-23T22:26:54.7371090Z Finished uploading artifact content to blob storage!
+2025-11-23T22:26:54.7374512Z SHA256 digest of uploaded artifact zip is f87e31bfc29dc2d1d487fbfd8faa380e9de600d5a08fe74ba8380a32c6d5084b
+2025-11-23T22:26:54.7376486Z Finalizing artifact upload
+2025-11-23T22:26:54.8188541Z Artifact test-results.zip successfully finalized. Artifact ID 4654938591
+2025-11-23T22:26:54.8189402Z Artifact test-results has been successfully uploaded! Final size is 90309 bytes. Artifact ID is 4654938591
+2025-11-23T22:26:54.8196260Z Artifact download URL: https://github.com/Eprey27/interstellar-tracker/actions/runs/19618219363/artifacts/4654938591

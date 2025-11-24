@@ -1,4 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using Silk.NET.OpenGL;
+using InterstellarTracker.Domain.Exceptions;
 
 namespace InterstellarTracker.Web.Rendering;
 
@@ -33,7 +35,12 @@ public class Shader : IDisposable
         if (linkStatus == 0)
         {
             string infoLog = _gl.GetProgramInfoLog(_program);
-            throw new Exception($"Shader program linking failed: {infoLog}");
+            var ex = new RenderingException($"Shader program linking failed: {infoLog}")
+            {
+                Operation = "shader linking",
+                ErrorDetails = infoLog
+            };
+            throw ex;
         }
 
         // Clean up shaders (already linked into program)
@@ -54,7 +61,12 @@ public class Shader : IDisposable
         if (status == 0)
         {
             string infoLog = _gl.GetShaderInfoLog(shader);
-            throw new Exception($"{type} compilation failed: {infoLog}");
+            var ex = new ShaderCompilationException($"{type} compilation failed: {infoLog}")
+            {
+                ShaderType = type.ToString(),
+                CompilationLog = infoLog
+            };
+            throw ex;
         }
 
         return shader;
@@ -71,6 +83,11 @@ public class Shader : IDisposable
     /// <summary>
     /// Sets a mat4 uniform variable.
     /// </summary>
+    /// <remarks>
+    /// Uses unsafe code for direct memory access required by OpenGL API.
+    /// This is necessary for efficient matrix data transfer to GPU.
+    /// </remarks>
+    [SuppressMessage("Security", "S6640:Using unsafe code is security-sensitive", Justification = "Required for OpenGL matrix pointer operations")]
     public unsafe void SetMatrix4(string name, Silk.NET.Maths.Matrix4X4<float> matrix)
     {
         int location = _gl.GetUniformLocation(_program, name);
@@ -110,13 +127,30 @@ public class Shader : IDisposable
         _gl.Uniform1(location, value);
     }
 
+    /// <summary>
+    /// Releases all resources used by the Shader.
+    /// </summary>
     public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Releases the unmanaged resources used by the Shader and optionally releases the managed resources.
+    /// </summary>
+    /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+    protected virtual void Dispose(bool disposing)
     {
         if (!_disposed)
         {
+            if (disposing)
+            {
+                // Dispose managed resources if any
+            }
+
             _gl.DeleteProgram(_program);
             _disposed = true;
         }
-        GC.SuppressFinalize(this);
     }
 }

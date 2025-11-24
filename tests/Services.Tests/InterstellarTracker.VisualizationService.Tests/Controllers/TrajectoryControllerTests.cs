@@ -31,6 +31,13 @@ public class TrajectoryControllerTests : IClassFixture<CustomWebApplicationFacto
         // Act
         var response = await _client.GetAsync($"/api/trajectories/{encodedObjectId}");
 
+        // Debug: Log response if failed
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"ERROR: Expected OK, got {response.StatusCode}. Content: {content}");
+        }
+
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }

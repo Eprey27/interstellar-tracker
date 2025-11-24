@@ -1,34 +1,34 @@
+using InterstellarTracker.Application;
+using InterstellarTracker.Infrastructure;
 using InterstellarTracker.VisualizationService.Services;
+using InterstellarTracker.VisualizationService.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-
-// Register HTTP client for CalculationService
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
+builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<ICalculationServiceClient, CalculationServiceClient>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["CalculationService:BaseUrl"] ?? "http://localhost:5001");
+    var baseUrl = builder.Configuration["Services:CalculationService:Url"]
+                ?? builder.Configuration["CalculationService:BaseUrl"]
+                ?? "http://localhost:5001";
+    client.BaseAddress = new Uri(baseUrl);
     client.Timeout = TimeSpan.FromSeconds(30);
 });
-
-// Register application services
 builder.Services.AddScoped<ITrajectoryService, TrajectoryService>();
+builder.Services.AddVisualizationServiceTelemetry(builder.Configuration);
+builder.Services.AddHealthChecks();
+builder.Services.AddVisualizationServiceCors(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
+app.UseVisualizationServiceMiddleware();
 app.MapControllers();
+app.MapHealthChecks("/health");
 
-app.Run();
+await app.RunAsync();
 
 // Make Program accessible to tests
 public partial class Program

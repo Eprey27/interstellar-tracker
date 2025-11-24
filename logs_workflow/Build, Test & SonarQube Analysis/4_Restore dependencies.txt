@@ -1,0 +1,20 @@
+﻿2025-11-23T22:26:11.8737803Z ##[group]Run dotnet restore
+2025-11-23T22:26:11.8738135Z [36;1mdotnet restore[0m
+2025-11-23T22:26:11.8776274Z shell: /usr/bin/bash -e {0}
+2025-11-23T22:26:11.8776557Z env:
+2025-11-23T22:26:11.8776747Z   DOTNET_ROOT: /usr/share/dotnet
+2025-11-23T22:26:11.8777022Z ##[endgroup]
+2025-11-23T22:26:17.4546188Z   Determining projects to restore...
+2025-11-23T22:26:21.2937290Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Application/InterstellarTracker.Application/InterstellarTracker.Application.csproj (in 2.2 sec).
+2025-11-23T22:26:21.2941507Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.Web/InterstellarTracker.Web.csproj (in 2.21 sec).
+2025-11-23T22:26:22.1882777Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/AuthService/InterstellarTracker.AuthService/InterstellarTracker.AuthService.csproj (in 567 ms).
+2025-11-23T22:26:22.5105428Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Web/InterstellarTracker.WebUI/InterstellarTracker.WebUI.csproj (in 3.75 sec).
+2025-11-23T22:26:22.5108894Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/VisualizationService/InterstellarTracker.VisualizationService/InterstellarTracker.VisualizationService.csproj (in 3.75 sec).
+2025-11-23T22:26:22.5220308Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Infrastructure/InterstellarTracker.Infrastructure/InterstellarTracker.Infrastructure.csproj (in 4 ms).
+2025-11-23T22:26:22.5226745Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Domain/InterstellarTracker.Domain/InterstellarTracker.Domain.csproj (in 1 ms).
+2025-11-23T22:26:22.6294288Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/CalculationService/InterstellarTracker.CalculationService/InterstellarTracker.CalculationService.csproj (in 1.31 sec).
+2025-11-23T22:26:22.7097920Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/src/Services/ApiGateway/InterstellarTracker.ApiGateway/InterstellarTracker.ApiGateway.csproj (in 473 ms).
+2025-11-23T22:26:23.5422564Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Domain.Tests/InterstellarTracker.Domain.Tests/InterstellarTracker.Domain.Tests.csproj (in 907 ms).
+2025-11-23T22:26:23.5449253Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Application.Tests/InterstellarTracker.Application.Tests/InterstellarTracker.Application.Tests.csproj (in 819 ms).
+2025-11-23T22:26:23.5461801Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Integration.Tests/InterstellarTracker.Integration.Tests/InterstellarTracker.Integration.Tests.csproj (in 1.01 sec).
+2025-11-23T22:26:27.5863613Z   Restored /home/runner/work/interstellar-tracker/interstellar-tracker/tests/Services.Tests/InterstellarTracker.VisualizationService.Tests/InterstellarTracker.VisualizationService.Tests.csproj (in 5.05 sec).
