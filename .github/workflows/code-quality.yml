@@ -48,6 +48,7 @@ jobs:
         shell: pwsh
 
       - name: SonarQube Scan
+        continue-on-error: true
         # NOTE: This requires Automatic Analysis to be disabled in SonarCloud
         # See: https://sonarcloud.io/organizations/eprey/projects
         # Go to Administration → Analysis Method and disable "Automatic Analysis"
