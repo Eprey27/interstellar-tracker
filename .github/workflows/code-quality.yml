@@ -82,8 +82,8 @@ jobs:
       - name: Generate CycloneDX BOM
         run: |
           dotnet tool install --global CycloneDX
-          dotnet-CycloneDX InterstellarTracker.sln -o . -format json
-          dotnet-CycloneDX InterstellarTracker.sln -o . -format xml
+          dotnet-CycloneDX InterstellarTracker.sln -o . --output-format json
+          dotnet-CycloneDX InterstellarTracker.sln -o . --output-format xml
 
       - name: Upload BOM artifacts
         uses: actions/upload-artifact@v4
