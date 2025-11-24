@@ -1,0 +1,8 @@
+﻿2025-11-23T22:26:41.1151215Z ##[group]Run dotnet tool install --global dotnet-coverage
+2025-11-23T22:26:41.1151911Z [36;1mdotnet tool install --global dotnet-coverage[0m
+2025-11-23T22:26:41.1198163Z shell: /usr/bin/bash -e {0}
+2025-11-23T22:26:41.1198759Z env:
+2025-11-23T22:26:41.1199061Z   DOTNET_ROOT: /usr/share/dotnet
+2025-11-23T22:26:41.1199437Z ##[endgroup]
+2025-11-23T22:26:43.3718195Z You can invoke the tool using the following command: dotnet-coverage
+2025-11-23T22:26:43.3719353Z Tool 'dotnet-coverage' (version '18.1.0') was successfully installed.

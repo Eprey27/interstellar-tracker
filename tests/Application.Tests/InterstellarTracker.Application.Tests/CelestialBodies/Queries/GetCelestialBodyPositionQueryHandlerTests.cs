@@ -44,7 +44,6 @@ public class GetCelestialBodyPositionQueryHandlerTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.NotNull(result.Value);
         Assert.True(result.Value.Magnitude > 0);
     }
 

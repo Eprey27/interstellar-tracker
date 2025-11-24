@@ -39,7 +39,6 @@ public class Window
     // Input state
     private Vector2D<float> _lastMousePos;
     private bool _leftMouseDown;
-    private bool _rightMouseDown;
     private bool _middleMouseDown;
 
     // Time simulation
@@ -315,7 +314,6 @@ public class Window
     private void OnMouseDown(IMouse mouse, MouseButton button)
     {
         if (button == MouseButton.Left) _leftMouseDown = true;
-        if (button == MouseButton.Right) _rightMouseDown = true;
         if (button == MouseButton.Middle) _middleMouseDown = true;
         _lastMousePos = new Vector2D<float>(mouse.Position.X, mouse.Position.Y);
     }
@@ -323,7 +321,6 @@ public class Window
     private void OnMouseUp(IMouse mouse, MouseButton button)
     {
         if (button == MouseButton.Left) _leftMouseDown = false;
-        if (button == MouseButton.Right) _rightMouseDown = false;
         if (button == MouseButton.Middle) _middleMouseDown = false;
     }
 

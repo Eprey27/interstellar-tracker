@@ -2,11 +2,12 @@ using InterstellarTracker.Application;
 using InterstellarTracker.Infrastructure;
 using InterstellarTracker.WebUI.Components;
 using InterstellarTracker.WebUI.Services;
+using InterstellarTracker.WebUI.Extensions;
 using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
@@ -14,42 +15,24 @@ builder.Services.AddRazorComponents()
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
-// Add Application Insights telemetry
-builder.Services.AddApplicationInsightsTelemetry(options =>
-{
-    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
-    options.EnableAdaptiveSampling = true;
-    options.EnableQuickPulseMetricStream = true;
-});
+// Add telemetry
+builder.Services.AddWebUITelemetry(builder.Configuration);
 
-// Add HTTP client for Calculation Service
-var calculationServiceUrl = builder.Configuration.GetValue<string>("CalculationServiceUrl") ?? "http://localhost:5001";
+// Configure Calculation Service HTTP client with externalized URL
 builder.Services.AddHttpClient<CalculationServiceClient>(client =>
 {
+    var calculationServiceUrl = builder.Configuration["Services:CalculationService:Url"]
+                             ?? "http://localhost:5001";
     client.BaseAddress = new Uri(calculationServiceUrl);
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 
-// Add health checks with dependency on CalculationService
-builder.Services.AddHealthChecks()
-    .AddUrlGroup(new Uri($"{calculationServiceUrl}/health"), "CalculationService");
-
+// Add health checks
+builder.Services.AddHealthChecks();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-
-// Prometheus metrics middleware
-app.UseHttpMetrics();
-
-app.UseAntiforgery();
+// Configure middleware
+app.UseWebUIMiddleware();
 
 // Map health check endpoint
 app.MapHealthChecks("/health");
@@ -61,4 +44,4 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.Run();
+await app.RunAsync();

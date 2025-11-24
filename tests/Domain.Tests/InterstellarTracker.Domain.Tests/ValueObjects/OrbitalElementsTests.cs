@@ -88,7 +88,7 @@ public class OrbitalElementsTests
 
         // Positions should differ
         Assert.NotEqual(positionAtEpoch, positionLater);
-        
+
         // Both should be roughly at orbital distance
         Assert.InRange(positionAtEpoch.Magnitude, AU * 0.9, AU * 1.1);
         Assert.InRange(positionLater.Magnitude, AU * 0.9, AU * 1.1);
@@ -131,10 +131,10 @@ public class OrbitalElementsTests
 
         Assert.NotNull(elements);
         Assert.True(elements.Eccentricity > 1.0);
-        
+
         // Should still calculate position without error
         var position = elements.CalculatePosition(2451545.0);
-        Assert.NotNull(position);
+        Assert.True(position.Magnitude >= 0);
     }
 
     [Fact]

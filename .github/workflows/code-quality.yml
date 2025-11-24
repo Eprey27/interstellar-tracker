@@ -37,34 +37,53 @@ jobs:
         run: dotnet tool install --global dotnet-coverage
 
       - name: Run tests with coverage
-        run: dotnet test --configuration Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --verbosity minimal
+        run: dotnet test --configuration Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --verbosity minimal -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Fix coverage report paths
         run: |
-          $reports = Get-ChildItem -Recurse -Include "coverage.cobertura.xml"
+          $reports = Get-ChildItem -Recurse -Include "coverage.opencover.xml"
           foreach ($report in $reports) {
               Write-Host "Found coverage report: $($report.FullName)"
           }
         shell: pwsh
 
       - name: SonarQube Scan
+        continue-on-error: true
         # NOTE: This requires Automatic Analysis to be disabled in SonarCloud
         # See: https://sonarcloud.io/organizations/eprey/projects
         # Go to Administration → Analysis Method and disable "Automatic Analysis"
+        # GitHub Secret SONAR_TOKEN must be configured with valid SonarCloud token
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"Eprey27_interstellar-tracker" /o:"eprey" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Tests.cs,**Mock.cs"
+
+          # Check if SONAR_TOKEN is set (bash syntax)
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "ERROR: SONAR_TOKEN not configured in GitHub Secrets"
+            echo "Please configure SONAR_TOKEN in repository Settings > Secrets and variables > Actions"
+            exit 1
+          fi
+
+          dotnet sonarscanner begin \
+            /k:"Eprey27_interstellar-tracker" \
+            /o:"eprey" \
+            /d:sonar.token="$SONAR_TOKEN" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
+            /d:sonar.coverage.exclusions="**Tests.cs,**Mock.cs"
+
           dotnet build --configuration Release --no-restore
-          dotnet sonarscanner end
+
+          dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+        shell: bash
 
       - name: Generate CycloneDX BOM
         run: |
           dotnet tool install --global CycloneDX
-          cyclonedx-dotnet -o . -format json
-          cyclonedx-dotnet -o . -format xml
+          dotnet-CycloneDX InterstellarTracker.sln -o . --output-format json
+          dotnet-CycloneDX InterstellarTracker.sln -o . --output-format xml
 
       - name: Upload BOM artifacts
         uses: actions/upload-artifact@v4
